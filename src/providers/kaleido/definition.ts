@@ -1,7 +1,7 @@
 import type { ProviderDefinition } from "../../core/types.ts";
 
-import { kaleidoDefaultBaseUrl } from "./constants.ts";
 import { kaleidoActions } from "./actions.ts";
+import { kaleidoDefaultBaseUrl } from "./constants.ts";
 
 const service = "kaleido";
 

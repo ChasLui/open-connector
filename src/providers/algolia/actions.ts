@@ -11,9 +11,13 @@ const forwardToReplicasSchema = s.boolean("Whether to forward the write operatio
 const pageSchema = s.integer("The zero-based page number.", { minimum: 0 });
 const hitsPerPageSchema = s.integer("The number of hits to return per page.", { minimum: 1 });
 const filtersSchema = s.string("The filter expression using Algolia's SQL-like syntax.", { minLength: 1 });
-const stringArraySchema = s.array("A list of non-empty strings.", s.string("A non-empty string value.", { minLength: 1 }), {
-  minItems: 1,
-});
+const stringArraySchema = s.array(
+  "A list of non-empty strings.",
+  s.string("A non-empty string value.", { minLength: 1 }),
+  {
+    minItems: 1,
+  },
+);
 const filterValueSchema = s.string("A single filter value.", { minLength: 1 });
 const nestedFilterSchema = s.anyOf("An Algolia filter expression in string or array form.", [
   filterValueSchema,

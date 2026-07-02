@@ -76,10 +76,7 @@ async function listLangbaseMemories(context: ApiKeyProviderContext): Promise<unk
   };
 }
 
-async function createLangbaseMemory(
-  input: Record<string, unknown>,
-  context: ApiKeyProviderContext,
-): Promise<unknown> {
+async function createLangbaseMemory(input: Record<string, unknown>, context: ApiKeyProviderContext): Promise<unknown> {
   const payload = await requestLangbaseJson({
     method: "POST",
     path: langbaseMemoryPath,
@@ -194,11 +191,7 @@ async function readLangbasePayload(response: Response): Promise<unknown> {
   }
 }
 
-function createLangbaseError(
-  response: Response,
-  payload: unknown,
-  phase: LangbaseRequestPhase,
-): ProviderRequestError {
+function createLangbaseError(response: Response, payload: unknown, phase: LangbaseRequestPhase): ProviderRequestError {
   const message = extractLangbaseErrorMessage(payload) ?? response.statusText ?? "Langbase request failed";
 
   if (response.status === 429) {

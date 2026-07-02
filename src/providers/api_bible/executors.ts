@@ -286,9 +286,11 @@ async function readApiBiblePayload(response: Response): Promise<Record<string, u
 
   try {
     const payload = JSON.parse(text) as unknown;
-    return optionalRecord(payload) ?? {
-      message: `API.Bible request failed with status ${response.status}`,
-    };
+    return (
+      optionalRecord(payload) ?? {
+        message: `API.Bible request failed with status ${response.status}`,
+      }
+    );
   } catch {
     return {
       message: text || `API.Bible request failed with status ${response.status}`,
@@ -338,11 +340,7 @@ function readMetaObject(payload: Record<string, unknown>): Record<string, unknow
   return optionalRecord(payload.meta);
 }
 
-function readOptionalArray(
-  value: unknown,
-  fieldName: string,
-  isPresent: boolean,
-): Array<Record<string, unknown>> {
+function readOptionalArray(value: unknown, fieldName: string, isPresent: boolean): Array<Record<string, unknown>> {
   if (!isPresent) {
     return [];
   }

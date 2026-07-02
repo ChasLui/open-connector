@@ -78,9 +78,7 @@ export const apifyActions: ActionDefinition[] = [
     name: "get_actor",
     description: "Retrieve metadata for one Apify actor by identifier.",
     inputSchema: s.object("The input for retrieving one Apify actor.", {
-      actorId: s.nonEmptyString(
-        "The Apify actor identifier, such as apify~web-scraper or apify/web-scraper.",
-      ),
+      actorId: s.nonEmptyString("The Apify actor identifier, such as apify~web-scraper or apify/web-scraper."),
     }),
     outputSchema: s.object("The Apify actor response.", {
       actor: apifyActorSchema,
@@ -92,9 +90,7 @@ export const apifyActions: ActionDefinition[] = [
     inputSchema: s.object(
       "The input for starting one Apify actor run.",
       {
-        actorId: s.nonEmptyString(
-          "The Apify actor identifier, such as apify~web-scraper or apify/web-scraper.",
-        ),
+        actorId: s.nonEmptyString("The Apify actor identifier, such as apify~web-scraper or apify/web-scraper."),
         input: s.record("The JSON input object passed to the actor run.", apifyJsonValueSchema),
         build: s.nonEmptyString("The actor build tag or number to run."),
         memoryMbytes: s.positiveInteger("The memory limit for the run in megabytes."),

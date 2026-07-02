@@ -55,7 +55,9 @@ const captureInputSchema = s.object(
     user_agent: s.nonEmptyString("The User-Agent string used when rendering the target page."),
     headers: s.nonEmptyString("A semicolon-separated header list such as `Header1=value1;Header2=value2`."),
     cookies: s.nonEmptyString("A semicolon-separated cookie list such as `name1=value1;name2=value2`."),
-    fail_on_status: s.nonEmptyString("A comma-separated list or range of HTTP status codes that should fail the capture."),
+    fail_on_status: s.nonEmptyString(
+      "A comma-separated list or range of HTTP status codes that should fail the capture.",
+    ),
     no_ads: s.boolean("Whether ApiFlash should block popular ad networks during capture."),
     no_tracking: s.boolean("Whether ApiFlash should block common tracking scripts during capture."),
     no_cookie_banners: s.boolean("Whether ApiFlash should hide cookie banners and popups during capture."),

@@ -30,20 +30,17 @@ const textContentPartSchema = s.looseRequiredObject("A text content block in a c
   text: s.string("The text content for this block."),
 });
 
-const imageContentPartSchema = s.looseRequiredObject(
-  "An image URL content block in a chat message.",
-  {
-    type: s.literal("image_url", { description: "The content block type." }),
-    image_url: s.looseRequiredObject(
-      "The image URL payload.",
-      {
-        url: s.url("The image URL or data URL to send to a vision-capable model."),
-        detail: s.stringEnum("The image detail level.", ["auto", "low", "high"]),
-      },
-      { optional: ["detail"] },
-    ),
-  },
-);
+const imageContentPartSchema = s.looseRequiredObject("An image URL content block in a chat message.", {
+  type: s.literal("image_url", { description: "The content block type." }),
+  image_url: s.looseRequiredObject(
+    "The image URL payload.",
+    {
+      url: s.url("The image URL or data URL to send to a vision-capable model."),
+      detail: s.stringEnum("The image detail level.", ["auto", "low", "high"]),
+    },
+    { optional: ["detail"] },
+  ),
+});
 
 const nullSchema: JsonSchema = {
   type: "null",
@@ -54,11 +51,7 @@ const chatMessageContentSchema = s.anyOf("The message content sent to the model.
   s.string("Plain text message content."),
   s.array(
     "Structured message content blocks.",
-    s.anyOf("A structured message content block.", [
-      textContentPartSchema,
-      imageContentPartSchema,
-      jsonObjectSchema,
-    ]),
+    s.anyOf("A structured message content block.", [textContentPartSchema, imageContentPartSchema, jsonObjectSchema]),
   ),
   nullSchema,
 ]);
@@ -149,17 +142,14 @@ const chatCompletionChoiceSchema = s.looseObject("A chat completion choice.", {
   logprobs: s.nullable(jsonObjectSchema),
 });
 
-const chatCompletionOutputSchema = s.looseObject(
-  "The response payload for an APIpie AI chat completion.",
-  {
-    id: s.string("The chat completion identifier."),
-    object: s.string("The object type returned by the API."),
-    created: s.integer("The Unix timestamp when the completion was created."),
-    model: s.string("The model used to generate the completion."),
-    choices: s.array("The generated completion choices.", chatCompletionChoiceSchema),
-    usage: usageSchema,
-  },
-);
+const chatCompletionOutputSchema = s.looseObject("The response payload for an APIpie AI chat completion.", {
+  id: s.string("The chat completion identifier."),
+  object: s.string("The object type returned by the API."),
+  created: s.integer("The Unix timestamp when the completion was created."),
+  model: s.string("The model used to generate the completion."),
+  choices: s.array("The generated completion choices.", chatCompletionChoiceSchema),
+  usage: usageSchema,
+});
 
 const embeddingInputSchema = s.looseRequiredObject(
   "The input payload for creating APIpie AI embeddings.",

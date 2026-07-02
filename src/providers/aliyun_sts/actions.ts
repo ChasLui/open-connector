@@ -42,9 +42,12 @@ export const aliyunStsActions: ActionDefinition[] = [
         roleArn: roleArnSchema,
         roleSessionName: s.string("The STS role session name.", { minLength: 1 }),
         durationSeconds: durationSecondsSchema,
-        policy: s.string("An optional inline session policy JSON string used only to narrow the temporary credential permissions.", {
-          minLength: 1,
-        }),
+        policy: s.string(
+          "An optional inline session policy JSON string used only to narrow the temporary credential permissions.",
+          {
+            minLength: 1,
+          },
+        ),
       },
       { optional: ["roleArn", "roleSessionName", "durationSeconds", "policy"] },
     ),

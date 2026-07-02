@@ -16,17 +16,14 @@ const optionalPerPageField = s.integer("Maximum number of Intercom records to re
   minimum: 1,
   maximum: 150,
 });
-const paginationSchema = s.object(
-  "Normalized Intercom cursor pagination metadata.",
-  {
-    hasMore: s.boolean("Whether Intercom reported another page of results."),
-    nextStartingAfter: s.nullable(s.string("Cursor for the next Intercom page, or null when there is no next page.")),
-    page: s.nullable(s.integer("Current page number reported by Intercom, or null when omitted.")),
-    perPage: s.nullable(s.integer("Current page size reported by Intercom, or null when omitted.")),
-    totalPages: s.nullable(s.integer("Total Intercom pages reported by the endpoint, or null when omitted.")),
-    totalCount: s.nullable(s.integer("Total Intercom record count reported by the endpoint, or null when omitted.")),
-  },
-);
+const paginationSchema = s.object("Normalized Intercom cursor pagination metadata.", {
+  hasMore: s.boolean("Whether Intercom reported another page of results."),
+  nextStartingAfter: s.nullable(s.string("Cursor for the next Intercom page, or null when there is no next page.")),
+  page: s.nullable(s.integer("Current page number reported by Intercom, or null when omitted.")),
+  perPage: s.nullable(s.integer("Current page size reported by Intercom, or null when omitted.")),
+  totalPages: s.nullable(s.integer("Total Intercom pages reported by the endpoint, or null when omitted.")),
+  totalCount: s.nullable(s.integer("Total Intercom record count reported by the endpoint, or null when omitted.")),
+});
 
 const adminSchema = { ...looseObjectSchema, description: "Intercom admin payload." };
 const contactSchema = { ...looseObjectSchema, description: "Intercom contact payload." };
@@ -40,7 +37,10 @@ const listAdminsInputSchema = s.object(
   { optional: ["displayAvatar"] },
 );
 
-const getCurrentAdminInputSchema = s.object("Input parameters for reading the currently authorized Intercom admin.", {});
+const getCurrentAdminInputSchema = s.object(
+  "Input parameters for reading the currently authorized Intercom admin.",
+  {},
+);
 
 const adminIdField = s.union(
   [s.string("Intercom admin identifier.", { minLength: 1 }), s.nonNegativeInteger("Intercom admin identifier.")],
@@ -140,10 +140,9 @@ const getConversationInputSchema = s.object(
 const replyToConversationInputSchema = s.object(
   "Input parameters for replying to an Intercom conversation as an admin.",
   {
-    conversationId: s.string(
-      "Intercom conversation identifier, or `last` to target the most recent part.",
-      { minLength: 1 },
-    ),
+    conversationId: s.string("Intercom conversation identifier, or `last` to target the most recent part.", {
+      minLength: 1,
+    }),
     adminId: s.string("Intercom admin identifier sending the reply.", { minLength: 1 }),
     body: s.string("Reply body to send to the conversation.", { minLength: 1 }),
     messageType: s.stringEnum("Intercom reply type to create. Defaults to `comment`.", ["comment", "note"]),

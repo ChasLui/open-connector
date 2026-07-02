@@ -40,13 +40,7 @@ const propertyStatusValues = ["Test", "Live"] as const;
 const unitConditionValues = ["Clean", "CleanToBeInspected", "Dirty"] as const;
 const maintenanceTypeValues = ["OutOfService", "OutOfOrder", "OutOfInventory"] as const;
 const unitListStatusValues = ["Active", "Archived", "All"] as const;
-const unitGroupTypeValues = [
-  "BedRoom",
-  "MeetingRoom",
-  "EventSpace",
-  "ParkingLot",
-  "Other",
-] as const;
+const unitGroupTypeValues = ["BedRoom", "MeetingRoom", "EventSpace", "ParkingLot", "Other"] as const;
 const createUnitGroupTypeValues = ["BedRoom", "MeetingRoom", "EventSpace", "ParkingLot"] as const;
 
 interface ApaleoActionDefinition {
@@ -82,10 +76,7 @@ const languagesField = s.array(
   s.string("Language code.", alpha2CodeOptions),
 );
 const propertyStatusField = s.stringEnum("Property status.", [...propertyStatusValues]);
-const propertyListStatusField = s.array(
-  "Filter results by one or more property statuses.",
-  propertyStatusField,
-);
+const propertyListStatusField = s.array("Filter results by one or more property statuses.", propertyStatusField);
 const includeArchivedField = s.boolean("Whether archived properties should be included.");
 const countryCodesField = s.array(
   "Filter results by ISO country code.",
@@ -95,15 +86,11 @@ const propertyExpandField = s.array(
   "Embedded resources to expand in the property response.",
   s.stringEnum("Property expansion key.", ["actions"]),
 );
-const unitConditionField = s.stringEnum(
-  "Current cleanliness state of the unit.",
-  [...unitConditionValues],
-);
+const unitConditionField = s.stringEnum("Current cleanliness state of the unit.", [...unitConditionValues]);
 const maintenanceTypeField = s.stringEnum("Type of scheduled maintenance.", [...maintenanceTypeValues]);
-const unitListStatusField = s.stringEnum(
-  "Whether to return active units, archived units, or both.",
-  [...unitListStatusValues],
-);
+const unitListStatusField = s.stringEnum("Whether to return active units, archived units, or both.", [
+  ...unitListStatusValues,
+]);
 const unitListExpandField = s.array(
   "Embedded resources to expand in the unit response.",
   s.stringEnum("Unit expansion key.", ["property", "unitGroup", "connectedUnits", "actions"]),
@@ -113,10 +100,7 @@ const unitGroupListExpandField = s.array(
   s.stringEnum("Unit group expansion key.", ["property", "connectedUnitGroups"]),
 );
 const unitGroupTypeField = s.stringEnum("Type of the unit group.", [...unitGroupTypeValues]);
-const createUnitGroupTypeField = s.stringEnum(
-  "Type of the unit group to create.",
-  [...createUnitGroupTypeValues],
-);
+const createUnitGroupTypeField = s.stringEnum("Type of the unit group to create.", [...createUnitGroupTypeValues]);
 const locationSchema = s.object(
   "Property address details.",
   {
@@ -147,10 +131,7 @@ const propertyActionSchema = s.object(
   {
     action: s.stringEnum("Property action name.", ["Delete", "Archive", "SetLive", "Reset"]),
     isAllowed: s.boolean("Whether the property action is currently allowed."),
-    reasons: s.array(
-      "Reasons returned when the property action is not allowed.",
-      propertyActionReasonSchema,
-    ),
+    reasons: s.array("Reasons returned when the property action is not allowed.", propertyActionReasonSchema),
   },
   { optional: ["reasons"] },
 );
@@ -294,10 +275,7 @@ const unitActionSchema = s.object(
   {
     action: s.stringEnum("Unit action name.", ["Delete", "Archive"]),
     isAllowed: s.boolean("Whether the unit action is currently allowed."),
-    reasons: s.array(
-      "Reasons returned when the unit action is not allowed.",
-      propertyActionReasonSchema,
-    ),
+    reasons: s.array("Reasons returned when the unit action is not allowed.", propertyActionReasonSchema),
   },
   { optional: ["reasons"] },
 );
@@ -320,15 +298,7 @@ const unitListItemSchema = s.object(
     actions: s.array("Available actions for the unit.", unitActionSchema),
   },
   {
-    optional: [
-      "unitGroup",
-      "connectingUnit",
-      "archived",
-      "isArchived",
-      "attributes",
-      "connectedUnits",
-      "actions",
-    ],
+    optional: ["unitGroup", "connectingUnit", "archived", "isArchived", "attributes", "connectedUnits", "actions"],
   },
 );
 const unitSchema = s.object(
@@ -350,15 +320,7 @@ const unitSchema = s.object(
     actions: s.array("Available actions for the unit.", unitActionSchema),
   },
   {
-    optional: [
-      "unitGroup",
-      "connectingUnit",
-      "archived",
-      "isArchived",
-      "attributes",
-      "connectedUnits",
-      "actions",
-    ],
+    optional: ["unitGroup", "connectingUnit", "archived", "isArchived", "attributes", "connectedUnits", "actions"],
   },
 );
 const connectedUnitGroupSchema = s.object(
@@ -384,10 +346,7 @@ const unitGroupListItemSchema = s.object(
     rank: integerField("Sort rank of the unit group."),
     type: unitGroupTypeField,
     property: embeddedPropertySchema,
-    connectedUnitGroups: s.array(
-      "Connected unit groups used by this unit group.",
-      connectedUnitGroupSchema,
-    ),
+    connectedUnitGroups: s.array("Connected unit groups used by this unit group.", connectedUnitGroupSchema),
   },
   { optional: ["maxPersons", "rank", "connectedUnitGroups"] },
 );
@@ -403,10 +362,7 @@ const unitGroupSchema = s.object(
     maxPersons: integerField("Maximum occupancy of the unit group."),
     rank: integerField("Sort rank of the unit group."),
     type: unitGroupTypeField,
-    connectedUnitGroups: s.array(
-      "Connected unit groups used by this unit group.",
-      connectedUnitGroupSchema,
-    ),
+    connectedUnitGroups: s.array("Connected unit groups used by this unit group.", connectedUnitGroupSchema),
   },
   { optional: ["rank", "connectedUnitGroups"] },
 );
@@ -423,10 +379,7 @@ const idOutputSchema = s.object("Identifier payload returned by a create request
   id: s.string("Identifier returned by the successful create request."),
 });
 const idsOutputSchema = s.object("Bulk create result.", {
-  ids: s.array(
-    "Identifiers returned by the bulk create request.",
-    s.string("Created resource ID."),
-  ),
+  ids: s.array("Identifiers returned by the bulk create request.", s.string("Created resource ID.")),
 });
 const successSchema = s.object("Successful no-content operation result.", {
   success: s.boolean("Whether the operation completed successfully."),
@@ -454,10 +407,7 @@ const unitGroupListSchema = s.object("Paginated unit group list.", {
 });
 const unitAttributeListSchema = s.object("Paginated unit attribute list.", {
   count: integerField("Total number of matching unit attributes."),
-  unitAttributes: s.array(
-    "Unit attributes returned for the current page.",
-    unitAttributeDefinitionSchema,
-  ),
+  unitAttributes: s.array("Unit attributes returned for the current page.", unitAttributeDefinitionSchema),
 });
 const createPropertyProperties = {
   code: s.string("Property code shown in reports and table views.", {
@@ -494,12 +444,9 @@ const createPropertyProperties = {
 const createConnectedUnitSchema = s.object("Connected unit reference used during unit creation.", {
   unitId: s.string("ID of a unit used inside a combined unit."),
 });
-const createUnitAttributeReferenceSchema = s.object(
-  "Unit attribute reference used during unit creation.",
-  {
-    id: s.string("Unit attribute definition ID."),
-  },
-);
+const createUnitAttributeReferenceSchema = s.object("Unit attribute reference used during unit creation.", {
+  id: s.string("Unit attribute definition ID."),
+});
 const createUnitProperties = {
   propertyId: s.string("Property ID where the unit should be created."),
   name: s.string("Unit name.", { minLength: 1 }),
@@ -528,10 +475,7 @@ const createUnitGroupProperties = {
   maxPersons: s.integer("Maximum occupancy of the unit group.", positiveIntegerOptions),
   rank: s.integer("Sort rank of the unit group.", positiveIntegerOptions),
   type: createUnitGroupTypeField,
-  connectedUnitGroups: s.array(
-    "Connected unit groups used by the new unit group.",
-    createConnectedUnitGroupSchema,
-  ),
+  connectedUnitGroups: s.array("Connected unit groups used by the new unit group.", createConnectedUnitGroupSchema),
 } satisfies Record<string, JsonSchema>;
 const replaceUnitGroupBodyProperties = {
   name: localizedTextSchema("Localized unit group name."),
@@ -550,14 +494,8 @@ const createUnitAttributeProperties = {
 const listUnitsFilterProperties = {
   propertyId: s.string("Return units for the specified property ID."),
   unitGroupId: s.string("Deprecated single unit group filter kept for compatibility."),
-  unitGroupIds: s.array(
-    "Return units for the specified unit group IDs.",
-    s.string("Unit group ID."),
-  ),
-  unitAttributeIds: s.array(
-    "Return units that have the specified unit attribute IDs.",
-    s.string("Unit attribute ID."),
-  ),
+  unitGroupIds: s.array("Return units for the specified unit group IDs.", s.string("Unit group ID.")),
+  unitAttributeIds: s.array("Return units that have the specified unit attribute IDs.", s.string("Unit attribute ID.")),
   isOccupied: s.boolean("Filter by occupied or vacant units."),
   maintenanceType: maintenanceTypeField,
   condition: unitConditionField,
@@ -623,16 +561,14 @@ const apaleoActionDefinitions: readonly ApaleoActionDefinition[] = [
   },
   {
     name: "count_properties",
-    description:
-      "Return the total number of properties accessible to the connected apaleo account.",
+    description: "Return the total number of properties accessible to the connected apaleo account.",
     requiredScopes: [],
     inputSchema: actionInputSchema,
     outputSchema: countSchema,
   },
   {
     name: "get_property",
-    description:
-      "Get one property by ID, including optional localized fields and expanded actions.",
+    description: "Get one property by ID, including optional localized fields and expanded actions.",
     requiredScopes: [],
     inputSchema: s.object(
       "Input payload for retrieving one property.",
@@ -807,18 +743,14 @@ const apaleoActionDefinitions: readonly ApaleoActionDefinition[] = [
   },
   {
     name: "list_unit_groups",
-    description:
-      "List unit groups with filters for property, unit group type, pagination, and embedded resources.",
+    description: "List unit groups with filters for property, unit group type, pagination, and embedded resources.",
     requiredScopes: [apaleoUnitGroupReadScope],
     providerPermissions: unitGroupReadPermissions,
     inputSchema: s.object(
       "Input payload for listing unit groups.",
       {
         propertyId: s.string("Return unit groups for the specified property ID."),
-        unitGroupTypes: s.array(
-          "Filter results by one or more unit group types.",
-          unitGroupTypeField,
-        ),
+        unitGroupTypes: s.array("Filter results by one or more unit group types.", unitGroupTypeField),
         pageNumber: pageNumberField,
         pageSize: pageSizeField,
         expand: unitGroupListExpandField,
@@ -836,10 +768,7 @@ const apaleoActionDefinitions: readonly ApaleoActionDefinition[] = [
       "Input payload for counting unit groups.",
       {
         propertyId: s.string("Return unit groups for the specified property ID."),
-        unitGroupTypes: s.array(
-          "Filter results by one or more unit group types.",
-          unitGroupTypeField,
-        ),
+        unitGroupTypes: s.array("Filter results by one or more unit group types.", unitGroupTypeField),
       },
       { optional: ["propertyId", "unitGroupTypes"] },
     ),
@@ -964,9 +893,7 @@ function getProviderPermissions(definition: ApaleoActionDefinition): string[] {
   return hasProviderPermissions(definition) ? [...definition.providerPermissions] : [];
 }
 
-function hasProviderPermissions(
-  definition: ApaleoActionDefinition,
-): definition is ApaleoActionDefinition & {
+function hasProviderPermissions(definition: ApaleoActionDefinition): definition is ApaleoActionDefinition & {
   providerPermissions: readonly string[];
 } {
   return "providerPermissions" in definition;

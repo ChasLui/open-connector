@@ -47,9 +47,13 @@ export const ahrefsActions: ActionDefinition[] = [
     name: "get_site_explorer_metrics",
     description: "Retrieve Site Explorer metrics for a domain or URL.",
     requiredScopes: [],
-    inputSchema: s.object("Input parameters for retrieving Ahrefs Site Explorer metrics.", targetMetricsInputProperties, {
-      optional: ["mode", "country", "protocol", "volumeMode"],
-    }),
+    inputSchema: s.object(
+      "Input parameters for retrieving Ahrefs Site Explorer metrics.",
+      targetMetricsInputProperties,
+      {
+        optional: ["mode", "country", "protocol", "volumeMode"],
+      },
+    ),
     outputSchema: dataWrapperOutput,
   }),
   defineProviderAction(service, {
@@ -89,9 +93,7 @@ export const ahrefsActions: ActionDefinition[] = [
         volumeMonthlyDateFrom: s.date(
           "Start date in YYYY-MM-DD format for retrieving historical monthly search volumes.",
         ),
-        volumeMonthlyDateTo: s.date(
-          "End date in YYYY-MM-DD format for retrieving historical monthly search volumes.",
-        ),
+        volumeMonthlyDateTo: s.date("End date in YYYY-MM-DD format for retrieving historical monthly search volumes."),
         where: s.string("Ahrefs filter expression.", { minLength: 1 }),
         orderBy: s.string("Column ordering expression accepted by Ahrefs.", { minLength: 1 }),
         limit: s.integer("Maximum number of keyword rows to return.", { minimum: 1 }),

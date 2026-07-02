@@ -129,11 +129,7 @@ function mergeApiKeyIntoParameters(apiKey: string, parametersInput: unknown): Re
   return parameterRecord;
 }
 
-function buildFunctionRoute(input: {
-  folder: string;
-  functionName: string;
-  environment: AppdragEnvironment;
-}): URL {
+function buildFunctionRoute(input: { folder: string; functionName: string; environment: AppdragEnvironment }): URL {
   const path = `/api/${encodeURIComponent(input.folder)}/${encodeURIComponent(input.functionName)}`;
   if (input.environment === "default") {
     return new URL(path, appdragHomepageUrl);

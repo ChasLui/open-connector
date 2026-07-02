@@ -140,10 +140,7 @@ function signAliyunRpcParams(params: Record<string, string>, accessKeySecret: st
 }
 
 function rpcPercentEncode(value: string): string {
-  return encodeURIComponent(value)
-    .replaceAll("+", "%20")
-    .replaceAll("*", "%2A")
-    .replaceAll("%7E", "~");
+  return encodeURIComponent(value).replaceAll("+", "%20").replaceAll("*", "%2A").replaceAll("%7E", "~");
 }
 
 function formatRpcTimestamp(value: Date): string {
@@ -170,7 +167,8 @@ function parseStsResponse(text: string): AliyunStsResponse {
 function normalizeAliyunStsError(response: Response, payload: AliyunStsResponse): ProviderRequestError {
   const code = payload.Code ?? "unknown";
   const message = payload.Message ?? response.statusText;
-  const status = response.status === 400 || response.status === 401 || response.status === 403 ? 400 : response.status || 500;
+  const status =
+    response.status === 400 || response.status === 401 || response.status === 403 ? 400 : response.status || 500;
   return new ProviderRequestError(status, `aliyun_sts AssumeRole failed: ${code}: ${message}`);
 }
 

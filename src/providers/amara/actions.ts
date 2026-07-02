@@ -34,16 +34,7 @@ const videoSummarySchema = s.object(
     allUrls: s.array("All source URLs attached to the video.", s.string("A source URL.")),
   },
   {
-    optional: [
-      "title",
-      "description",
-      "team",
-      "project",
-      "primaryAudioLanguageCode",
-      "duration",
-      "created",
-      "allUrls",
-    ],
+    optional: ["title", "description", "team", "project", "primaryAudioLanguageCode", "duration", "created", "allUrls"],
   },
 );
 const userSchema = s.object(
@@ -175,18 +166,7 @@ export const amaraActions: ActionDefinition[] = [
         limit: s.integer("The page size to request.", { minimum: 1, maximum: 50 }),
       },
       {
-        optional: [
-          "sort",
-          "team",
-          "owner",
-          "project",
-          "language",
-          "archive",
-          "videoId",
-          "videoUrl",
-          "offset",
-          "limit",
-        ],
+        optional: ["sort", "team", "owner", "project", "language", "archive", "videoId", "videoUrl", "offset", "limit"],
       },
     ),
     outputSchema: s.object("Output for listing Amara videos.", {
@@ -231,15 +211,7 @@ export const amaraActions: ActionDefinition[] = [
       },
       {
         required: ["videoUrl", "title"],
-        optional: [
-          "team",
-          "project",
-          "duration",
-          "metadata",
-          "thumbnail",
-          "description",
-          "primaryAudioLanguageCode",
-        ],
+        optional: ["team", "project", "duration", "metadata", "thumbnail", "description", "primaryAudioLanguageCode"],
       },
     ),
     outputSchema: s.object("Output for creating an Amara video.", {
@@ -543,17 +515,7 @@ export const amaraActions: ActionDefinition[] = [
         teamActivity: s.boolean("Whether to request team-level activity instead of team video activity."),
       },
       {
-        optional: [
-          "team",
-          "type",
-          "after",
-          "before",
-          "limit",
-          "video",
-          "offset",
-          "language",
-          "teamActivity",
-        ],
+        optional: ["team", "type", "after", "before", "limit", "video", "offset", "language", "teamActivity"],
       },
     ),
     outputSchema: activityListOutputSchema(),

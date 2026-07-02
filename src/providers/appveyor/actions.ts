@@ -5,9 +5,7 @@ import { defineProviderAction } from "../../core/provider-definition.ts";
 
 const service = "appveyor";
 
-const accountNameField = s.nonEmptyString(
-  "The AppVeyor account name used to scope requests for user-level API keys.",
-);
+const accountNameField = s.nonEmptyString("The AppVeyor account name used to scope requests for user-level API keys.");
 
 const scopedInputSchema = s.object(
   "Optional AppVeyor account scoping parameters for this request.",
@@ -66,16 +64,13 @@ const appveyorRoleSchema = s.looseObject("An AppVeyor role returned by the team 
   updated: s.string("The timestamp when the role was last updated."),
 });
 
-const appveyorArtifactSchema = s.looseObject(
-  "An AppVeyor build artifact returned by the build job artifacts API.",
-  {
-    fileName: s.string("The artifact file name."),
-    name: s.string("The artifact display name when AppVeyor returns one."),
-    type: s.string("The AppVeyor artifact type."),
-    size: s.integer("The artifact size in bytes when AppVeyor returns it."),
-    created: s.string("The timestamp when the artifact was created."),
-  },
-);
+const appveyorArtifactSchema = s.looseObject("An AppVeyor build artifact returned by the build job artifacts API.", {
+  fileName: s.string("The artifact file name."),
+  name: s.string("The artifact display name when AppVeyor returns one."),
+  type: s.string("The AppVeyor artifact type."),
+  size: s.integer("The artifact size in bytes when AppVeyor returns it."),
+  created: s.string("The timestamp when the artifact was created."),
+});
 
 export const appveyorActions: ActionDefinition[] = [
   defineProviderAction(service, {
@@ -92,10 +87,7 @@ export const appveyorActions: ActionDefinition[] = [
     description: "List AppVeyor deployment environments accessible to the connected API token.",
     inputSchema: scopedInputSchema,
     outputSchema: s.object("The normalized AppVeyor environments list.", {
-      environments: s.array(
-        "The AppVeyor deployment environments returned by the request.",
-        appveyorEnvironmentSchema,
-      ),
+      environments: s.array("The AppVeyor deployment environments returned by the request.", appveyorEnvironmentSchema),
       count: s.nonNegativeInteger("The number of AppVeyor environments returned by the request."),
     }),
   }),

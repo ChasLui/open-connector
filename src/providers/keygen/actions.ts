@@ -24,17 +24,12 @@ const jsonApiAttributesSchema = s.looseObject(
 const jsonApiRelationshipsSchema = s.looseObject(
   "JSON:API relationships to send to Keygen. Use standard relationship linkage objects from the Keygen API docs.",
 );
-const jsonApiMetaSchema = s.looseObject(
-  "JSON:API meta fields to send to Keygen for this resource or action.",
-);
+const jsonApiMetaSchema = s.looseObject("JSON:API meta fields to send to Keygen for this resource or action.");
 const keygenDocumentSchema = s.looseObject("The raw JSON:API document returned by Keygen.", {
   data: s.unknown("The JSON:API data member returned by Keygen."),
   meta: s.looseObject("The JSON:API meta member returned by Keygen."),
   links: s.looseObject("The JSON:API links member returned by Keygen."),
-  included: s.array(
-    "Included JSON:API resources returned by Keygen.",
-    s.unknown("Included resource."),
-  ),
+  included: s.array("Included JSON:API resources returned by Keygen.", s.unknown("Included resource.")),
   errors: s.array("JSON:API errors returned by Keygen.", s.unknown("Error object.")),
 });
 const idInputSchema = (resource: string) =>
@@ -55,24 +50,14 @@ const listRelationshipInputSchema = (relationship: string) =>
     },
     { optional: ["limit", "pageSize", "pageCursor"] },
   );
-const relationshipIdsInputSchema = (
-  relationship: string,
-  fieldName: string,
-  fieldDescription: string,
-) =>
+const relationshipIdsInputSchema = (relationship: string, fieldName: string, fieldDescription: string) =>
   s.object(`Input parameters for updating Keygen ${relationship}.`, {
     id: s.string("The parent Keygen resource ID.", { minLength: 1 }),
-    [fieldName]: s.array(
-      fieldDescription,
-      s.string("A related Keygen resource ID.", { minLength: 1 }),
-      { minItems: 1 },
-    ),
+    [fieldName]: s.array(fieldDescription, s.string("A related Keygen resource ID.", { minLength: 1 }), {
+      minItems: 1,
+    }),
   });
-const changeRelationshipInputSchema = (
-  relationship: string,
-  fieldName: string,
-  fieldDescription: string,
-) =>
+const changeRelationshipInputSchema = (relationship: string, fieldName: string, fieldDescription: string) =>
   s.object(`Input parameters for changing a Keygen ${relationship}.`, {
     id: s.string("The parent Keygen resource ID.", { minLength: 1 }),
     [fieldName]: s.string(fieldDescription, { minLength: 1 }),
@@ -369,11 +354,7 @@ export const keygenActions: ActionDefinition[] = [
     name: "change_user_group",
     description: "Move a Keygen user to another group.",
     requiredScopes: [],
-    inputSchema: changeRelationshipInputSchema(
-      "user group",
-      "groupId",
-      "The Keygen group ID to assign to the user.",
-    ),
+    inputSchema: changeRelationshipInputSchema("user group", "groupId", "The Keygen group ID to assign to the user."),
     outputSchema: keygenDocumentSchema,
   }),
   defineProviderAction(service, {

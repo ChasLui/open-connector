@@ -10,32 +10,20 @@ const anthropicAdminApiVersion = "2023-06-01";
 const anthropicAdminValidationPath = "/v1/organizations/me";
 
 type AnthropicAdminRequestPhase = "validate" | "execute";
-type AnthropicAdminActionHandler = (
-  input: Record<string, unknown>,
-  context: ApiKeyProviderContext,
-) => Promise<unknown>;
+type AnthropicAdminActionHandler = (input: Record<string, unknown>, context: ApiKeyProviderContext) => Promise<unknown>;
 
 export const anthropicAdminActionHandlers: Record<string, AnthropicAdminActionHandler> = {
   get_organization(_input, context) {
     return anthropicAdminRequest({ path: anthropicAdminValidationPath }, context);
   },
   list_users(input, context) {
-    return anthropicAdminRequest(
-      { path: buildAnthropicAdminPath("/v1/organizations/users", input) },
-      context,
-    );
+    return anthropicAdminRequest({ path: buildAnthropicAdminPath("/v1/organizations/users", input) }, context);
   },
   list_workspaces(input, context) {
-    return anthropicAdminRequest(
-      { path: buildAnthropicAdminPath("/v1/organizations/workspaces", input) },
-      context,
-    );
+    return anthropicAdminRequest({ path: buildAnthropicAdminPath("/v1/organizations/workspaces", input) }, context);
   },
   list_api_keys(input, context) {
-    return anthropicAdminRequest(
-      { path: buildAnthropicAdminPath("/v1/organizations/api_keys", input) },
-      context,
-    );
+    return anthropicAdminRequest({ path: buildAnthropicAdminPath("/v1/organizations/api_keys", input) }, context);
   },
   list_workspace_members(input, context) {
     const workspaceId = requiredString(input.workspace_id, "workspace_id", providerInputError);
@@ -52,10 +40,7 @@ export const anthropicAdminActionHandlers: Record<string, AnthropicAdminActionHa
     );
   },
   list_invites(input, context) {
-    return anthropicAdminRequest(
-      { path: buildAnthropicAdminPath("/v1/organizations/invites", input) },
-      context,
-    );
+    return anthropicAdminRequest({ path: buildAnthropicAdminPath("/v1/organizations/invites", input) }, context);
   },
 };
 
@@ -69,10 +54,7 @@ export const credentialValidators: CredentialValidators = {
       signal,
     };
     const payload = optionalRecord(
-      await anthropicAdminRequest(
-        { path: anthropicAdminValidationPath, phase: "validate" },
-        context,
-      ),
+      await anthropicAdminRequest({ path: anthropicAdminValidationPath, phase: "validate" }, context),
     );
     const organizationId = optionalString(payload?.id);
     const organizationName = optionalString(payload?.name);

@@ -119,8 +119,7 @@ async function readGoogleAddressValidationPayload(response: Response): Promise<u
 
 function createGoogleAddressValidationError(status: number, payload: unknown): ProviderRequestError {
   const message =
-    extractGoogleAddressValidationMessage(payload) ??
-    `Google Address Validation request failed with ${status || 500}`;
+    extractGoogleAddressValidationMessage(payload) ?? `Google Address Validation request failed with ${status || 500}`;
 
   if (status === 429) {
     return new ProviderRequestError(429, message, payload);

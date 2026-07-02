@@ -7,7 +7,6 @@ import type {
 import type { AwsStsActionName } from "./actions.ts";
 
 import { createHash, createHmac } from "node:crypto";
-
 import { compactObject, optionalInteger, optionalRecord, optionalString } from "../../core/cast.ts";
 import { defineProviderExecutors, ProviderRequestError, providerUserAgent } from "../provider-runtime.ts";
 

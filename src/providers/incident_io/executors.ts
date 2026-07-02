@@ -2,13 +2,7 @@ import type { CredentialValidators, ProviderExecutors } from "../../core/types.t
 import type { ApiKeyProviderContext } from "../provider-runtime.ts";
 import type { IncidentIoActionName } from "./actions.ts";
 
-import {
-  compactObject,
-  optionalInteger,
-  optionalRecord,
-  optionalString,
-  stringArray,
-} from "../../core/cast.ts";
+import { compactObject, optionalInteger, optionalRecord, optionalString, stringArray } from "../../core/cast.ts";
 import {
   createProviderTimeout,
   defineApiKeyProviderExecutors,
@@ -23,10 +17,7 @@ const requestTimeoutMs = 30_000;
 
 type RequestPhase = "validate" | "execute";
 type IncidentIoActionContext = Pick<ApiKeyProviderContext, "apiKey" | "fetcher" | "signal">;
-type IncidentIoActionHandler = (
-  input: Record<string, unknown>,
-  context: IncidentIoActionContext,
-) => Promise<unknown>;
+type IncidentIoActionHandler = (input: Record<string, unknown>, context: IncidentIoActionContext) => Promise<unknown>;
 
 interface IncidentIoRequestInput {
   path: string;

@@ -221,11 +221,7 @@ async function readGoodyPayload(response: Response): Promise<unknown> {
   }
 }
 
-function createGoodyError(
-  response: Response,
-  payload: unknown,
-  phase: GoodyRequestPhase,
-): ProviderRequestError {
+function createGoodyError(response: Response, payload: unknown, phase: GoodyRequestPhase): ProviderRequestError {
   const message = readErrorMessage(payload) ?? (response.statusText.trim() || "goody request failed");
 
   if (response.status === 429) {

@@ -76,11 +76,7 @@ const feedbackOrderInputSchema = s.object(
   "Input parameters for sending merchant feedback to FraudLabs Pro.",
   {
     id: transactionIdSchema,
-    action: s.stringEnum("The feedback action to apply to the transaction.", [
-      "APPROVE",
-      "REJECT",
-      "REJECT_BLACKLIST",
-    ]),
+    action: s.stringEnum("The feedback action to apply to the transaction.", ["APPROVE", "REJECT", "REJECT_BLACKLIST"]),
     note: s.nonEmptyString("Optional merchant note explaining the feedback decision."),
   },
   { optional: ["note"] },

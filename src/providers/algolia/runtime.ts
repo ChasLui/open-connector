@@ -354,10 +354,7 @@ function wrapAlgoliaTransportError(
 }
 
 function buildAlgoliaProviderAccountId(applicationId: string, apiKey: string): string {
-  const digest = createHash("sha256")
-    .update(`${applicationId}:${apiKey}`)
-    .digest("hex")
-    .slice(0, 16);
+  const digest = createHash("sha256").update(`${applicationId}:${apiKey}`).digest("hex").slice(0, 16);
   return `algolia:${applicationId}:key:${digest}`;
 }
 

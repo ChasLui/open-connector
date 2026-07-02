@@ -34,7 +34,8 @@ export const provider: ProviderDefinition = {
           required: true,
           secret: false,
           placeholder: "paper",
-          description: "Alpaca trading environment for this key. Use paper for paper trading keys or live for live trading keys.",
+          description:
+            "Alpaca trading environment for this key. Use paper for paper trading keys or live for live trading keys.",
         },
       ],
     },

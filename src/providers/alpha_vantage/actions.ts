@@ -14,10 +14,7 @@ const outputSizeSchema = s.stringEnum(
   ["compact", "full"],
 );
 
-const datatypeSchema = s.stringEnum("The response format requested from Alpha Vantage.", [
-  "json",
-  "csv",
-]);
+const datatypeSchema = s.stringEnum("The response format requested from Alpha Vantage.", ["json", "csv"]);
 
 const intradayIntervalSchema = s.stringEnum("The intraday interval between data points.", [
   "1min",
@@ -38,12 +35,7 @@ const intervalSchema = s.stringEnum("The time interval between data points.", [
   "monthly",
 ]);
 
-const seriesTypeSchema = s.stringEnum("The price series to use for the calculation.", [
-  "close",
-  "open",
-  "high",
-  "low",
-]);
+const seriesTypeSchema = s.stringEnum("The price series to use for the calculation.", ["close", "open", "high", "low"]);
 
 const rawJsonOutputSchema = s.object("The raw response returned by Alpha Vantage.", {
   data: s.unknown("The parsed JSON payload or raw text/CSV payload returned by Alpha Vantage."),
@@ -76,9 +68,7 @@ const globalQuoteOutputSchema = s.object("The normalized global quote response."
   low: s.string("The lowest price for the latest trading session."),
   price: s.string("The latest available price."),
   volume: s.string("The latest trading volume."),
-  latestTradingDay: s.string(
-    "The latest trading day in YYYY-MM-DD format returned by Alpha Vantage.",
-  ),
+  latestTradingDay: s.string("The latest trading day in YYYY-MM-DD format returned by Alpha Vantage."),
   previousClose: s.string("The previous closing price."),
   change: s.string("The absolute price change versus the previous close."),
   changePercent: s.string("The percentage price change versus the previous close."),
@@ -130,13 +120,10 @@ const marketStatusOutputSchema = s.object("The global market status response.", 
   markets: s.array("The list of market status rows.", marketStatusSchema),
 });
 
-const fromToCurrencyInputSchema = s.object(
-  "The input for an Alpha Vantage currency pair request.",
-  {
-    fromSymbol: nonEmptyString("The base currency code, such as USD or BTC."),
-    toSymbol: nonEmptyString("The quote currency code, such as EUR or USD."),
-  },
-);
+const fromToCurrencyInputSchema = s.object("The input for an Alpha Vantage currency pair request.", {
+  fromSymbol: nonEmptyString("The base currency code, such as USD or BTC."),
+  toSymbol: nonEmptyString("The quote currency code, such as EUR or USD."),
+});
 
 const stockSymbolInputSchema = s.object("The input for an Alpha Vantage stock symbol request.", {
   symbol: nonEmptyString("The stock symbol to query, such as IBM or TSCO.LON."),
@@ -154,8 +141,7 @@ const csvCalendarInputSchema = s.object(
 export const alphaVantageActions: ActionDefinition[] = [
   defineProviderAction(service, {
     name: "search_symbols",
-    description:
-      "Search supported stocks, ETFs, and mutual funds by keyword and return the best matching symbols.",
+    description: "Search supported stocks, ETFs, and mutual funds by keyword and return the best matching symbols.",
     requiredScopes: [],
     inputSchema: s.object("The input for searching supported symbols.", {
       keywords: nonEmptyString("The company name, ticker fragment, or keyword to search for."),
@@ -164,16 +150,14 @@ export const alphaVantageActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "get_global_quote",
-    description:
-      "Retrieve the latest end-of-day quote snapshot for a single stock symbol from Alpha Vantage.",
+    description: "Retrieve the latest end-of-day quote snapshot for a single stock symbol from Alpha Vantage.",
     requiredScopes: [],
     inputSchema: stockSymbolInputSchema,
     outputSchema: globalQuoteOutputSchema,
   }),
   defineProviderAction(service, {
     name: "get_intraday_time_series",
-    description:
-      "Retrieve raw intraday OHLCV time series data for a stock symbol from Alpha Vantage.",
+    description: "Retrieve raw intraday OHLCV time series data for a stock symbol from Alpha Vantage.",
     requiredScopes: [],
     inputSchema: s.object(
       "The input for retrieving an intraday stock time series.",
@@ -192,8 +176,7 @@ export const alphaVantageActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "get_daily_time_series",
-    description:
-      "Retrieve the raw daily OHLCV time series for a single stock symbol from Alpha Vantage.",
+    description: "Retrieve the raw daily OHLCV time series for a single stock symbol from Alpha Vantage.",
     requiredScopes: [],
     inputSchema: s.object(
       "The input for retrieving the daily time series.",
@@ -207,8 +190,7 @@ export const alphaVantageActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "get_daily_adjusted_time_series",
-    description:
-      "Retrieve raw daily adjusted OHLCV, dividend, and split data for a stock symbol from Alpha Vantage.",
+    description: "Retrieve raw daily adjusted OHLCV, dividend, and split data for a stock symbol from Alpha Vantage.",
     requiredScopes: [],
     inputSchema: s.object(
       "The input for retrieving the daily adjusted time series.",
@@ -223,32 +205,28 @@ export const alphaVantageActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "get_weekly_time_series",
-    description:
-      "Retrieve the raw weekly OHLCV time series for a single stock symbol from Alpha Vantage.",
+    description: "Retrieve the raw weekly OHLCV time series for a single stock symbol from Alpha Vantage.",
     requiredScopes: [],
     inputSchema: stockSymbolInputSchema,
     outputSchema: timeSeriesOutputSchema,
   }),
   defineProviderAction(service, {
     name: "get_weekly_adjusted_time_series",
-    description:
-      "Retrieve raw weekly adjusted OHLCV and dividend data for a stock symbol from Alpha Vantage.",
+    description: "Retrieve raw weekly adjusted OHLCV and dividend data for a stock symbol from Alpha Vantage.",
     requiredScopes: [],
     inputSchema: stockSymbolInputSchema,
     outputSchema: rawJsonOutputSchema,
   }),
   defineProviderAction(service, {
     name: "get_monthly_time_series",
-    description:
-      "Retrieve the raw monthly OHLCV time series for a single stock symbol from Alpha Vantage.",
+    description: "Retrieve the raw monthly OHLCV time series for a single stock symbol from Alpha Vantage.",
     requiredScopes: [],
     inputSchema: stockSymbolInputSchema,
     outputSchema: timeSeriesOutputSchema,
   }),
   defineProviderAction(service, {
     name: "get_monthly_adjusted_time_series",
-    description:
-      "Retrieve raw monthly adjusted OHLCV and dividend data for a stock symbol from Alpha Vantage.",
+    description: "Retrieve raw monthly adjusted OHLCV and dividend data for a stock symbol from Alpha Vantage.",
     requiredScopes: [],
     inputSchema: stockSymbolInputSchema,
     outputSchema: rawJsonOutputSchema,
@@ -271,8 +249,7 @@ export const alphaVantageActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "get_market_status",
-    description:
-      "Retrieve the current open or closed status for major equity, forex, and cryptocurrency markets.",
+    description: "Retrieve the current open or closed status for major equity, forex, and cryptocurrency markets.",
     requiredScopes: [],
     inputSchema: s.object("The input for retrieving the global market status.", {}),
     outputSchema: marketStatusOutputSchema,
@@ -547,8 +524,7 @@ export const alphaVantageActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "get_commodity_data",
-    description:
-      "Retrieve raw commodity time series data from an Alpha Vantage commodity endpoint.",
+    description: "Retrieve raw commodity time series data from an Alpha Vantage commodity endpoint.",
     requiredScopes: [],
     inputSchema: s.object(
       "The input for retrieving commodity data.",
@@ -616,8 +592,7 @@ export const alphaVantageActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "get_technical_indicator",
-    description:
-      "Retrieve raw technical indicator data using an official Alpha Vantage indicator function.",
+    description: "Retrieve raw technical indicator data using an official Alpha Vantage indicator function.",
     requiredScopes: [],
     inputSchema: s.object(
       "The input for retrieving a technical indicator.",

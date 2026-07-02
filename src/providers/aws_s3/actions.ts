@@ -48,8 +48,14 @@ const objectMetadataSchema = s.object("Structured S3 object metadata.", {
   contentEncoding: s.nullable(s.string("The Content-Encoding header, or null when S3 did not return it.")),
   storageClass: s.nullable(s.string("The object storage class, or null when S3 did not return it.")),
   versionId: s.nullable(s.string("The object version ID, or null when S3 did not return it.")),
-  metadata: s.record("The user-defined `x-amz-meta-*` metadata attached to the object.", s.string("One metadata value.")),
-  headers: s.record("The raw response headers returned by S3 for this object metadata request.", s.string("One header value.")),
+  metadata: s.record(
+    "The user-defined `x-amz-meta-*` metadata attached to the object.",
+    s.string("One metadata value."),
+  ),
+  headers: s.record(
+    "The raw response headers returned by S3 for this object metadata request.",
+    s.string("One header value."),
+  ),
 });
 
 const putObjectInputSchema = s.object(
@@ -80,7 +86,11 @@ const putObjectInputSchema = s.object(
     ],
   },
 );
-putObjectInputSchema.oneOf = [{ required: ["sourceUrl"] }, { required: ["contentText"] }, { required: ["contentBase64"] }];
+putObjectInputSchema.oneOf = [
+  { required: ["sourceUrl"] },
+  { required: ["contentText"] },
+  { required: ["contentBase64"] },
+];
 
 export const awsActions: ActionDefinition[] = [
   defineProviderAction(service, {
@@ -190,7 +200,10 @@ export const awsActions: ActionDefinition[] = [
         objectKey: objectKeyField,
         region: regionField,
         method: s.stringEnum("The HTTP method that the signed URL should allow.", ["GET", "PUT", "DELETE"]),
-        expiresSeconds: s.integer("How long the signed URL remains valid, in seconds.", { minimum: 1, maximum: 604800 }),
+        expiresSeconds: s.integer("How long the signed URL remains valid, in seconds.", {
+          minimum: 1,
+          maximum: 604800,
+        }),
         contentType: s.string("The Content-Type that must be used with the signed request."),
       },
       { optional: ["bucket", "region", "method", "expiresSeconds", "contentType"] },

@@ -71,11 +71,16 @@ export const executors: ProviderExecutors = defineProviderExecutors<ApiKeyProvid
 
 export const credentialValidators: CredentialValidators = {
   async apiKey(input, { fetcher, signal }) {
-    const payload = await baremetricsGetJson("/v1/sources", {}, {
-      apiKey: input.apiKey,
-      fetcher,
-      signal,
-    }, "validate");
+    const payload = await baremetricsGetJson(
+      "/v1/sources",
+      {},
+      {
+        apiKey: input.apiKey,
+        fetcher,
+        signal,
+      },
+      "validate",
+    );
     const sources = readArray(payload, "sources");
     const firstSource = optionalRecord(sources[0]);
     const sourceId = optionalString(firstSource?.id);
@@ -106,7 +111,10 @@ async function listSources(context: ApiKeyProviderContext): Promise<Record<strin
   };
 }
 
-async function listCustomers(input: Record<string, unknown>, context: ApiKeyProviderContext): Promise<Record<string, unknown>> {
+async function listCustomers(
+  input: Record<string, unknown>,
+  context: ApiKeyProviderContext,
+): Promise<Record<string, unknown>> {
   const sourceId = requiredString(input.sourceId, "sourceId", invalidInputError);
   const payload = await baremetricsGetJson(
     `/v1/${encodeURIComponent(sourceId)}/customers`,
@@ -152,7 +160,10 @@ async function customerMutation(
   };
 }
 
-async function listPlans(input: Record<string, unknown>, context: ApiKeyProviderContext): Promise<Record<string, unknown>> {
+async function listPlans(
+  input: Record<string, unknown>,
+  context: ApiKeyProviderContext,
+): Promise<Record<string, unknown>> {
   const sourceId = requiredString(input.sourceId, "sourceId", invalidInputError);
   const payload = await baremetricsGetJson(
     `/v1/${encodeURIComponent(sourceId)}/plans`,
@@ -199,7 +210,10 @@ async function planMutation(
   };
 }
 
-async function listSubscriptions(input: Record<string, unknown>, context: ApiKeyProviderContext): Promise<Record<string, unknown>> {
+async function listSubscriptions(
+  input: Record<string, unknown>,
+  context: ApiKeyProviderContext,
+): Promise<Record<string, unknown>> {
   const sourceId = requiredString(input.sourceId, "sourceId", invalidInputError);
   const payload = await baremetricsGetJson(
     `/v1/${encodeURIComponent(sourceId)}/subscriptions`,
@@ -230,7 +244,10 @@ async function subscriptionMutation(
   return normalizeSubscriptionPayload(payload);
 }
 
-async function cancelSubscription(input: Record<string, unknown>, context: ApiKeyProviderContext): Promise<Record<string, unknown>> {
+async function cancelSubscription(
+  input: Record<string, unknown>,
+  context: ApiKeyProviderContext,
+): Promise<Record<string, unknown>> {
   const sourceId = requiredString(input.sourceId, "sourceId", invalidInputError);
   const payload = await baremetricsSendJson(
     "PUT",
@@ -243,7 +260,10 @@ async function cancelSubscription(input: Record<string, unknown>, context: ApiKe
   return normalizeSubscriptionPayload(payload);
 }
 
-async function listCharges(input: Record<string, unknown>, context: ApiKeyProviderContext): Promise<Record<string, unknown>> {
+async function listCharges(
+  input: Record<string, unknown>,
+  context: ApiKeyProviderContext,
+): Promise<Record<string, unknown>> {
   const sourceId = requiredString(input.sourceId, "sourceId", invalidInputError);
   const payload = await baremetricsGetJson(
     `/v1/${encodeURIComponent(sourceId)}/charges`,
@@ -375,7 +395,11 @@ async function readBaremetricsPayload(response: Response): Promise<unknown> {
 function createBaremetricsError(response: Response, payload: unknown, phase: BaremetricsPhase): ProviderRequestError {
   const message = extractBaremetricsErrorMessage(payload) ?? response.statusText;
   if (response.status === 401 || response.status === 403) {
-    return new ProviderRequestError(phase === "validate" ? 400 : response.status, message || "Baremetrics API key was rejected", payload);
+    return new ProviderRequestError(
+      phase === "validate" ? 400 : response.status,
+      message || "Baremetrics API key was rejected",
+      payload,
+    );
   }
   if (response.status === 429) {
     return new ProviderRequestError(429, message || "Baremetrics rate limit exceeded", payload);

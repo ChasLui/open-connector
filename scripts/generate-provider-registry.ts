@@ -1,4 +1,4 @@
-import { readdir, writeFile } from "node:fs/promises";
+import { readFile, readdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 const providersDir = join(process.cwd(), "src/providers");
@@ -49,5 +49,23 @@ const lines = [
 ];
 
 const registryPath = join(providersDir, "registry.generated.ts");
-await writeFile(registryPath, `${lines.join("\n")}\n`);
-console.log(`Generated provider registry for ${services.length} providers.`);
+const registryContent = `${lines.join("\n")}\n`;
+const existingContent = await readTextFile(registryPath);
+if (existingContent !== registryContent) {
+  await writeFile(registryPath, registryContent);
+  console.log(`Generated provider registry for ${services.length} providers.`);
+} else {
+  console.log(`Provider registry is up to date for ${services.length} providers.`);
+}
+
+async function readTextFile(path: string): Promise<string | undefined> {
+  try {
+    return await readFile(path, "utf8");
+  } catch (error) {
+    if (error instanceof Error && "code" in error && error.code === "ENOENT") {
+      return undefined;
+    }
+
+    throw error;
+  }
+}

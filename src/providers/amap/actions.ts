@@ -215,11 +215,15 @@ const simpleRoutePathSchema = s.object(
   { optional: ["distance", "cost"] },
 );
 const simpleRouteOutputSchema = s.object("The response payload returned by the simple route actions.", {
-  route: s.object("The route summary returned by the API.", {
-    origin: s.string("The route origin."),
-    destination: s.string("The route destination."),
-    paths: s.array("The available route paths.", simpleRoutePathSchema),
-  }, { optional: ["origin", "destination"] }),
+  route: s.object(
+    "The route summary returned by the API.",
+    {
+      origin: s.string("The route origin."),
+      destination: s.string("The route destination."),
+      paths: s.array("The available route paths.", simpleRoutePathSchema),
+    },
+    { optional: ["origin", "destination"] },
+  ),
 });
 const routeWalkingInputSchema = s.object(
   "The input parameters for planning a walking route.",
@@ -255,12 +259,16 @@ const routeDrivingInputSchema = s.object(
   { optional: ["waypoints", "strategy", "plate", "carType", "avoidPolygons", "showFields"] },
 );
 const routeDrivingOutputSchema = s.object("The response payload returned by the driving route action.", {
-  route: s.object("The route summary returned by the driving route API.", {
-    origin: s.string("The route origin."),
-    destination: s.string("The route destination."),
-    taxi_cost: s.string("The estimated taxi cost."),
-    paths: s.array("The available driving paths.", objectSchema),
-  }, { optional: ["origin", "destination", "taxi_cost"] }),
+  route: s.object(
+    "The route summary returned by the driving route API.",
+    {
+      origin: s.string("The route origin."),
+      destination: s.string("The route destination."),
+      taxi_cost: s.string("The estimated taxi cost."),
+      paths: s.array("The available driving paths.", objectSchema),
+    },
+    { optional: ["origin", "destination", "taxi_cost"] },
+  ),
 });
 const routeTransitInputSchema = s.object(
   "The input parameters for planning a transit route.",
@@ -276,12 +284,16 @@ const routeTransitInputSchema = s.object(
   { optional: ["strategy", "nightFlag", "showFields"] },
 );
 const routeTransitOutputSchema = s.object("The response payload returned by the transit route action.", {
-  route: s.object("The route summary returned by the transit route API.", {
-    origin: s.string("The route origin."),
-    destination: s.string("The route destination."),
-    cost: objectSchema,
-    transits: s.array("The available transit options.", objectSchema),
-  }, { optional: ["origin", "destination", "cost"] }),
+  route: s.object(
+    "The route summary returned by the transit route API.",
+    {
+      origin: s.string("The route origin."),
+      destination: s.string("The route destination."),
+      cost: objectSchema,
+      transits: s.array("The available transit options.", objectSchema),
+    },
+    { optional: ["origin", "destination", "cost"] },
+  ),
 });
 
 export const amapActions: ActionDefinition[] = [

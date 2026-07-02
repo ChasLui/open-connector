@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "files": [
+    "./ensure-generated.ts",
+    "./generate-catalog.ts",
+    "./generate-provider-registry.ts",
+    "./healthcheck.ts",
+    "./typecheck.ts"
+  ]
+}

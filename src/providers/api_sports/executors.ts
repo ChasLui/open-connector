@@ -132,7 +132,11 @@ function listLeagues(input: Record<string, unknown>, context: ApiSportsActionCon
 }
 
 function listTeams(input: Record<string, unknown>, context: ApiSportsActionContext): Promise<unknown> {
-  requireAnyField(input, ["id", "name", "league", "season", "country", "code", "venue", "search"], "Provide at least one team filter");
+  requireAnyField(
+    input,
+    ["id", "name", "league", "season", "country", "code", "venue", "search"],
+    "Provide at least one team filter",
+  );
   return apiSportsGet(
     "/teams",
     compactObject({
@@ -514,7 +518,9 @@ function readObject(value: unknown): Record<string, unknown> | null {
 }
 
 function readObjectArray(value: unknown): Array<Record<string, unknown>> {
-  return Array.isArray(value) ? value.filter((item): item is Record<string, unknown> => optionalRecord(item) != null) : [];
+  return Array.isArray(value)
+    ? value.filter((item): item is Record<string, unknown> => optionalRecord(item) != null)
+    : [];
 }
 
 function readString(value: unknown): string | null {
@@ -856,7 +862,11 @@ function validatePlayersStatisticsInput(input: Record<string, unknown>): void {
 }
 
 function validateInjuriesInput(input: Record<string, unknown>): void {
-  requireAnyField(input, ["fixture", "ids", "date", "league", "team", "player"], "Provide at least one injury query condition");
+  requireAnyField(
+    input,
+    ["fixture", "ids", "date", "league", "team", "player"],
+    "Provide at least one injury query condition",
+  );
   if ((input.league || input.team || input.player) && !input.season) {
     throw new ProviderRequestError(400, "Season must be provided when querying using league, team, or player");
   }

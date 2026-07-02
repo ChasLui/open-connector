@@ -112,11 +112,7 @@ export const giphyActionHandlers: Record<GiphyActionName, GiphyActionHandler> = 
     );
   },
   get_gif(input, context) {
-    return giphyGetGif(
-      `/gifs/${encodeURIComponent(String(input.gifId))}`,
-      toGiphyContextQuery(input),
-      context,
-    );
+    return giphyGetGif(`/gifs/${encodeURIComponent(String(input.gifId))}`, toGiphyContextQuery(input), context);
   },
   list_gifs_by_ids(input, context) {
     return giphyListByIds(
@@ -273,9 +269,7 @@ async function giphyListStrings(
 ): Promise<unknown> {
   const payload = await giphyGet(path, query, context);
   return {
-    tags: Array.isArray(payload.data)
-      ? payload.data.filter((value): value is string => typeof value === "string")
-      : [],
+    tags: Array.isArray(payload.data) ? payload.data.filter((value): value is string => typeof value === "string") : [],
   };
 }
 

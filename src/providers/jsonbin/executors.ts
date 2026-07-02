@@ -2,11 +2,7 @@ import type { CredentialValidators, ProviderExecutors } from "../../core/types.t
 import type { JsonbinActionName } from "./actions.ts";
 
 import { optionalRecord, optionalString, requiredRecord, requiredString } from "../../core/cast.ts";
-import {
-  defineApiKeyProviderExecutors,
-  providerUserAgent,
-  ProviderRequestError,
-} from "../provider-runtime.ts";
+import { defineApiKeyProviderExecutors, providerUserAgent, ProviderRequestError } from "../provider-runtime.ts";
 
 const service = "jsonbin";
 const jsonbinApiBaseUrl = "https://api.jsonbin.io/v3";

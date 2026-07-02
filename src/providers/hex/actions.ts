@@ -95,7 +95,9 @@ const runProjectInputSchema = s.actionInput(
       minItems: 1,
     }),
     dryRun: s.boolean("Whether to validate run inputs without executing the project."),
-    updatePublishedResults: s.boolean("Whether to update the cached state of the published app after a successful run."),
+    updatePublishedResults: s.boolean(
+      "Whether to update the cached state of the published app after a successful run.",
+    ),
     useCachedSqlResults: s.boolean("Whether to use cached SQL results when available."),
     viewId: s.uuid("Saved view ID to use for project run inputs."),
     flagConfigOverride: s.nonEmptyString("Feature flag configuration override for the run."),

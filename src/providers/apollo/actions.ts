@@ -56,9 +56,7 @@ const searchOrganizationsInputSchema = s.object(
     organizationKeywordTags: stringListField(
       "The organization industry or specialization keywords used to refine the search.",
     ),
-    organizationEmployeeRanges: stringListField(
-      "The employee-count ranges expressed as Apollo 'min,max' strings.",
-    ),
+    organizationEmployeeRanges: stringListField("The employee-count ranges expressed as Apollo 'min,max' strings."),
     organizationRevenueMin: revenueField(
       "The minimum annual revenue, in US dollars, used to refine the organization search.",
     ),
@@ -97,9 +95,7 @@ const searchPeopleInputSchema = s.object(
     contactEmailStatus: stringListField("The Apollo contact-email-status values to include."),
     organizationLocations: stringListField("The organization headquarters locations used to refine the people search."),
     organizationDomains: stringListField("The organization domains used to refine the people search."),
-    organizationEmployeeRanges: stringListField(
-      "The employee-count ranges expressed as Apollo 'min,max' strings.",
-    ),
+    organizationEmployeeRanges: stringListField("The employee-count ranges expressed as Apollo 'min,max' strings."),
     organizationRevenueMin: revenueField(
       "The minimum annual revenue, in US dollars, used to refine the people search.",
     ),

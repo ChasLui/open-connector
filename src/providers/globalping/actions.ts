@@ -12,10 +12,9 @@ const measurementTypeSchema = s.stringEnum("The Globalping measurement type.", [
   "mtr",
   "http",
 ]);
-const ipVersionSchema = s.union(
-  [s.literal(4, { description: "IPv4." }), s.literal(6, { description: "IPv6." })],
-  { description: "The IP version used by the measurement." },
-);
+const ipVersionSchema = s.union([s.literal(4, { description: "IPv4." }), s.literal(6, { description: "IPv6." })], {
+  description: "The IP version used by the measurement.",
+});
 
 const continentCodeSchema = s.stringEnum("A continent code used to select probes.", [
   "AF",
@@ -163,7 +162,13 @@ const httpOptionsInputSchema = s.object(
 );
 
 const measurementOptionsInputSchema = s.union(
-  [pingOptionsInputSchema, tracerouteOptionsInputSchema, dnsOptionsInputSchema, mtrOptionsInputSchema, httpOptionsInputSchema],
+  [
+    pingOptionsInputSchema,
+    tracerouteOptionsInputSchema,
+    dnsOptionsInputSchema,
+    mtrOptionsInputSchema,
+    httpOptionsInputSchema,
+  ],
   { description: "The type-specific Globalping measurement options." },
 );
 

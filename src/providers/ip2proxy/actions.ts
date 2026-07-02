@@ -65,8 +65,7 @@ const lookupIpOutputSchema = s.looseRequiredObject(
 export const ip2proxyActions: ActionDefinition[] = [
   defineProviderAction(service, {
     name: "lookup_ip",
-    description:
-      "Detect whether one IPv4 or IPv6 address is a proxy and return the official IP2Proxy lookup payload.",
+    description: "Detect whether one IPv4 or IPv6 address is a proxy and return the official IP2Proxy lookup payload.",
     inputSchema: lookupIpInputSchema,
     outputSchema: lookupIpOutputSchema,
   }),

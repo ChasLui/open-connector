@@ -254,7 +254,10 @@ const squadPlayerSchema = s.object("Team squad player.", {
 
 const playerStatisticsResultSchema = s.object("Player season statistics result.", {
   player: playerSummarySchema,
-  statistics: s.array("Player season statistics list, retaining upstream statistical objects.", s.unknownObject("Player statistics object.")),
+  statistics: s.array(
+    "Player season statistics list, retaining upstream statistical objects.",
+    s.unknownObject("Player statistics object."),
+  ),
 });
 
 const injurySchema = s.object("One injury or suspension record.", {

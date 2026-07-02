@@ -58,17 +58,14 @@ const domainLookupOutputSchema = s.object(
   { optional: ["domain_id", "whois_server"] },
 );
 
-const hostedDomainsLookupOutputSchema = s.object(
-  "Hosted domains lookup result for an IP address.",
-  {
-    ip: s.string("The queried IP address."),
-    page: s.integer("Current page number."),
-    per_page: s.integer("Number of domains returned per page."),
-    total_pages: s.integer("Total number of available pages."),
-    total_domains: s.integer("Total number of domains hosted on the IP."),
-    domains: s.array("Hosted domain names.", s.string("Hosted domain name.")),
-  },
-);
+const hostedDomainsLookupOutputSchema = s.object("Hosted domains lookup result for an IP address.", {
+  ip: s.string("The queried IP address."),
+  page: s.integer("Current page number."),
+  per_page: s.integer("Number of domains returned per page."),
+  total_pages: s.integer("Total number of available pages."),
+  total_domains: s.integer("Total number of domains hosted on the IP."),
+  domains: s.array("Hosted domain names.", s.string("Hosted domain name.")),
+});
 
 export const ip2whoisActions: ActionDefinition[] = [
   defineProviderAction(service, {

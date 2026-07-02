@@ -2,14 +2,8 @@ import type { CredentialValidators, ExecutionContext, ProviderExecutors } from "
 import type { KaleidoActionContext } from "./runtime.ts";
 
 import { optionalString } from "../../core/cast.ts";
-import {
-  defineProviderExecutors,
-  requireApiKeyCredential,
-} from "../provider-runtime.ts";
-import {
-  kaleidoActionHandlers,
-  validateKaleidoCredential,
-} from "./runtime.ts";
+import { defineProviderExecutors, requireApiKeyCredential } from "../provider-runtime.ts";
+import { kaleidoActionHandlers, validateKaleidoCredential } from "./runtime.ts";
 
 const service = "kaleido";
 

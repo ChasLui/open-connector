@@ -97,10 +97,14 @@ export const basinActions: ActionDefinition[] = [
     description: "List projects available to the current Basin API key.",
     requiredScopes: [],
     inputSchema: listInputSchema,
-    outputSchema: s.object("Project list response inferred from Basin API documentation.", {
-      projects: s.array("Projects returned by the Basin projects list endpoint.", resourceSchema),
-      meta: metaSchema,
-    }, { optional: ["meta"] }),
+    outputSchema: s.object(
+      "Project list response inferred from Basin API documentation.",
+      {
+        projects: s.array("Projects returned by the Basin projects list endpoint.", resourceSchema),
+        meta: metaSchema,
+      },
+      { optional: ["meta"] },
+    ),
   }),
   defineProviderAction(service, {
     name: "get_project",
@@ -140,10 +144,14 @@ export const basinActions: ActionDefinition[] = [
     description: "List forms available to the current Basin API key.",
     requiredScopes: [],
     inputSchema: listInputSchema,
-    outputSchema: s.object("Form list response inferred from Basin API documentation.", {
-      forms: s.array("Forms returned by the Basin forms list endpoint.", resourceSchema),
-      meta: metaSchema,
-    }, { optional: ["meta"] }),
+    outputSchema: s.object(
+      "Form list response inferred from Basin API documentation.",
+      {
+        forms: s.array("Forms returned by the Basin forms list endpoint.", resourceSchema),
+        meta: metaSchema,
+      },
+      { optional: ["meta"] },
+    ),
   }),
   defineProviderAction(service, {
     name: "get_form",
@@ -190,15 +198,24 @@ export const basinActions: ActionDefinition[] = [
         form_id: s.nonEmptyString("Basin form ID used to filter submissions."),
         filter_by: s.stringEnum("Submission status filter accepted by Basin.", ["new", "spam", "trash", "all"]),
         query: s.nonEmptyString("Search text for matching submissions."),
-        order_by: s.stringEnum("Submission sort order accepted by Basin.", ["date_asc", "date_desc", "email_asc", "email_desc"]),
+        order_by: s.stringEnum("Submission sort order accepted by Basin.", [
+          "date_asc",
+          "date_desc",
+          "email_asc",
+          "email_desc",
+        ]),
         date_range: s.nonEmptyString("Date range in YYYY-MM-DD+to+YYYY-MM-DD format accepted by Basin."),
       },
       { optional: ["form_id", "filter_by", "query", "order_by", "date_range"] },
     ),
-    outputSchema: s.object("Submission list response inferred from Basin API documentation.", {
-      submissions: s.array("Submissions returned by the Basin submissions list endpoint.", resourceSchema),
-      meta: metaSchema,
-    }, { optional: ["meta"] }),
+    outputSchema: s.object(
+      "Submission list response inferred from Basin API documentation.",
+      {
+        submissions: s.array("Submissions returned by the Basin submissions list endpoint.", resourceSchema),
+        meta: metaSchema,
+      },
+      { optional: ["meta"] },
+    ),
   }),
   defineProviderAction(service, {
     name: "get_submission",
@@ -219,10 +236,14 @@ export const basinActions: ActionDefinition[] = [
     description: "List Basin form webhooks with optional filters.",
     requiredScopes: [],
     inputSchema: listInputSchema,
-    outputSchema: s.object("Form webhook list response inferred from Basin API documentation.", {
-      form_webhooks: s.array("Form webhooks returned by the Basin list endpoint.", resourceSchema),
-      meta: metaSchema,
-    }, { optional: ["meta"] }),
+    outputSchema: s.object(
+      "Form webhook list response inferred from Basin API documentation.",
+      {
+        form_webhooks: s.array("Form webhooks returned by the Basin list endpoint.", resourceSchema),
+        meta: metaSchema,
+      },
+      { optional: ["meta"] },
+    ),
   }),
   defineProviderAction(service, {
     name: "get_form_webhook",

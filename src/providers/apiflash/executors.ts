@@ -220,11 +220,7 @@ function buildCaptureQuery(input: Record<string, unknown>): Record<string, Apifl
   });
 }
 
-function buildApiflashUrl(
-  path: string,
-  apiKey: string,
-  query: Record<string, ApiflashQueryValue> = {},
-): URL {
+function buildApiflashUrl(path: string, apiKey: string, query: Record<string, ApiflashQueryValue> = {}): URL {
   const url = new URL(path, apiflashApiBaseUrl);
   url.searchParams.set("access_key", apiKey);
   for (const [key, value] of Object.entries(query)) {
@@ -295,15 +291,9 @@ async function readApiflashPayload(response: Response): Promise<unknown> {
   }
 }
 
-function createApiflashError(
-  response: Response,
-  payload: unknown,
-  phase: ApiflashRequestPhase,
-): ProviderRequestError {
+function createApiflashError(response: Response, payload: unknown, phase: ApiflashRequestPhase): ProviderRequestError {
   const message =
-    extractApiflashErrorMessage(payload) ??
-    response.statusText ??
-    `apiflash request failed with ${response.status}`;
+    extractApiflashErrorMessage(payload) ?? response.statusText ?? `apiflash request failed with ${response.status}`;
 
   if (response.status === 429 || response.status === 402) {
     return new ProviderRequestError(429, message, payload);

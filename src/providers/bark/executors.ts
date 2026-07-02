@@ -3,7 +3,6 @@ import type { ApiKeyProviderContext } from "../provider-runtime.ts";
 import type { BarkActionName } from "./actions.ts";
 
 import { createHash } from "node:crypto";
-
 import { compactObject, optionalInteger, optionalString } from "../../core/cast.ts";
 import {
   defineProviderExecutors,
@@ -95,7 +94,10 @@ export const credentialValidators: CredentialValidators = {
   },
 };
 
-async function sendBarkNotification(input: Record<string, unknown>, context: BarkContext): Promise<BarkResponsePayload> {
+async function sendBarkNotification(
+  input: Record<string, unknown>,
+  context: BarkContext,
+): Promise<BarkResponsePayload> {
   const payload = await requestBarkJson({
     context,
     path: "/push",
@@ -107,7 +109,10 @@ async function sendBarkNotification(input: Record<string, unknown>, context: Bar
   return normalizeBarkResponsePayload(payload);
 }
 
-async function sendBarkBatchNotifications(input: Record<string, unknown>, context: BarkContext): Promise<BarkResponsePayload> {
+async function sendBarkBatchNotifications(
+  input: Record<string, unknown>,
+  context: BarkContext,
+): Promise<BarkResponsePayload> {
   const payload = await requestBarkJson({
     context,
     path: "/push",
@@ -206,7 +211,9 @@ async function requestBarkRaw(input: {
   } catch (error) {
     throw new ProviderRequestError(
       isAbortError(error) ? 504 : 502,
-      error instanceof Error ? `Bark ${input.path} request failed: ${error.message}` : `Bark ${input.path} request failed`,
+      error instanceof Error
+        ? `Bark ${input.path} request failed: ${error.message}`
+        : `Bark ${input.path} request failed`,
     );
   }
 

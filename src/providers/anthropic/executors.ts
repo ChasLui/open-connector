@@ -8,10 +8,7 @@ const service = "anthropic";
 const anthropicApiBaseUrl = "https://api.anthropic.com";
 const anthropicApiVersion = "2023-06-01";
 
-type AnthropicActionHandler = (
-  input: Record<string, unknown>,
-  context: ApiKeyProviderContext,
-) => Promise<unknown>;
+type AnthropicActionHandler = (input: Record<string, unknown>, context: ApiKeyProviderContext) => Promise<unknown>;
 
 export const anthropicActionHandlers: Record<string, AnthropicActionHandler> = {
   list_models(input, context) {

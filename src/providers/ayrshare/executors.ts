@@ -112,7 +112,10 @@ export const credentialValidators: CredentialValidators = {
   },
 };
 
-async function getUserProfile(input: Record<string, unknown>, context: AyrshareContext): Promise<Record<string, unknown>> {
+async function getUserProfile(
+  input: Record<string, unknown>,
+  context: AyrshareContext,
+): Promise<Record<string, unknown>> {
   const payload = await requestAyrshareJson(
     {
       method: "GET",
@@ -132,7 +135,10 @@ async function getUserProfile(input: Record<string, unknown>, context: AyrshareC
   };
 }
 
-async function listPostHistory(input: Record<string, unknown>, context: AyrshareContext): Promise<Record<string, unknown>> {
+async function listPostHistory(
+  input: Record<string, unknown>,
+  context: AyrshareContext,
+): Promise<Record<string, unknown>> {
   const payload = await requestAyrshareJson(
     {
       method: "GET",
@@ -273,7 +279,10 @@ async function retryPost(input: Record<string, unknown>, context: AyrshareContex
   };
 }
 
-async function checkPostLength(input: Record<string, unknown>, context: AyrshareContext): Promise<Record<string, unknown>> {
+async function checkPostLength(
+  input: Record<string, unknown>,
+  context: AyrshareContext,
+): Promise<Record<string, unknown>> {
   const payload = await requestAyrshareJson(
     {
       method: "POST",
@@ -294,7 +303,10 @@ async function checkPostLength(input: Record<string, unknown>, context: Ayrshare
   };
 }
 
-async function validatePost(input: Record<string, unknown>, context: AyrshareContext): Promise<Record<string, unknown>> {
+async function validatePost(
+  input: Record<string, unknown>,
+  context: AyrshareContext,
+): Promise<Record<string, unknown>> {
   const payload = await requestAyrshareJson(
     {
       method: "POST",
@@ -318,7 +330,10 @@ async function validatePost(input: Record<string, unknown>, context: AyrshareCon
   };
 }
 
-async function verifyMediaUrl(input: Record<string, unknown>, context: AyrshareContext): Promise<Record<string, unknown>> {
+async function verifyMediaUrl(
+  input: Record<string, unknown>,
+  context: AyrshareContext,
+): Promise<Record<string, unknown>> {
   const payload = await requestAyrshareJson(
     {
       method: "POST",
@@ -342,7 +357,10 @@ async function verifyMediaUrl(input: Record<string, unknown>, context: AyrshareC
   };
 }
 
-async function getPostAnalytics(input: Record<string, unknown>, context: AyrshareContext): Promise<Record<string, unknown>> {
+async function getPostAnalytics(
+  input: Record<string, unknown>,
+  context: AyrshareContext,
+): Promise<Record<string, unknown>> {
   const payload = await requestAyrshareJson(
     {
       method: "POST",

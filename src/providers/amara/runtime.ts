@@ -205,11 +205,7 @@ async function amaraListVideos(input: JsonRecord, context: AmaraActionContext) {
 
 async function amaraViewVideoDetails(input: JsonRecord, context: AmaraActionContext) {
   const videoId = requireString(input, "videoId");
-  const video = await amaraRequestJson<JsonRecord>(
-    { path: `/videos/${videoId}/` },
-    context,
-    "execute",
-  );
+  const video = await amaraRequestJson<JsonRecord>({ path: `/videos/${videoId}/` }, context, "execute");
 
   return { video };
 }
@@ -297,11 +293,7 @@ async function amaraListVideoUrls(input: JsonRecord, context: AmaraActionContext
 async function amaraGetVideoUrl(input: JsonRecord, context: AmaraActionContext) {
   const videoId = requireString(input, "videoId");
   const urlId = requireInteger(input, "urlId");
-  const payload = await amaraRequestJson<JsonRecord>(
-    { path: `/videos/${videoId}/urls/${urlId}/` },
-    context,
-    "execute",
-  );
+  const payload = await amaraRequestJson<JsonRecord>({ path: `/videos/${videoId}/urls/${urlId}/` }, context, "execute");
   return {
     videoUrl: normalizeVideoUrl(payload),
   };
@@ -387,10 +379,7 @@ async function amaraGetVideoUrlDetails(input: JsonRecord, context: AmaraActionCo
   };
 }
 
-async function amaraListSubtitleLanguages(
-  input: JsonRecord,
-  context: AmaraActionContext,
-) {
+async function amaraListSubtitleLanguages(input: JsonRecord, context: AmaraActionContext) {
   const videoId = requireString(input, "videoId");
   return amaraListResponse(
     {
@@ -402,10 +391,7 @@ async function amaraListSubtitleLanguages(
   );
 }
 
-async function amaraCreateSubtitleLanguage(
-  input: JsonRecord,
-  context: AmaraActionContext,
-) {
+async function amaraCreateSubtitleLanguage(input: JsonRecord, context: AmaraActionContext) {
   const videoId = requireString(input, "videoId");
   const language = await amaraRequestJson<JsonRecord>(
     {
@@ -421,10 +407,7 @@ async function amaraCreateSubtitleLanguage(
   return { language };
 }
 
-async function amaraGetSubtitleLanguageDetails(
-  input: JsonRecord,
-  context: AmaraActionContext,
-) {
+async function amaraGetSubtitleLanguageDetails(input: JsonRecord, context: AmaraActionContext) {
   const videoId = requireString(input, "videoId");
   const languageCode = requireString(input, "languageCode");
   const language = await amaraRequestJson<JsonRecord>(
@@ -435,10 +418,7 @@ async function amaraGetSubtitleLanguageDetails(
   return { language };
 }
 
-async function amaraUpdateSubtitleLanguage(
-  input: JsonRecord,
-  context: AmaraActionContext,
-) {
+async function amaraUpdateSubtitleLanguage(input: JsonRecord, context: AmaraActionContext) {
   const videoId = requireString(input, "videoId");
   const languageCode = requireString(input, "languageCode");
   const language = await amaraRequestJson<JsonRecord>(
@@ -543,20 +523,12 @@ async function amaraListSubtitleActions(input: JsonRecord, context: AmaraActionC
     actions: (payload.actions ?? []).map((item) => ({
       action: optionalString(item.action) ?? "",
       label: optionalString(item.label) ?? "",
-      completed:
-        typeof item.completed === "boolean"
-          ? item.completed
-          : item.completed === null
-            ? null
-            : undefined,
+      completed: typeof item.completed === "boolean" ? item.completed : item.completed === null ? null : undefined,
     })),
   };
 }
 
-async function amaraPerformSubtitleAction(
-  input: JsonRecord,
-  context: AmaraActionContext,
-) {
+async function amaraPerformSubtitleAction(input: JsonRecord, context: AmaraActionContext) {
   const videoId = requireString(input, "videoId");
   const languageCode = requireString(input, "languageCode");
   const payload = await amaraRequestJson<JsonRecord>(
@@ -632,21 +604,13 @@ async function amaraListActivity(input: JsonRecord, context: AmaraActionContext)
 
 async function amaraGetActivity(input: JsonRecord, context: AmaraActionContext) {
   const activityId = requireInteger(input, "activityId");
-  const activity = await amaraRequestJson<JsonRecord>(
-    { path: `/activity/${activityId}/` },
-    context,
-    "execute",
-  );
+  const activity = await amaraRequestJson<JsonRecord>({ path: `/activity/${activityId}/` }, context, "execute");
   return { activity };
 }
 
 async function amaraGetUser(input: JsonRecord, context: AmaraActionContext) {
   const userIdentifier = requireString(input, "userIdentifier");
-  const payload = await amaraRequestJson<JsonRecord>(
-    { path: `/users/${userIdentifier}/` },
-    context,
-    "execute",
-  );
+  const payload = await amaraRequestJson<JsonRecord>({ path: `/users/${userIdentifier}/` }, context, "execute");
 
   const providerAccountId = optionalString(payload.id);
   const username = optionalString(payload.username);
@@ -661,11 +625,7 @@ async function amaraGetUser(input: JsonRecord, context: AmaraActionContext) {
 
 async function amaraGetUserData(input: JsonRecord, context: AmaraActionContext) {
   const identifier = requireString(input, "identifier");
-  const user = await amaraRequestJson<JsonRecord>(
-    { path: `/users/${identifier}/` },
-    context,
-    "execute",
-  );
+  const user = await amaraRequestJson<JsonRecord>({ path: `/users/${identifier}/` }, context, "execute");
   return { user };
 }
 
@@ -702,11 +662,7 @@ async function amaraListTeams(input: JsonRecord, context: AmaraActionContext) {
 
 async function amaraGetTeamDetails(input: JsonRecord, context: AmaraActionContext) {
   const slug = requireString(input, "slug");
-  const team = await amaraRequestJson<JsonRecord>(
-    { path: `/teams/${slug}/` },
-    context,
-    "execute",
-  );
+  const team = await amaraRequestJson<JsonRecord>({ path: `/teams/${slug}/` }, context, "execute");
   return { team };
 }
 
@@ -757,11 +713,7 @@ async function amaraListResponse(
   outputKey: string,
   normalizeItem: (value: JsonRecord) => unknown,
 ) {
-  const payload = await amaraRequestJson<{ meta?: JsonRecord; objects?: JsonRecord[] }>(
-    input,
-    context,
-    "execute",
-  );
+  const payload = await amaraRequestJson<{ meta?: JsonRecord; objects?: JsonRecord[] }>(input, context, "execute");
 
   return {
     [outputKey]: (payload.objects ?? []).map((item) => normalizeItem(item)),
@@ -778,20 +730,12 @@ async function amaraRequestJson<T>(
   return payload as T;
 }
 
-async function amaraRequestText(
-  input: AmaraRequestInput,
-  context: AmaraActionContext,
-  mode: "validate" | "execute",
-) {
+async function amaraRequestText(input: AmaraRequestInput, context: AmaraActionContext, mode: "validate" | "execute") {
   const payload = await amaraRequest({ ...input, responseType: "text" }, context, mode);
   return String(payload ?? "");
 }
 
-async function amaraRequest(
-  input: AmaraRequestInput,
-  context: AmaraActionContext,
-  mode: "validate" | "execute",
-) {
+async function amaraRequest(input: AmaraRequestInput, context: AmaraActionContext, mode: "validate" | "execute") {
   const url = buildAmaraUrl(input.path, input.query);
   const headers: Record<string, string> = {
     accept: input.responseType === "text" ? "text/plain, application/json" : "application/json",
@@ -819,10 +763,7 @@ async function amaraRequest(
   return response.json();
 }
 
-function buildAmaraUrl(
-  path: string,
-  query?: Record<string, string | number | boolean | undefined>,
-) {
+function buildAmaraUrl(path: string, query?: Record<string, string | number | boolean | undefined>) {
   const url = new URL(`${amaraApiBaseUrl}${path}`);
   for (const [key, value] of Object.entries(query ?? {})) {
     if (value === undefined) {
@@ -853,10 +794,7 @@ function normalizeUser(user: JsonRecord) {
     username: optionalString(user.username) ?? "",
     fullName: optionalString(user.full_name) ?? null,
     displayName:
-      optionalString(user.display_name) ??
-      optionalString(user.full_name) ??
-      optionalString(user.username) ??
-      null,
+      optionalString(user.display_name) ?? optionalString(user.full_name) ?? optionalString(user.username) ?? null,
     isActive: typeof user.is_active === "boolean" ? user.is_active : undefined,
   };
 }
@@ -876,8 +814,7 @@ function normalizeActivity(activity: JsonRecord) {
     id: typeof activity.id === "number" ? activity.id : undefined,
     created: optionalString(activity.created),
     date: optionalString(activity.date),
-    type:
-      typeof activity.type === "number" ? activity.type : (optionalString(activity.type) ?? ""),
+    type: typeof activity.type === "number" ? activity.type : (optionalString(activity.type) ?? ""),
     typeName: optionalString(activity.type_name) ?? null,
     video: optionalString(activity.video) ?? null,
     language: optionalString(activity.language) ?? null,
@@ -888,15 +825,11 @@ function normalizeSubtitleLanguage(language: JsonRecord) {
   return {
     languageCode: optionalString(language.language_code) ?? "",
     name: optionalString(language.name) ?? "",
-    subtitleCount:
-      typeof language.subtitle_count === "number" ? language.subtitle_count : undefined,
+    subtitleCount: typeof language.subtitle_count === "number" ? language.subtitle_count : undefined,
     published: typeof language.published === "boolean" ? language.published : undefined,
-    subtitlesComplete:
-      typeof language.subtitles_complete === "boolean" ? language.subtitles_complete : undefined,
+    subtitlesComplete: typeof language.subtitles_complete === "boolean" ? language.subtitles_complete : undefined,
     isPrimaryAudioLanguage:
-      typeof language.is_primary_audio_language === "boolean"
-        ? language.is_primary_audio_language
-        : undefined,
+      typeof language.is_primary_audio_language === "boolean" ? language.is_primary_audio_language : undefined,
   };
 }
 
@@ -924,8 +857,7 @@ function normalizeSubtitleSegments(payload: unknown) {
     return [];
   }
   return payload.map((item) => {
-    const record =
-      item && typeof item === "object" && !Array.isArray(item) ? (item as JsonRecord) : {};
+    const record = item && typeof item === "object" && !Array.isArray(item) ? (item as JsonRecord) : {};
     return {
       start: typeof record.start === "number" ? record.start : 0,
       end: typeof record.end === "number" ? record.end : 0,
@@ -1023,13 +955,11 @@ async function readAmaraError(response: Response) {
     const detail = optionalString(payload.detail);
     const description = optionalString(payload.description);
     const error = optionalString(payload.error);
-    const message =
-      detail ?? description ?? error ?? `amara request failed with ${response.status}`;
+    const message = detail ?? description ?? error ?? `amara request failed with ${response.status}`;
     const code = optionalString(payload.code) ?? optionalString(payload.error_code);
     return { code, message };
   } catch {
-    const message =
-      (await response.text().catch(() => "")) || `amara request failed with ${response.status}`;
+    const message = (await response.text().catch(() => "")) || `amara request failed with ${response.status}`;
     return { code: undefined, message };
   }
 }

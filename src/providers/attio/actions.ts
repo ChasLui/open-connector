@@ -100,7 +100,8 @@ export const attioActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "list_records",
-    description: "List Attio records for an object with optional filtering, view filtering, sorting, limit, and offset.",
+    description:
+      "List Attio records for an object with optional filtering, view filtering, sorting, limit, and offset.",
     requiredScopes: ["record_permission:read", "object_configuration:read"],
     inputSchema: listRecordsInputSchema,
     outputSchema: s.object("Records returned by Attio.", {

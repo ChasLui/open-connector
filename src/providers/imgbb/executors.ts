@@ -214,10 +214,7 @@ function createImgbbError(input: {
     return new ProviderRequestError(429, message, input.payload);
   }
 
-  if (
-    input.phase === "validate" &&
-    (input.status === 400 || input.status === 401 || input.status === 403)
-  ) {
+  if (input.phase === "validate" && (input.status === 400 || input.status === 401 || input.status === 403)) {
     return new ProviderRequestError(400, message, input.payload);
   }
 

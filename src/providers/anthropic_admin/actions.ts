@@ -130,7 +130,11 @@ export const anthropicAdminActions: ActionDefinition[] = [
     description: "List Anthropic workspaces in the organization with cursor pagination.",
     requiredScopes: [],
     inputSchema: paginationInputSchema,
-    outputSchema: listOutputSchema("The response payload for listing Anthropic workspaces.", "workspaces", workspaceSchema),
+    outputSchema: listOutputSchema(
+      "The response payload for listing Anthropic workspaces.",
+      "workspaces",
+      workspaceSchema,
+    ),
   }),
   defineProviderAction(service, {
     name: "list_api_keys",

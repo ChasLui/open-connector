@@ -110,8 +110,7 @@ export const balldontlieWorldcupActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "list_matches",
-    description:
-      "List FIFA World Cup matches from BALLDONTLIE for the selected season, optionally filtered by team.",
+    description: "List FIFA World Cup matches from BALLDONTLIE for the selected season, optionally filtered by team.",
     requiredScopes: [],
     inputSchema: matchesInputSchema,
     outputSchema: s.object("The BALLDONTLIE World Cup matches response.", {

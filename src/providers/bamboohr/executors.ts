@@ -3,7 +3,6 @@ import type { ApiKeyProviderContext } from "../provider-runtime.ts";
 import type { BamboohrActionName } from "./actions.ts";
 
 import { Buffer } from "node:buffer";
-
 import { optionalInteger, optionalRecord, optionalString, requiredString } from "../../core/cast.ts";
 import {
   defineProviderExecutors,

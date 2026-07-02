@@ -85,11 +85,7 @@ async function requestIp2proxyJson(
     if (error instanceof ProviderRequestError) {
       throw error;
     }
-    throw new ProviderRequestError(
-      502,
-      error instanceof Error ? error.message : "IP2Proxy request failed",
-      error,
-    );
+    throw new ProviderRequestError(502, error instanceof Error ? error.message : "IP2Proxy request failed", error);
   }
 
   const payloadError = readIp2proxyErrorPayload(payload);

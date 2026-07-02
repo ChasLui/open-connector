@@ -45,9 +45,7 @@ const executeFunctionInputSchema = s.object(
     method: appdragHttpMethodSchema,
     environment: appdragEnvironmentSchema,
     parameters: appdragParametersSchema,
-    rawResponse: s.boolean(
-      "Whether to return the raw response body instead of the standard AppDrag wrapper payload.",
-    ),
+    rawResponse: s.boolean("Whether to return the raw response body instead of the standard AppDrag wrapper payload."),
   },
   { required: ["folder", "functionName"] },
 );

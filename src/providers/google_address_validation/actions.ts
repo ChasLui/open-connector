@@ -74,9 +74,7 @@ const validateAddressInputSchema = s.object(
   "The input payload for validating a postal address.",
   {
     address: postalAddressInputSchema,
-    previousResponseId: s.nonEmptyString(
-      "The first responseId from the validation sequence for follow-up requests.",
-    ),
+    previousResponseId: s.nonEmptyString("The first responseId from the validation sequence for follow-up requests."),
     sessionToken: s.string({
       minLength: 1,
       maxLength: 36,

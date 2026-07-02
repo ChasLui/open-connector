@@ -33,19 +33,25 @@ const linksSchema = s.looseObject("Pagination links returned by Givebutter.");
 const metaSchema = s.looseObject("Pagination metadata returned by Givebutter.");
 
 function listOutputSchema(description: string, key: string): JsonSchema {
-  return s.actionOutput({
-    [key]: rawArraySchema,
-    links: linksSchema,
-    meta: metaSchema,
-    raw: rawObjectSchema,
-  }, description);
+  return s.actionOutput(
+    {
+      [key]: rawArraySchema,
+      links: linksSchema,
+      meta: metaSchema,
+      raw: rawObjectSchema,
+    },
+    description,
+  );
 }
 
 function itemOutputSchema(description: string, key: string): JsonSchema {
-  return s.actionOutput({
-    [key]: rawObjectSchema,
-    raw: rawObjectSchema,
-  }, description);
+  return s.actionOutput(
+    {
+      [key]: rawObjectSchema,
+      raw: rawObjectSchema,
+    },
+    description,
+  );
 }
 
 function getInputSchema(description: string, key: string, idDescription: string): JsonSchema {

@@ -137,9 +137,7 @@ export const credentialValidators: CredentialValidators = {
   },
 };
 
-function createListHandler(
-  actionName: keyof typeof balldontlieListEndpoints,
-): BalldontlieActionHandler {
+function createListHandler(actionName: keyof typeof balldontlieListEndpoints): BalldontlieActionHandler {
   return async (input, context) => {
     const endpoint = balldontlieListEndpoints[actionName];
     const payload = await balldontlieRequestJson({

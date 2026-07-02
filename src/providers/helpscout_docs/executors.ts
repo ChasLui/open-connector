@@ -173,7 +173,10 @@ function helpscoutDocsAuthorization(apiKey: string): string {
   return `Basic ${Buffer.from(`${apiKey}:X`).toString("base64")}`;
 }
 
-function normalizePagedPayload(payload: unknown, envelopeKey: string): {
+function normalizePagedPayload(
+  payload: unknown,
+  envelopeKey: string,
+): {
   page: number | null;
   pages: number | null;
   count: number | null;

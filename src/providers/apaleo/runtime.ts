@@ -10,10 +10,7 @@ type ApaleoQueryValue = string | number | boolean | Array<string | number> | und
 
 type ApaleoActionContext = OAuthProviderContext;
 
-type ApaleoActionHandler = (
-  input: Record<string, unknown>,
-  context: ApaleoActionContext,
-) => Promise<unknown>;
+type ApaleoActionHandler = (input: Record<string, unknown>, context: ApaleoActionContext) => Promise<unknown>;
 
 type ApaleoRequestOptions = {
   path: string;
@@ -120,11 +117,7 @@ export const apaleoActionHandlers: Record<ApaleoActionName, ApaleoActionHandler>
 export async function apaleoJsonRequest<T>(options: ApaleoRequestOptions): Promise<T | null> {
   const response = await options.fetcher(buildApaleoUrl(options.path, options.query).toString(), {
     method: options.method ?? (options.body === undefined ? "GET" : "POST"),
-    headers: buildApaleoHeaders(
-      options.accessToken,
-      options.idempotencyKey,
-      options.body !== undefined,
-    ),
+    headers: buildApaleoHeaders(options.accessToken, options.idempotencyKey, options.body !== undefined),
     body: options.body === undefined ? undefined : JSON.stringify(options.body),
     signal: options.signal,
   });
@@ -199,10 +192,7 @@ async function readApaleoJsonResponse<T>(response: Response) {
   }
 }
 
-async function listProperties(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function listProperties(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return (
     (await apaleoJsonRequest<{ count: number; properties: unknown[] }>({
       path: "/inventory/v1/properties",
@@ -230,10 +220,7 @@ async function countProperties({ accessToken, fetcher, signal }: ApaleoActionCon
   });
 }
 
-async function getProperty(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function getProperty(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return apaleoJsonRequest<Record<string, unknown>>({
     path: `/inventory/v1/properties/${encodeURIComponent(String(input.id))}`,
     accessToken,
@@ -260,10 +247,7 @@ async function checkPropertyExists(
   };
 }
 
-async function createProperty(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function createProperty(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   const { idempotencyKey, ...body } = input;
   return apaleoJsonRequest<{ id: string }>({
     path: "/inventory/v1/properties",
@@ -275,10 +259,7 @@ async function createProperty(
   });
 }
 
-async function cloneProperty(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function cloneProperty(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   const { id, idempotencyKey, ...body } = input;
   return apaleoJsonRequest<{ id: string }>({
     path: `/inventory/v1/property-actions/${encodeURIComponent(String(id))}/clone`,
@@ -290,10 +271,7 @@ async function cloneProperty(
   });
 }
 
-async function archiveProperty(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function archiveProperty(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return apaleoNoContentRequest({
     path: `/inventory/v1/property-actions/${encodeURIComponent(String(input.id))}/archive`,
     method: "PUT",
@@ -338,10 +316,7 @@ async function listSupportedCountries({ accessToken, fetcher, signal }: ApaleoAc
   });
 }
 
-async function listUnits(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function listUnits(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return (
     (await apaleoJsonRequest<{ count: number; units: unknown[] }>({
       path: "/inventory/v1/units",
@@ -353,10 +328,7 @@ async function listUnits(
   );
 }
 
-async function countUnits(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function countUnits(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return apaleoJsonRequest<{ count: number }>({
     path: "/inventory/v1/units/$count",
     accessToken,
@@ -366,10 +338,7 @@ async function countUnits(
   });
 }
 
-async function getUnit(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function getUnit(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return apaleoJsonRequest<Record<string, unknown>>({
     path: `/inventory/v1/units/${encodeURIComponent(String(input.id))}`,
     accessToken,
@@ -382,10 +351,7 @@ async function getUnit(
   });
 }
 
-async function checkUnitExists(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function checkUnitExists(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return {
     exists: await apaleoHeadExists({
       path: `/inventory/v1/units/${encodeURIComponent(String(input.id))}`,
@@ -396,10 +362,7 @@ async function checkUnitExists(
   };
 }
 
-async function createUnit(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function createUnit(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   const { idempotencyKey, ...body } = input;
   return apaleoJsonRequest<{ id: string }>({
     path: "/inventory/v1/units",
@@ -426,10 +389,7 @@ async function createMultipleUnits(
   });
 }
 
-async function deleteUnit(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function deleteUnit(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return apaleoNoContentRequest({
     path: `/inventory/v1/units/${encodeURIComponent(String(input.id))}`,
     method: "DELETE",
@@ -439,10 +399,7 @@ async function deleteUnit(
   });
 }
 
-async function listUnitGroups(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function listUnitGroups(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return (
     (await apaleoJsonRequest<{ count: number; unitGroups: unknown[] }>({
       path: "/inventory/v1/unit-groups",
@@ -460,10 +417,7 @@ async function listUnitGroups(
   );
 }
 
-async function countUnitGroups(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function countUnitGroups(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return apaleoJsonRequest<{ count: number }>({
     path: "/inventory/v1/unit-groups/$count",
     accessToken,
@@ -476,10 +430,7 @@ async function countUnitGroups(
   });
 }
 
-async function getUnitGroup(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function getUnitGroup(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return apaleoJsonRequest<Record<string, unknown>>({
     path: `/inventory/v1/unit-groups/${encodeURIComponent(String(input.id))}`,
     accessToken,
@@ -506,10 +457,7 @@ async function checkUnitGroupExists(
   };
 }
 
-async function createUnitGroup(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function createUnitGroup(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   const { idempotencyKey, ...body } = input;
   return apaleoJsonRequest<{ id: string }>({
     path: "/inventory/v1/unit-groups",
@@ -521,10 +469,7 @@ async function createUnitGroup(
   });
 }
 
-async function replaceUnitGroup(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function replaceUnitGroup(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   const { id, ...body } = input;
   return apaleoNoContentRequest({
     path: `/inventory/v1/unit-groups/${encodeURIComponent(String(id))}`,
@@ -536,10 +481,7 @@ async function replaceUnitGroup(
   });
 }
 
-async function deleteUnitGroup(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function deleteUnitGroup(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return apaleoNoContentRequest({
     path: `/inventory/v1/unit-groups/${encodeURIComponent(String(input.id))}`,
     method: "DELETE",
@@ -567,10 +509,7 @@ async function listUnitAttributes(
   );
 }
 
-async function getUnitAttribute(
-  input: Record<string, unknown>,
-  { accessToken, fetcher, signal }: ApaleoActionContext,
-) {
+async function getUnitAttribute(input: Record<string, unknown>, { accessToken, fetcher, signal }: ApaleoActionContext) {
   return apaleoJsonRequest<Record<string, unknown>>({
     path: `/inventory/v1/unit-attributes/${encodeURIComponent(String(input.id))}`,
     accessToken,

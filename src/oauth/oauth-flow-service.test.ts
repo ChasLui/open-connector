@@ -134,7 +134,10 @@ describe("OAuthFlowService", () => {
         tenant: "default",
       },
     });
-    vi.stubGlobal("fetch", vi.fn(async () => Response.json({ token: "intercom-token" })));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => Response.json({ token: "intercom-token" })),
+    );
 
     const started = await services.flow.startAuthorization({ service: "example", connectionName: "work" });
     await expect(services.flow.completeAuthorization({ state: started.state, code: "code" })).resolves.toEqual({

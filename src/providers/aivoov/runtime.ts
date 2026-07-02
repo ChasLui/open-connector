@@ -170,7 +170,9 @@ async function readAivoovError(response: Response): Promise<string> {
   try {
     const payload = JSON.parse(text) as Record<string, unknown>;
     return (
-      optionalString(payload.message) ?? optionalString(payload.error) ?? `aivoov request failed with ${response.status}`
+      optionalString(payload.message) ??
+      optionalString(payload.error) ??
+      `aivoov request failed with ${response.status}`
     );
   } catch {
     return text;

@@ -191,10 +191,7 @@ async function requestApolloJson(input: {
     if (timeoutSignal.aborted && isAbortLikeError(error)) {
       throw new ProviderRequestError(502, `apollo ${input.path} request timed out after 30 seconds`);
     }
-    throw new ProviderRequestError(
-      502,
-      error instanceof Error ? error.message : "Apollo request failed",
-    );
+    throw new ProviderRequestError(502, error instanceof Error ? error.message : "Apollo request failed");
   }
 
   if (!response.ok) {
@@ -263,8 +260,7 @@ function buildPeopleEnrichmentQuery(input: Record<string, unknown>): Record<stri
     last_name: optionalString(input.lastName),
     organization_name: optionalString(input.organizationName),
     domain: optionalString(input.domain),
-    reveal_personal_emails:
-      typeof input.revealPersonalEmails === "boolean" ? input.revealPersonalEmails : undefined,
+    reveal_personal_emails: typeof input.revealPersonalEmails === "boolean" ? input.revealPersonalEmails : undefined,
   });
 }
 

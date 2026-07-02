@@ -88,11 +88,7 @@ export const alphaVantageActionHandlers: Record<string, AlphaVantageActionHandle
     );
   },
   get_realtime_bulk_quotes(input, context) {
-    return executeRawFunction(
-      "REALTIME_BULK_QUOTES",
-      { symbol: readRequiredInputString(input, "symbols") },
-      context,
-    );
+    return executeRawFunction("REALTIME_BULK_QUOTES", { symbol: readRequiredInputString(input, "symbols") }, context);
   },
   get_top_gainers_losers(_input, context) {
     return executeRawFunction("TOP_GAINERS_LOSERS", {}, context);
@@ -367,10 +363,7 @@ export async function validateAlphaVantageCredential(
   };
 }
 
-async function executeSearchSymbols(
-  input: Record<string, unknown>,
-  context: AlphaVantageActionContext,
-) {
+async function executeSearchSymbols(input: Record<string, unknown>, context: AlphaVantageActionContext) {
   const payload = readRequiredObject(
     await alphaVantageQuery(
       "SYMBOL_SEARCH",
@@ -394,10 +387,7 @@ async function executeSearchSymbols(
   };
 }
 
-async function executeGlobalQuote(
-  input: Record<string, unknown>,
-  context: AlphaVantageActionContext,
-) {
+async function executeGlobalQuote(input: Record<string, unknown>, context: AlphaVantageActionContext) {
   const payload = readRequiredObject(
     await alphaVantageQuery(
       "GLOBAL_QUOTE",
@@ -414,10 +404,7 @@ async function executeGlobalQuote(
   );
   const quote = readRequiredObject(payload["Global Quote"], "Global Quote");
   if (Object.keys(quote).length === 0) {
-    throw new ProviderRequestError(
-      400,
-      "Alpha Vantage returned an empty global quote for the requested symbol",
-    );
+    throw new ProviderRequestError(400, "Alpha Vantage returned an empty global quote for the requested symbol");
   }
 
   return normalizeGlobalQuote(quote);
@@ -437,10 +424,7 @@ async function executeTimeSeries(
       seriesDefinition.functionName,
       compactObject({
         symbol: readRequiredInputString(input, "symbol"),
-        outputsize:
-          seriesDefinition.seriesType === "daily"
-            ? readOptionalInputString(input, "outputSize")
-            : undefined,
+        outputsize: seriesDefinition.seriesType === "daily" ? readOptionalInputString(input, "outputSize") : undefined,
       }),
       context.apiKey,
       context.fetcher,
@@ -451,18 +435,12 @@ async function executeTimeSeries(
     "response",
   );
   const meta = readRequiredObject(payload["Meta Data"], "Meta Data");
-  const series = readRequiredObject(
-    payload[seriesDefinition.seriesKey],
-    seriesDefinition.seriesKey,
-  );
+  const series = readRequiredObject(payload[seriesDefinition.seriesKey], seriesDefinition.seriesKey);
 
   return {
     meta: normalizeTimeSeriesMeta(meta, seriesDefinition.seriesType),
     values: Object.entries(series).map(([timestamp, value]) =>
-      normalizeTimeSeriesValue(
-        timestamp,
-        readRequiredObject(value, `${seriesDefinition.seriesKey}.${timestamp}`),
-      ),
+      normalizeTimeSeriesValue(timestamp, readRequiredObject(value, `${seriesDefinition.seriesKey}.${timestamp}`)),
     ),
   };
 }
@@ -501,11 +479,7 @@ async function executeStockSymbolFunction(
   input: Record<string, unknown>,
   context: AlphaVantageActionContext,
 ) {
-  return executeRawFunction(
-    functionName,
-    { symbol: readRequiredInputString(input, "symbol") },
-    context,
-  );
+  return executeRawFunction(functionName, { symbol: readRequiredInputString(input, "symbol") }, context);
 }
 
 async function executeRawFunction(
@@ -514,8 +488,7 @@ async function executeRawFunction(
   context: AlphaVantageActionContext,
   responseFormat: AlphaVantageResponseFormat = "json",
 ) {
-  const resolvedResponseFormat =
-    responseFormat === "json" && query.datatype === "csv" ? "text" : responseFormat;
+  const resolvedResponseFormat = responseFormat === "json" && query.datatype === "csv" ? "text" : responseFormat;
   const data = await alphaVantageQuery(
     functionName,
     query,
@@ -559,9 +532,7 @@ async function alphaVantageQuery(
   } catch (error) {
     throw new ProviderRequestError(
       502,
-      error instanceof Error
-        ? `Alpha Vantage request failed: ${error.message}`
-        : "Alpha Vantage request failed",
+      error instanceof Error ? `Alpha Vantage request failed: ${error.message}` : "Alpha Vantage request failed",
     );
   }
 
@@ -572,10 +543,7 @@ async function alphaVantageQuery(
   return payload;
 }
 
-async function readAlphaVantagePayload(
-  response: Response,
-  responseFormat: AlphaVantageResponseFormat,
-) {
+async function readAlphaVantagePayload(response: Response, responseFormat: AlphaVantageResponseFormat) {
   const text = await response.text();
   if (!text) {
     return null;
@@ -632,15 +600,8 @@ function isAlphaVantageTextError(text: string) {
   );
 }
 
-function createAlphaVantageError(
-  response: Response,
-  payload: unknown,
-  phase: AlphaVantageRequestPhase,
-) {
-  const message =
-    extractAlphaVantageErrorMessage(payload) ??
-    response.statusText ??
-    "Alpha Vantage request failed";
+function createAlphaVantageError(response: Response, payload: unknown, phase: AlphaVantageRequestPhase) {
+  const message = extractAlphaVantageErrorMessage(payload) ?? response.statusText ?? "Alpha Vantage request failed";
   const loweredMessage = message.toLowerCase();
 
   if (
@@ -692,20 +653,14 @@ function normalizeGlobalQuote(record: Record<string, unknown>) {
     low: readRequiredString(record["04. low"], "04. low"),
     price: readRequiredString(record["05. price"], "05. price"),
     volume: readRequiredString(record["06. volume"], "06. volume"),
-    latestTradingDay: readRequiredString(
-      record["07. latest trading day"],
-      "07. latest trading day",
-    ),
+    latestTradingDay: readRequiredString(record["07. latest trading day"], "07. latest trading day"),
     previousClose: readRequiredString(record["08. previous close"], "08. previous close"),
     change: readRequiredString(record["09. change"], "09. change"),
     changePercent: readRequiredString(record["10. change percent"], "10. change percent"),
   };
 }
 
-function normalizeTimeSeriesMeta(
-  record: Record<string, unknown>,
-  seriesType: AlphaVantageSeriesType,
-) {
+function normalizeTimeSeriesMeta(record: Record<string, unknown>, seriesType: AlphaVantageSeriesType) {
   if (seriesType === "daily") {
     return {
       seriesType,
@@ -798,10 +753,7 @@ function readParametersInput(input: Record<string, unknown>) {
         return [[key, value] as const];
       }
 
-      throw new ProviderRequestError(
-        400,
-        `parameters.${key} must be a string, number, boolean, or null`,
-      );
+      throw new ProviderRequestError(400, `parameters.${key} must be a string, number, boolean, or null`);
     }),
   );
 }

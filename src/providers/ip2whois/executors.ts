@@ -89,10 +89,7 @@ export const credentialValidators: CredentialValidators = {
   },
 };
 
-async function requestIp2whoisJson(
-  input: Ip2whoisRequestInput,
-  context: Ip2whoisActionContext,
-): Promise<unknown> {
+async function requestIp2whoisJson(input: Ip2whoisRequestInput, context: Ip2whoisActionContext): Promise<unknown> {
   const url = buildIp2whoisUrl(input, context.apiKey);
 
   let response: Response;
@@ -111,11 +108,7 @@ async function requestIp2whoisJson(
     if (error instanceof ProviderRequestError) {
       throw error;
     }
-    throw new ProviderRequestError(
-      502,
-      error instanceof Error ? error.message : "IP2WHOIS request failed",
-      error,
-    );
+    throw new ProviderRequestError(502, error instanceof Error ? error.message : "IP2WHOIS request failed", error);
   }
 
   const payloadError = readIp2whoisErrorPayload(payload);

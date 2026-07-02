@@ -3,7 +3,6 @@ import type { ApiKeyProviderContext } from "../provider-runtime.ts";
 import type { BannerbearActionName } from "./actions.ts";
 
 import { createHash } from "node:crypto";
-
 import {
   compactObject,
   optionalBoolean,
@@ -61,17 +60,18 @@ export const executors: ProviderExecutors = defineProviderExecutors<ApiKeyProvid
 export const credentialValidators: CredentialValidators = {
   async apiKey(input, { fetcher, signal }) {
     const projectId = optionalString(input.values.projectId);
-    const payload = optionalRecord(
-      await requestBannerbear({
-        apiKey: input.apiKey,
-        path: "/v2/auth",
-        query: {
-          project_id: projectId,
-        },
-        fetcher,
-        signal,
-      }),
-    ) ?? {};
+    const payload =
+      optionalRecord(
+        await requestBannerbear({
+          apiKey: input.apiKey,
+          path: "/v2/auth",
+          query: {
+            project_id: projectId,
+          },
+          fetcher,
+          signal,
+        }),
+      ) ?? {};
     const project = optionalString(payload.project) ?? "Bannerbear Project";
     const accountId = projectId ?? `key:${hashBannerbearApiKey(input.apiKey)}`;
 
@@ -94,17 +94,19 @@ async function getBannerbearAuth(
   input: Record<string, unknown>,
   context: ApiKeyProviderContext,
 ): Promise<Record<string, unknown>> {
-  return optionalRecord(
-    await requestBannerbear({
-      apiKey: context.apiKey,
-      path: "/v2/auth",
-      query: {
-        project_id: optionalString(input.project_id),
-      },
-      fetcher: context.fetcher,
-      signal: context.signal,
-    }),
-  ) ?? {};
+  return (
+    optionalRecord(
+      await requestBannerbear({
+        apiKey: context.apiKey,
+        path: "/v2/auth",
+        query: {
+          project_id: optionalString(input.project_id),
+        },
+        fetcher: context.fetcher,
+        signal: context.signal,
+      }),
+    ) ?? {}
+  );
 }
 
 async function listBannerbearTemplates(

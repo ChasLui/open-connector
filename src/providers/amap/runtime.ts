@@ -215,10 +215,7 @@ async function executeSearchPlaces(input: Record<string, unknown>, runtime: Amap
   return buildPoiSearchOutput(payload);
 }
 
-async function executeSearchPlacesAround(
-  input: Record<string, unknown>,
-  runtime: AmapActionContext,
-) {
+async function executeSearchPlacesAround(input: Record<string, unknown>, runtime: AmapActionContext) {
   const payload = await amapGet(
     "/v5/place/around",
     {
@@ -240,10 +237,7 @@ async function executeSearchPlacesAround(
   return buildPoiSearchOutput(payload);
 }
 
-async function executeSearchPlacesPolygon(
-  input: Record<string, unknown>,
-  runtime: AmapActionContext,
-) {
+async function executeSearchPlacesPolygon(input: Record<string, unknown>, runtime: AmapActionContext) {
   const payload = await amapGet(
     "/v5/place/polygon",
     {
@@ -408,9 +402,7 @@ async function executeRouteDriving(input: Record<string, unknown>, runtime: Amap
     key: runtime.apiKey,
   };
   assertAmapGetUrlLength("/v5/direction/driving", query);
-  const payload = await amapGet("/v5/direction/driving", query, runtime.fetcher,
-    "execute",
-    runtime.signal);
+  const payload = await amapGet("/v5/direction/driving", query, runtime.fetcher, "execute", runtime.signal);
   const route = readObject(payload.route);
 
   return {
@@ -435,9 +427,7 @@ async function executeRouteTransit(input: Record<string, unknown>, runtime: Amap
     key: runtime.apiKey,
   };
   assertAmapGetUrlLength("/v5/direction/transit/integrated", query);
-  const payload = await amapGet("/v5/direction/transit/integrated", query, runtime.fetcher,
-    "execute",
-    runtime.signal);
+  const payload = await amapGet("/v5/direction/transit/integrated", query, runtime.fetcher, "execute", runtime.signal);
   const route = readObject(payload.route);
   const includeCost = hasShowField(input.showFields, "cost");
 
@@ -470,20 +460,12 @@ async function readAmapJson<T extends AmapResponsePayload>(response: Response) {
   }
 }
 
-function normalizeAmapError(
-  response: Response,
-  payload: AmapResponsePayload,
-  mode: AmapRequestMode,
-) {
+function normalizeAmapError(response: Response, payload: AmapResponsePayload, mode: AmapRequestMode) {
   const info = typeof payload.info === "string" ? payload.info : undefined;
   const infocode = typeof payload.infocode === "string" ? payload.infocode : undefined;
   const message = buildAmapErrorMessage(response.status, info, infocode);
 
-  if (
-    response.status === 429 ||
-    amapRateLimitInfos.has(info ?? "") ||
-    amapRateLimitInfocodes.has(infocode ?? "")
-  ) {
+  if (response.status === 429 || amapRateLimitInfos.has(info ?? "") || amapRateLimitInfocodes.has(infocode ?? "")) {
     return new ProviderRequestError(429, message);
   }
 
@@ -499,11 +481,7 @@ function normalizeAmapError(
     return new ProviderRequestError(401, message);
   }
 
-  if (
-    response.status === 400 ||
-    amapInputErrorInfos.has(info ?? "") ||
-    amapInputErrorInfocodes.has(infocode ?? "")
-  ) {
+  if (response.status === 400 || amapInputErrorInfos.has(info ?? "") || amapInputErrorInfocodes.has(infocode ?? "")) {
     return new ProviderRequestError(400, message);
   }
 
@@ -577,9 +555,7 @@ function readObjectArray(value: unknown) {
     return [];
   }
 
-  return value
-    .map((item) => readObject(item))
-    .filter((item): item is Record<string, unknown> => item !== null);
+  return value.map((item) => readObject(item)).filter((item): item is Record<string, unknown> => item !== null);
 }
 
 function buildPoiSearchOutput(payload: AmapResponsePayload) {
@@ -617,9 +593,7 @@ async function executeSimpleRoute(
     ...query,
   };
   assertAmapGetUrlLength(path, fullQuery);
-  const payload = await amapGet(path, fullQuery, runtime.fetcher,
-    "execute",
-    runtime.signal);
+  const payload = await amapGet(path, fullQuery, runtime.fetcher, "execute", runtime.signal);
   const route = readObject(payload.route);
 
   return {

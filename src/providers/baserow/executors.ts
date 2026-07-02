@@ -2,13 +2,7 @@ import type { CredentialValidators, ProviderExecutors } from "../../core/types.t
 import type { ApiKeyProviderContext } from "../provider-runtime.ts";
 import type { BaserowActionName } from "./actions.ts";
 
-import {
-  compactObject,
-  optionalBoolean,
-  optionalInteger,
-  optionalRecord,
-  optionalString,
-} from "../../core/cast.ts";
+import { compactObject, optionalBoolean, optionalInteger, optionalRecord, optionalString } from "../../core/cast.ts";
 import {
   defineProviderExecutors,
   ProviderRequestError,

@@ -33,18 +33,19 @@ const printSortFieldSchema = s.stringEnum("The Intelliprint print field used to 
   "cost.after_tax",
   "cost.amount",
 ]);
-const backgroundSortFieldSchema = s.stringEnum(
-  "The Intelliprint background field used to sort the list response.",
-  ["created", "name"],
-);
+const backgroundSortFieldSchema = s.stringEnum("The Intelliprint background field used to sort the list response.", [
+  "created",
+  "name",
+]);
 const recipientSortFieldSchema = s.stringEnum(
   "The Intelliprint mailing list recipient field used to sort the list response.",
   ["created", "name"],
 );
-const mailingListSortFieldSchema = s.stringEnum(
-  "The Intelliprint mailing list field used to sort the list response.",
-  ["created", "name", "recipients"],
-);
+const mailingListSortFieldSchema = s.stringEnum("The Intelliprint mailing list field used to sort the list response.", [
+  "created",
+  "name",
+  "recipients",
+]);
 const printTypeSchema = s.stringEnum("The Intelliprint print job type to filter by.", ["letter", "postcard"]);
 
 const listBaseProperties = {
@@ -79,8 +80,7 @@ const listOutputSchema = (description: string, itemDescription: string) =>
 export const intelliprintActions: ActionDefinition[] = [
   defineProviderAction(service, {
     name: "list_prints",
-    description:
-      "List Intelliprint print jobs with official pagination, sorting, and print-specific filters.",
+    description: "List Intelliprint print jobs with official pagination, sorting, and print-specific filters.",
     inputSchema: s.object(
       "Input parameters for listing Intelliprint print jobs.",
       {
@@ -199,13 +199,10 @@ export const intelliprintActions: ActionDefinition[] = [
   defineProviderAction(service, {
     name: "get_mailing_list_recipient",
     description: "Retrieve one recipient from an Intelliprint mailing list.",
-    inputSchema: s.object(
-      "Input parameters for retrieving an Intelliprint mailing list recipient.",
-      {
-        mailingListId: idSchema("The Intelliprint mailing list ID containing the recipient."),
-        id: idSchema("The Intelliprint mailing list recipient ID to retrieve."),
-      },
-    ),
+    inputSchema: s.object("Input parameters for retrieving an Intelliprint mailing list recipient.", {
+      mailingListId: idSchema("The Intelliprint mailing list ID containing the recipient."),
+      id: idSchema("The Intelliprint mailing list recipient ID to retrieve."),
+    }),
     outputSchema: s.object("The normalized Intelliprint mailing list recipient response.", {
       recipient: recipientSchema,
       raw: s.looseObject("The raw Intelliprint mailing list recipient response payload."),

@@ -221,11 +221,7 @@ async function readAppveyorPayload(response: Response): Promise<unknown> {
   }
 }
 
-function createAppveyorError(
-  response: Response,
-  payload: unknown,
-  phase: AppveyorRequestPhase,
-): ProviderRequestError {
+function createAppveyorError(response: Response, payload: unknown, phase: AppveyorRequestPhase): ProviderRequestError {
   const message = extractAppveyorErrorMessage(payload) ?? response.statusText ?? "appveyor request failed";
 
   if (response.status === 429) {

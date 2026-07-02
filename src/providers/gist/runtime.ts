@@ -336,9 +336,7 @@ async function createGistComment(input: Record<string, unknown>, context: GistAc
 
 async function getGistComment(input: Record<string, unknown>, context: GistActionContext): Promise<unknown> {
   return gistRequestJson({
-    path: `/gists/${encodeURIComponent(String(input.gistId))}/comments/${encodeURIComponent(
-      String(input.commentId),
-    )}`,
+    path: `/gists/${encodeURIComponent(String(input.gistId))}/comments/${encodeURIComponent(String(input.commentId))}`,
     accessToken: context.accessToken,
     fetcher: context.fetcher,
     signal: context.signal,
@@ -349,9 +347,7 @@ async function getGistComment(input: Record<string, unknown>, context: GistActio
 async function updateGistComment(input: Record<string, unknown>, context: GistActionContext): Promise<unknown> {
   return gistRequestJson({
     method: "PATCH",
-    path: `/gists/${encodeURIComponent(String(input.gistId))}/comments/${encodeURIComponent(
-      String(input.commentId),
-    )}`,
+    path: `/gists/${encodeURIComponent(String(input.gistId))}/comments/${encodeURIComponent(String(input.commentId))}`,
     body: {
       body: String(input.body),
     },
@@ -365,9 +361,7 @@ async function updateGistComment(input: Record<string, unknown>, context: GistAc
 async function deleteGistComment(input: Record<string, unknown>, context: GistActionContext): Promise<unknown> {
   await gistRequestNoContent({
     method: "DELETE",
-    path: `/gists/${encodeURIComponent(String(input.gistId))}/comments/${encodeURIComponent(
-      String(input.commentId),
-    )}`,
+    path: `/gists/${encodeURIComponent(String(input.gistId))}/comments/${encodeURIComponent(String(input.commentId))}`,
     accessToken: context.accessToken,
     fetcher: context.fetcher,
     signal: context.signal,

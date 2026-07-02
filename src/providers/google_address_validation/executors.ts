@@ -1,10 +1,7 @@
 import type { CredentialValidators, ProviderExecutors } from "../../core/types.ts";
 
 import { defineApiKeyProviderExecutors } from "../provider-runtime.ts";
-import {
-  googleAddressValidationActionHandlers,
-  validateGoogleAddressValidationCredential,
-} from "./runtime.ts";
+import { googleAddressValidationActionHandlers, validateGoogleAddressValidationCredential } from "./runtime.ts";
 
 const service = "google_address_validation";
 

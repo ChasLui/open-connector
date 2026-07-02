@@ -16,20 +16,21 @@ const computeRoutesInputSchema = s.looseRequiredObject("Input payload for Google
   origin: upstreamObject("The route origin waypoint."),
   destination: upstreamObject("The route destination waypoint."),
 });
-const computeRouteMatrixInputSchema = s.looseRequiredObject(
-  "Input payload for Google Routes `computeRouteMatrix`.",
-  {
-    fieldMask: fieldMaskSchema,
-    origins: s.array("The route matrix origin route matrix waypoints.", upstreamObject("One origin route matrix waypoint."), {
+const computeRouteMatrixInputSchema = s.looseRequiredObject("Input payload for Google Routes `computeRouteMatrix`.", {
+  fieldMask: fieldMaskSchema,
+  origins: s.array(
+    "The route matrix origin route matrix waypoints.",
+    upstreamObject("One origin route matrix waypoint."),
+    {
       minItems: 1,
-    }),
-    destinations: s.array(
-      "The route matrix destination route matrix waypoints.",
-      upstreamObject("One destination route matrix waypoint."),
-      { minItems: 1 },
-    ),
-  },
-);
+    },
+  ),
+  destinations: s.array(
+    "The route matrix destination route matrix waypoints.",
+    upstreamObject("One destination route matrix waypoint."),
+    { minItems: 1 },
+  ),
+});
 const computeRoutesOutputSchema = s.looseObject(
   {
     routes: s.array("The routes returned by Google Routes.", upstreamObject("One route.")),

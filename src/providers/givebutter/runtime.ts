@@ -33,13 +33,11 @@ const getResources = {
 export const givebutterActionHandlers = Object.fromEntries([
   ...Object.entries(listResources).map(([name, config]) => [
     name,
-    (input: Record<string, unknown>, context: ApiKeyProviderContext) =>
-      listGivebutterResource(input, context, config),
+    (input: Record<string, unknown>, context: ApiKeyProviderContext) => listGivebutterResource(input, context, config),
   ]),
   ...Object.entries(getResources).map(([name, config]) => [
     name,
-    (input: Record<string, unknown>, context: ApiKeyProviderContext) =>
-      getGivebutterResource(input, context, config),
+    (input: Record<string, unknown>, context: ApiKeyProviderContext) => getGivebutterResource(input, context, config),
   ]),
 ]) as Record<GivebutterActionName, GivebutterActionHandler>;
 

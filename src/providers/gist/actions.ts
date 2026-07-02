@@ -190,7 +190,10 @@ export const gistActions: ActionDefinition[] = [
     description: "List gists visible to the authenticated GitHub user.",
     requiredScopes: gistRequiredScopes,
     inputSchema: listGistsInputSchema,
-    outputSchema: gistsOutput("The output payload for listing the current user's gists.", "The visible gists for the authenticated user."),
+    outputSchema: gistsOutput(
+      "The output payload for listing the current user's gists.",
+      "The visible gists for the authenticated user.",
+    ),
   }),
   defineProviderAction(service, {
     name: "create_gist",
@@ -221,7 +224,10 @@ export const gistActions: ActionDefinition[] = [
     description: "List gists starred by the authenticated GitHub user.",
     requiredScopes: gistRequiredScopes,
     inputSchema: listGistsInputSchema,
-    outputSchema: gistsOutput("The output payload for listing starred gists.", "The gists starred by the authenticated user."),
+    outputSchema: gistsOutput(
+      "The output payload for listing starred gists.",
+      "The gists starred by the authenticated user.",
+    ),
   }),
   defineProviderAction(service, {
     name: "get_gist",
@@ -276,7 +282,10 @@ export const gistActions: ActionDefinition[] = [
     name: "list_gist_forks",
     description: "List forks for a GitHub gist.",
     requiredScopes: [],
-    inputSchema: idWithPaginationInput("The input payload for listing gist forks.", "The gist ID whose forks should be listed."),
+    inputSchema: idWithPaginationInput(
+      "The input payload for listing gist forks.",
+      "The gist ID whose forks should be listed.",
+    ),
     outputSchema: s.actionOutput(
       {
         forks: s.array("The fork records for the gist.", gistForkSchema),
@@ -363,7 +372,10 @@ export const gistActions: ActionDefinition[] = [
       },
       { optional: ["perPage", "page", "since"] },
     ),
-    outputSchema: gistsOutput("The output payload for listing a user's gists.", "The public gists for the requested user."),
+    outputSchema: gistsOutput(
+      "The output payload for listing a user's gists.",
+      "The public gists for the requested user.",
+    ),
   }),
   defineProviderAction(service, {
     name: "list_gist_comments",

@@ -213,10 +213,7 @@ async function executeGetNftsForOwner(
   };
 }
 
-async function executeGetNftMetadata(
-  input: Record<string, unknown>,
-  context: ApiKeyProviderContext,
-): Promise<unknown> {
+async function executeGetNftMetadata(input: Record<string, unknown>, context: ApiKeyProviderContext): Promise<unknown> {
   const payload = await alchemyNftRequest(
     "/getNFTMetadata",
     compactObject({
@@ -481,9 +478,7 @@ function readOptionalStringArray(value: unknown): string[] | undefined {
   if (!Array.isArray(value)) {
     return undefined;
   }
-  return value
-    .map((entry) => readOptionalTrimmedString(entry))
-    .filter((entry): entry is string => entry !== undefined);
+  return value.map((entry) => readOptionalTrimmedString(entry)).filter((entry): entry is string => entry !== undefined);
 }
 
 function readTokenSpec(value: unknown): string | string[] | undefined {

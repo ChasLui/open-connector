@@ -76,7 +76,9 @@ const createMessageInputSchema = s.looseRequiredObject(
     system: systemContentSchema,
     metadata: anthropicMetadataSchema,
     stop_sequences: s.array("Custom text sequences that stop generation.", s.string("A stop sequence.")),
-    stream: s.boolean("Whether to request a streaming response. This connector only accepts false or an omitted value."),
+    stream: s.boolean(
+      "Whether to request a streaming response. This connector only accepts false or an omitted value.",
+    ),
     temperature: s.number("The sampling temperature.", { minimum: 0, maximum: 1 }),
     thinking: jsonObjectSchema,
     tool_choice: toolChoiceSchema,

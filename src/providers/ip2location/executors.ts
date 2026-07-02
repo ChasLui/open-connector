@@ -14,10 +14,7 @@ const ip2locationValidationIp = "8.8.8.8";
 type Ip2locationRequestPhase = "validate" | "execute";
 type Ip2locationQueryValue = string | number | undefined;
 type Ip2locationActionContext = Pick<ApiKeyProviderContext, "apiKey" | "fetcher" | "signal">;
-type Ip2locationActionHandler = (
-  input: Record<string, unknown>,
-  context: Ip2locationActionContext,
-) => Promise<unknown>;
+type Ip2locationActionHandler = (input: Record<string, unknown>, context: Ip2locationActionContext) => Promise<unknown>;
 
 interface Ip2locationRequestInput {
   baseUrl: string;
@@ -206,8 +203,7 @@ function mapIp2locationError(
 ): ProviderRequestError {
   const message = input.errorMessage;
   const lowerMessage = message.toLowerCase();
-  const looksLikeCredentialError =
-    lowerMessage.includes("api key") || lowerMessage.includes("insufficient query");
+  const looksLikeCredentialError = lowerMessage.includes("api key") || lowerMessage.includes("insufficient query");
 
   if (looksLikeCredentialError) {
     return new ProviderRequestError(phase === "validate" ? 400 : 401, message, input);

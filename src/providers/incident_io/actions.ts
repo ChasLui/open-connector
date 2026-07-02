@@ -32,15 +32,12 @@ const sortBySchema = s.stringEnum("The incident ordering requested from incident
 const filterModeSchema = s.stringEnum("Whether all or any provided incident filters must match.", ["all", "any"]);
 const idSchema = (description: string) => s.string(description, { minLength: 1 });
 
-const paginationMetaSchema = s.object(
-  "Pagination metadata returned by incident.io when listing resources.",
-  {
-    after: s.nullable(s.string("The cursor to pass as the after parameter when loading the next page.")),
-    pageSize: s.nullable(s.integer("The maximum number of records requested from incident.io.")),
-    totalRecordCount: s.nullable(s.integer("The total matching record count when incident.io provides it.")),
-    raw: s.looseObject("The raw pagination_meta object returned by incident.io."),
-  },
-);
+const paginationMetaSchema = s.object("Pagination metadata returned by incident.io when listing resources.", {
+  after: s.nullable(s.string("The cursor to pass as the after parameter when loading the next page.")),
+  pageSize: s.nullable(s.integer("The maximum number of records requested from incident.io.")),
+  totalRecordCount: s.nullable(s.integer("The total matching record count when incident.io provides it.")),
+  raw: s.looseObject("The raw pagination_meta object returned by incident.io."),
+});
 
 const incidentSchema = s.object(
   "A normalized incident.io incident with stable top-level fields and raw upstream data.",
@@ -61,21 +58,18 @@ const incidentSchema = s.object(
   },
 );
 
-const actionSchema = s.object(
-  "A normalized incident.io action with stable top-level fields and raw upstream data.",
-  {
-    id: s.string("The unique action identifier."),
-    incidentId: s.string("The unique identifier of the incident this action belongs to."),
-    description: s.string("The action description."),
-    status: s.string("The action status returned by incident.io."),
-    assigneeName: s.nullable(s.string("The assigned user's display name when present.")),
-    assigneeEmail: s.nullable(s.string("The assigned user's email address when present.")),
-    createdAt: s.nullable(s.string("When the action was created.")),
-    updatedAt: s.nullable(s.string("When the action was last updated.")),
-    completedAt: s.nullable(s.string("When the action was completed.")),
-    raw: s.looseObject("The raw action object returned by incident.io."),
-  },
-);
+const actionSchema = s.object("A normalized incident.io action with stable top-level fields and raw upstream data.", {
+  id: s.string("The unique action identifier."),
+  incidentId: s.string("The unique identifier of the incident this action belongs to."),
+  description: s.string("The action description."),
+  status: s.string("The action status returned by incident.io."),
+  assigneeName: s.nullable(s.string("The assigned user's display name when present.")),
+  assigneeEmail: s.nullable(s.string("The assigned user's email address when present.")),
+  createdAt: s.nullable(s.string("When the action was created.")),
+  updatedAt: s.nullable(s.string("When the action was last updated.")),
+  completedAt: s.nullable(s.string("When the action was completed.")),
+  raw: s.looseObject("The raw action object returned by incident.io."),
+});
 
 const severitySchema = s.object(
   "A normalized incident.io severity with stable top-level fields and raw upstream data.",

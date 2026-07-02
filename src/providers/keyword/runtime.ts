@@ -1,12 +1,7 @@
 import type { CredentialValidationResult } from "../../core/types.ts";
 import type { KeywordActionName } from "./actions.ts";
 
-import {
-  compactObject,
-  optionalInteger,
-  optionalRecord,
-  optionalString,
-} from "../../core/cast.ts";
+import { compactObject, optionalInteger, optionalRecord, optionalString } from "../../core/cast.ts";
 import {
   createProviderTimeout,
   isAbortLikeError,
@@ -140,9 +135,7 @@ async function requestKeywordJson(
 
     throw new ProviderRequestError(
       502,
-      error instanceof Error
-        ? `Keyword.com request failed: ${error.message}`
-        : "Keyword.com request failed",
+      error instanceof Error ? `Keyword.com request failed: ${error.message}` : "Keyword.com request failed",
     );
   } finally {
     timeout.cleanup();
@@ -173,9 +166,7 @@ async function readKeywordPayload(response: Response) {
 }
 
 function createKeywordError(response: Response, payload: unknown, phase: KeywordRequestPhase) {
-  const message =
-    extractKeywordErrorMessage(payload) ??
-    `Keyword.com request failed with status ${response.status}`;
+  const message = extractKeywordErrorMessage(payload) ?? `Keyword.com request failed with status ${response.status}`;
 
   if (response.status === 429) {
     return new ProviderRequestError(429, message);

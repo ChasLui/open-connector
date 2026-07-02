@@ -19,9 +19,7 @@ const billingSchema = s.looseObject(
     billing_period: s.string("Current billing period in YYYY-MM format."),
     tier: s.string("Billing tier for the project."),
     gifts_balance: s.nullable(s.number("Available gift or prepaid credit balance before applicable overage.")),
-    max_concurrent_browsers: s.nullable(
-      s.number("Maximum concurrent browser sessions allowed for the project."),
-    ),
+    max_concurrent_browsers: s.nullable(s.number("Maximum concurrent browser sessions allowed for the project.")),
     cost_limit: s.nullable(s.number("Optional configured credit spend limit for the project.")),
   },
   { description: "Anchor Browser billing information." },

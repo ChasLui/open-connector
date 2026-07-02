@@ -78,32 +78,29 @@ const registrarSchema = s.looseObject("Registrar details returned by IP2WHOIS.",
   url: s.string("The registrar website URL returned by IP2WHOIS."),
 });
 
-const ipGeolocationOutputSchema = s.looseObject(
-  "The IP geolocation payload returned by IP2Location.io.",
-  {
-    ip: s.string("The queried IP address."),
-    country_code: s.string("The ISO 3166-1 alpha-2 country code."),
-    country_name: s.string("The country name."),
-    region_name: s.string("The region or state name."),
-    city_name: s.string("The city name."),
-    latitude: s.number("The latitude coordinate."),
-    longitude: s.number("The longitude coordinate."),
-    zip_code: s.string("The postal or ZIP code."),
-    time_zone: s.string("The UTC offset returned by IP2Location.io."),
-    asn: s.string("The autonomous system number."),
-    as: s.string("The autonomous system name."),
-    isp: s.string("The internet service provider name."),
-    domain: s.string("The primary domain associated with the IP."),
-    net_speed: s.string("The connection speed category returned by IP2Location.io."),
-    idd_code: s.string("The international direct dialing code."),
-    area_code: s.string("The local area code."),
-    weather_station_code: s.string("The weather station code."),
-    weather_station_name: s.string("The weather station name."),
-    elevation: s.number("The elevation in meters."),
-    usage_type: s.string("The IP usage type returned by IP2Location.io."),
-    is_proxy: s.boolean("Whether the IP address is identified as a proxy."),
-  },
-);
+const ipGeolocationOutputSchema = s.looseObject("The IP geolocation payload returned by IP2Location.io.", {
+  ip: s.string("The queried IP address."),
+  country_code: s.string("The ISO 3166-1 alpha-2 country code."),
+  country_name: s.string("The country name."),
+  region_name: s.string("The region or state name."),
+  city_name: s.string("The city name."),
+  latitude: s.number("The latitude coordinate."),
+  longitude: s.number("The longitude coordinate."),
+  zip_code: s.string("The postal or ZIP code."),
+  time_zone: s.string("The UTC offset returned by IP2Location.io."),
+  asn: s.string("The autonomous system number."),
+  as: s.string("The autonomous system name."),
+  isp: s.string("The internet service provider name."),
+  domain: s.string("The primary domain associated with the IP."),
+  net_speed: s.string("The connection speed category returned by IP2Location.io."),
+  idd_code: s.string("The international direct dialing code."),
+  area_code: s.string("The local area code."),
+  weather_station_code: s.string("The weather station code."),
+  weather_station_name: s.string("The weather station name."),
+  elevation: s.number("The elevation in meters."),
+  usage_type: s.string("The IP usage type returned by IP2Location.io."),
+  is_proxy: s.boolean("Whether the IP address is identified as a proxy."),
+});
 
 const domainWhoisOutputSchema = s.looseObject("The domain WHOIS payload returned by IP2WHOIS.", {
   domain: s.string("The queried domain name."),
@@ -122,20 +119,20 @@ const domainWhoisOutputSchema = s.looseObject("The domain WHOIS payload returned
   admin: contactSchema,
   tech: contactSchema,
   billing: contactSchema,
-  nameservers: s.array("The authoritative nameservers for the domain.", s.string("One authoritative nameserver hostname.")),
+  nameservers: s.array(
+    "The authoritative nameservers for the domain.",
+    s.string("One authoritative nameserver hostname."),
+  ),
 });
 
-const hostedDomainsOutputSchema = s.object(
-  "The hosted domains lookup payload returned by IP2WHOIS.",
-  {
-    ip: s.nonEmptyString("The queried IP address."),
-    total_domains: s.integer("The total number of hosted domains."),
-    page: s.integer("The current result page."),
-    per_page: s.integer("The number of domains returned per page."),
-    total_pages: s.integer("The total number of result pages."),
-    domains: s.array("The hosted domain names returned for the queried IP.", s.string("One hosted domain name.")),
-  },
-);
+const hostedDomainsOutputSchema = s.object("The hosted domains lookup payload returned by IP2WHOIS.", {
+  ip: s.nonEmptyString("The queried IP address."),
+  total_domains: s.integer("The total number of hosted domains."),
+  page: s.integer("The current result page."),
+  per_page: s.integer("The number of domains returned per page."),
+  total_pages: s.integer("The total number of result pages."),
+  domains: s.array("The hosted domain names returned for the queried IP.", s.string("One hosted domain name.")),
+});
 
 export const ip2locationActions: ActionDefinition[] = [
   defineProviderAction(service, {

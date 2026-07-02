@@ -1,7 +1,13 @@
 import type { ApiKeyProviderContext } from "../provider-runtime.ts";
 import type { HexActionName } from "./actions.ts";
 
-import { compactObject, optionalBoolean, optionalRecord, optionalScalarString, optionalString } from "../../core/cast.ts";
+import {
+  compactObject,
+  optionalBoolean,
+  optionalRecord,
+  optionalScalarString,
+  optionalString,
+} from "../../core/cast.ts";
 import { ProviderRequestError, providerUserAgent } from "../provider-runtime.ts";
 
 export const hexApiBaseUrl = "https://app.hex.tech/api/v1";
@@ -309,7 +315,9 @@ function readErrorMessage(payload: unknown): string | undefined {
     return undefined;
   }
 
-  return optionalString(body.message) ?? optionalString(body.error) ?? optionalString(optionalRecord(body.error)?.message);
+  return (
+    optionalString(body.message) ?? optionalString(body.error) ?? optionalString(optionalRecord(body.error)?.message)
+  );
 }
 
 function requireObject(value: unknown, fieldName: string): Record<string, unknown> {

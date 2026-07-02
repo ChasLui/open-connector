@@ -18,47 +18,59 @@ type FraudlabsproActionHandler = (
 
 export const fraudlabsproActionHandlers: Record<FraudlabsproActionName, FraudlabsproActionHandler> = {
   async screen_order(input, context) {
-    return fraudlabsproRequest(context.apiKey, {
-      method: "POST",
-      path: "/order/screen",
-      body: {
-        ip: optionalString(input.ip),
-        user_order_id: optionalString(input.userOrderId),
-        email: optionalString(input.email),
-        amount: optionalNumber(input.amount),
-        currency: optionalString(input.currency),
-        payment_mode: optionalString(input.paymentMode),
-        first_name: optionalString(input.firstName),
-        last_name: optionalString(input.lastName),
-        user_phone: optionalString(input.userPhone),
-        email_hash: optionalString(input.emailHash),
-        email_domain: optionalString(input.emailDomain),
-        bin_no: optionalString(input.binNo),
-        quantity: optionalNumber(input.quantity),
-        coupon_code: optionalString(input.couponCode),
-        flp_checksum: optionalString(input.flpChecksum),
+    return fraudlabsproRequest(
+      context.apiKey,
+      {
+        method: "POST",
+        path: "/order/screen",
+        body: {
+          ip: optionalString(input.ip),
+          user_order_id: optionalString(input.userOrderId),
+          email: optionalString(input.email),
+          amount: optionalNumber(input.amount),
+          currency: optionalString(input.currency),
+          payment_mode: optionalString(input.paymentMode),
+          first_name: optionalString(input.firstName),
+          last_name: optionalString(input.lastName),
+          user_phone: optionalString(input.userPhone),
+          email_hash: optionalString(input.emailHash),
+          email_domain: optionalString(input.emailDomain),
+          bin_no: optionalString(input.binNo),
+          quantity: optionalNumber(input.quantity),
+          coupon_code: optionalString(input.couponCode),
+          flp_checksum: optionalString(input.flpChecksum),
+        },
       },
-    }, context);
+      context,
+    );
   },
   async get_order_result(input, context) {
-    return fraudlabsproRequest(context.apiKey, {
-      method: "GET",
-      path: "/order/result",
-      query: {
-        id: requiredString(input.id, "id", (message) => new ProviderRequestError(400, message)),
+    return fraudlabsproRequest(
+      context.apiKey,
+      {
+        method: "GET",
+        path: "/order/result",
+        query: {
+          id: requiredString(input.id, "id", (message) => new ProviderRequestError(400, message)),
+        },
       },
-    }, context);
+      context,
+    );
   },
   async feedback_order(input, context) {
-    return fraudlabsproRequest(context.apiKey, {
-      method: "POST",
-      path: "/order/feedback",
-      body: {
-        id: requiredString(input.id, "id", (message) => new ProviderRequestError(400, message)),
-        action: requiredString(input.action, "action", (message) => new ProviderRequestError(400, message)),
-        note: optionalString(input.note),
+    return fraudlabsproRequest(
+      context.apiKey,
+      {
+        method: "POST",
+        path: "/order/feedback",
+        body: {
+          id: requiredString(input.id, "id", (message) => new ProviderRequestError(400, message)),
+          action: requiredString(input.action, "action", (message) => new ProviderRequestError(400, message)),
+          note: optionalString(input.note),
+        },
       },
-    }, context);
+      context,
+    );
   },
 };
 
@@ -66,13 +78,17 @@ export const executors: ProviderExecutors = defineApiKeyProviderExecutors(servic
 
 export const credentialValidators: CredentialValidators = {
   async apiKey(input, { fetcher, signal }) {
-    const response = await fraudlabsproRawRequest(input.apiKey, {
-      method: "GET",
-      path: "/order/result",
-      query: {
-        id: "connect-validation",
+    const response = await fraudlabsproRawRequest(
+      input.apiKey,
+      {
+        method: "GET",
+        path: "/order/result",
+        query: {
+          id: "connect-validation",
+        },
       },
-    }, { fetcher, signal });
+      { fetcher, signal },
+    );
     const payload = await readFraudlabsproPayload(response);
     const message = extractFraudlabsproErrorMessage(payload) ?? "";
     const normalized = message.toLowerCase();
@@ -182,8 +198,7 @@ async function fraudlabsproRawRequest(
 }
 
 function buildFraudlabsproError(status: number, payload: unknown, phase: "execute" | "validate"): ProviderRequestError {
-  const message =
-    extractFraudlabsproErrorMessage(payload) ?? `FraudLabs Pro request failed with ${status || 500}`;
+  const message = extractFraudlabsproErrorMessage(payload) ?? `FraudLabs Pro request failed with ${status || 500}`;
   const normalized = message.toLowerCase();
 
   if (status === 429 || normalized.includes("limit")) {

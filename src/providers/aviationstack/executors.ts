@@ -2,13 +2,7 @@ import type { CredentialValidators, ProviderExecutors } from "../../core/types.t
 import type { ApiKeyProviderContext } from "../provider-runtime.ts";
 import type { AviationstackActionName } from "./actions.ts";
 
-import {
-  compactObject,
-  optionalNumber,
-  optionalRecord,
-  optionalString,
-  requiredRecord,
-} from "../../core/cast.ts";
+import { compactObject, optionalNumber, optionalRecord, optionalString, requiredRecord } from "../../core/cast.ts";
 import {
   defineProviderExecutors,
   ProviderRequestError,
@@ -118,7 +112,10 @@ export const credentialValidators: CredentialValidators = {
   },
 };
 
-async function searchFlights(input: Record<string, unknown>, context: ApiKeyProviderContext): Promise<Record<string, unknown>> {
+async function searchFlights(
+  input: Record<string, unknown>,
+  context: ApiKeyProviderContext,
+): Promise<Record<string, unknown>> {
   const payload = await requestAviationstackJson({
     path: "/flights",
     query: {
@@ -151,7 +148,10 @@ async function searchFlights(input: Record<string, unknown>, context: ApiKeyProv
   };
 }
 
-async function searchRoutes(input: Record<string, unknown>, context: ApiKeyProviderContext): Promise<Record<string, unknown>> {
+async function searchRoutes(
+  input: Record<string, unknown>,
+  context: ApiKeyProviderContext,
+): Promise<Record<string, unknown>> {
   const payload = await requestAviationstackJson({
     path: "/routes",
     query: {

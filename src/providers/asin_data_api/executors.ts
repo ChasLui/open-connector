@@ -78,8 +78,7 @@ export const asinDataApiActionHandlers: Record<AsinDataApiActionName, AsinDataAp
         deleted_count: deletedRequests.length - failedRequestIds.length,
         deleted_requests: deletedRequests,
       },
-      error:
-        failedRequestIds.length > 0 ? `Failed to delete request IDs: ${failedRequestIds.join(", ")}` : undefined,
+      error: failedRequestIds.length > 0 ? `Failed to delete request IDs: ${failedRequestIds.join(", ")}` : undefined,
       successful: failedRequestIds.length === 0,
     });
   },
@@ -176,7 +175,10 @@ export const credentialValidators: CredentialValidators = {
       phase: "validate",
     });
     if (!isAsinDataApiPayloadSuccessful(payload)) {
-      throw new ProviderRequestError(400, extractAsinDataApiMessage(payload) ?? "ASIN Data API credential validation failed");
+      throw new ProviderRequestError(
+        400,
+        extractAsinDataApiMessage(payload) ?? "ASIN Data API credential validation failed",
+      );
     }
 
     const accountInfo = optionalRecord(payload.account_info);
@@ -190,7 +192,9 @@ export const credentialValidators: CredentialValidators = {
         validationEndpoint: "/account",
         plan: optionalString(accountInfo?.plan),
         monthlyCreditsRemaining:
-          typeof accountInfo?.monthly_credits_remaining === "number" ? accountInfo.monthly_credits_remaining : undefined,
+          typeof accountInfo?.monthly_credits_remaining === "number"
+            ? accountInfo.monthly_credits_remaining
+            : undefined,
         collectionsAvailable:
           typeof accountInfo?.collections_available === "number" ? accountInfo.collections_available : undefined,
         destinationsAvailable:

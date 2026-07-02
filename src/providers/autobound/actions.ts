@@ -84,15 +84,23 @@ const companyEnrichInputSchema = s.object(
     domain: s.nonEmptyString("The company domain to enrich, for example stripe.com."),
     companyName: s.nonEmptyString("The company name to enrich when the domain is unavailable."),
     linkedinUrl: s.url("The company LinkedIn URL to enrich when other identifiers are unavailable."),
-    signalTypes: s.array("The signal types Autobound should include in the enrichment response.", signalTypeSlugSchema, {
-      minItems: 1,
-    }),
+    signalTypes: s.array(
+      "The signal types Autobound should include in the enrichment response.",
+      signalTypeSlugSchema,
+      {
+        minItems: 1,
+      },
+    ),
     detectedAfter: s.dateTime("Only return signals detected on or after this timestamp."),
     limit: s.integer("The maximum number of signals to return.", { minimum: 1, maximum: 500 }),
   },
   { optional: ["domain", "companyName", "linkedinUrl", "signalTypes", "detectedAfter", "limit"] },
 );
-companyEnrichInputSchema.anyOf = [{ required: ["domain"] }, { required: ["companyName"] }, { required: ["linkedinUrl"] }];
+companyEnrichInputSchema.anyOf = [
+  { required: ["domain"] },
+  { required: ["companyName"] },
+  { required: ["linkedinUrl"] },
+];
 
 const companySearchInputSchema = s.object(
   "The input payload for searching companies by Autobound signal filters.",
@@ -120,9 +128,13 @@ const contactEnrichInputSchema = s.object(
   {
     contactEmail: s.email("The contact email address to enrich."),
     contactLinkedinUrl: s.url("The contact LinkedIn URL to enrich when the email is unavailable."),
-    signalTypes: s.array("The signal types Autobound should include in the enrichment response.", signalTypeSlugSchema, {
-      minItems: 1,
-    }),
+    signalTypes: s.array(
+      "The signal types Autobound should include in the enrichment response.",
+      signalTypeSlugSchema,
+      {
+        minItems: 1,
+      },
+    ),
     detectedAfter: s.dateTime("Only return signals detected on or after this timestamp."),
     limit: s.integer("The maximum number of signals to return.", { minimum: 1, maximum: 500 }),
   },

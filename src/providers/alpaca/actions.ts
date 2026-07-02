@@ -79,10 +79,7 @@ const cryptoLatestLocationSchema = s.stringEnum("Crypto latest market-data locat
 ]);
 const optionContractStatusSchema = s.stringEnum("Option contract status filter.", ["active", "inactive"]);
 const optionContractTypeSchema = s.stringEnum("Option contract type filter.", ["call", "put"]);
-const optionContractStyleSchema = s.stringEnum("Option contract exercise style filter.", [
-  "american",
-  "european",
-]);
+const optionContractStyleSchema = s.stringEnum("Option contract exercise style filter.", ["american", "european"]);
 
 const getOrderInputSchema = s.oneOf(
   [
@@ -158,17 +155,7 @@ const corporateActionFilterSchema = s.oneOf(
         sort: sortSchema,
       },
       {
-        optional: [
-          "symbols",
-          "cusips",
-          "types",
-          "region",
-          "start",
-          "end",
-          "limit",
-          "pageToken",
-          "sort",
-        ],
+        optional: ["symbols", "cusips", "types", "region", "start", "end", "limit", "pageToken", "sort"],
       },
     ),
   ],
@@ -364,11 +351,7 @@ const getAccountPortfolioHistoryAction = defineProviderAction(service, {
     {
       period: nonBlankString("Duration such as 1D, 1W, 1M, or 1A."),
       timeframe: nonBlankString("Time window size such as 1Min, 5Min, 15Min, 1H, or 1D."),
-      intradayReporting: s.stringEnum("Intraday reporting mode.", [
-        "market_hours",
-        "extended_hours",
-        "continuous",
-      ]),
+      intradayReporting: s.stringEnum("Intraday reporting mode.", ["market_hours", "extended_hours", "continuous"]),
       start: dateOrDateTimeSchema,
       end: dateOrDateTimeSchema,
       pnlReset: s.stringEnum("Profit and loss reset mode.", ["no_reset", "per_day"]),
@@ -479,11 +462,9 @@ const listOptionContractsAction = defineProviderAction(service, {
   inputSchema: s.object(
     "Input for listing Alpaca option contracts.",
     {
-      underlyingSymbols: s.array(
-        "A non-empty list of underlying symbols.",
-        nonBlankString("An underlying symbol."),
-        { minItems: 1 },
-      ),
+      underlyingSymbols: s.array("A non-empty list of underlying symbols.", nonBlankString("An underlying symbol."), {
+        minItems: 1,
+      }),
       showDeliverables: s.boolean("Whether deliverables should be included in the response."),
       status: optionContractStatusSchema,
       expirationDate: s.date("Exact expiration date filter."),
@@ -590,16 +571,7 @@ const listNewsAction = defineProviderAction(service, {
       pageToken: pageTokenSchema,
     },
     {
-      optional: [
-        "symbols",
-        "limit",
-        "includeContent",
-        "excludeContentless",
-        "start",
-        "end",
-        "sort",
-        "pageToken",
-      ],
+      optional: ["symbols", "limit", "includeContent", "excludeContentless", "start", "end", "sort", "pageToken"],
     },
   ),
   outputSchema: s.object(

@@ -8,7 +8,6 @@ import type { AwsActionName } from "./actions.ts";
 
 import { createHash, createHmac } from "node:crypto";
 import { isIP } from "node:net";
-
 import { compactObject, optionalRecord, optionalString } from "../../core/cast.ts";
 import { defineProviderExecutors, ProviderRequestError } from "../provider-runtime.ts";
 
@@ -19,10 +18,7 @@ type AwsActionContext = {
   signal?: AbortSignal;
 };
 
-type AwsActionHandler = (
-  input: Record<string, unknown>,
-  context: AwsActionContext,
-) => Promise<unknown>;
+type AwsActionHandler = (input: Record<string, unknown>, context: AwsActionContext) => Promise<unknown>;
 
 type AwsS3ClientConfig = {
   accessKeyId: string;
@@ -123,7 +119,10 @@ export const credentialValidators: CredentialValidators = {
   },
 };
 
-async function validateAwsCredential(input: Record<string, string>, fetcher: typeof fetch): Promise<CredentialValidationResult> {
+async function validateAwsCredential(
+  input: Record<string, string>,
+  fetcher: typeof fetch,
+): Promise<CredentialValidationResult> {
   const accessKeyId = requireAwsField(input.accessKeyId, "accessKeyId");
   const secretAccessKey = requireAwsField(input.secretAccessKey, "secretAccessKey");
   const region = requireAwsField(input.region, "region");
@@ -378,11 +377,7 @@ async function awsS3Request(client: AwsS3ClientConfig, input: AwsS3RequestInput)
   });
   const body = normalizeRequestBody(input.body);
   const payloadHash =
-    method === "PUT"
-      ? sha256Hex(body ?? Buffer.alloc(0))
-      : body == null
-        ? "UNSIGNED-PAYLOAD"
-        : sha256Hex(body);
+    method === "PUT" ? sha256Hex(body ?? Buffer.alloc(0)) : body == null ? "UNSIGNED-PAYLOAD" : sha256Hex(body);
   const signedRequest = signAwsRequest(client, {
     method,
     url: target.url,
@@ -453,12 +448,7 @@ function awsPresignUrl(
     signedHeaders,
     "UNSIGNED-PAYLOAD",
   ].join("\n");
-  const stringToSign = [
-    "AWS4-HMAC-SHA256",
-    amzDate,
-    credentialScope,
-    sha256Hex(canonicalRequest),
-  ].join("\n");
+  const stringToSign = ["AWS4-HMAC-SHA256", amzDate, credentialScope, sha256Hex(canonicalRequest)].join("\n");
   const signature = hmacHex(
     getSigningKey(client.secretAccessKey, dateStamp, client.region, awsServiceName),
     stringToSign,
@@ -495,12 +485,7 @@ function signAwsRequest(
     signedHeaders,
     input.payloadHash,
   ].join("\n");
-  const stringToSign = [
-    "AWS4-HMAC-SHA256",
-    amzDate,
-    credentialScope,
-    sha256Hex(canonicalRequest),
-  ].join("\n");
+  const stringToSign = ["AWS4-HMAC-SHA256", amzDate, credentialScope, sha256Hex(canonicalRequest)].join("\n");
   const authorization = [
     `AWS4-HMAC-SHA256 Credential=${client.accessKeyId}/${credentialScope}`,
     `SignedHeaders=${signedHeaders}`,
@@ -518,9 +503,7 @@ function buildRequestTarget(input: {
   objectKey?: string;
   query?: Record<string, string | number | boolean | undefined>;
 }) {
-  const host = input.bucket
-    ? `${input.bucket}.s3.${input.region}.amazonaws.com`
-    : `s3.${input.region}.amazonaws.com`;
+  const host = input.bucket ? `${input.bucket}.s3.${input.region}.amazonaws.com` : `s3.${input.region}.amazonaws.com`;
   const url = new URL(`https://${host}`);
   url.pathname = input.objectKey ? `/${encodeS3Key(input.objectKey)}` : "/";
   for (const [key, value] of Object.entries(input.query ?? {})) {
@@ -566,7 +549,7 @@ function canonicalizeSearchParams(searchParams: URLSearchParams) {
   entries.sort((left, right) => {
     if (left.key === right.key) {
       return left.value.localeCompare(right.value);
-      }
+    }
     return left.key.localeCompare(right.key);
   });
   return entries.map((entry) => `${entry.key}=${entry.value}`).join("&");
@@ -592,9 +575,7 @@ function normalizeRequestBody(value: AwsS3RequestInput["body"]) {
   if (value == null) {
     return undefined;
   }
-  return typeof value === "string"
-    ? new Uint8Array(Buffer.from(value, "utf8"))
-    : new Uint8Array(value);
+  return typeof value === "string" ? new Uint8Array(Buffer.from(value, "utf8")) : new Uint8Array(value);
 }
 
 async function createAwsS3HttpError(response: Response) {
@@ -703,9 +684,7 @@ function parseXmlDocument(xml: string) {
     const selfClosing = rawTag.endsWith("/");
     const tagContent = selfClosing ? rawTag.slice(0, -1).trim() : rawTag;
     const spaceIndex = tagContent.indexOf(" ");
-    const tagName = normalizeXmlTagName(
-      spaceIndex === -1 ? tagContent : tagContent.slice(0, spaceIndex),
-    );
+    const tagName = normalizeXmlTagName(spaceIndex === -1 ? tagContent : tagContent.slice(0, spaceIndex));
     const node: XmlNode = {
       name: tagName,
       children: [],
@@ -786,11 +765,7 @@ function normalizeOwner(ownerElement: XmlNode | null | undefined) {
   };
 }
 
-function normalizeObject(
-  contentElement: XmlNode,
-  bucket: string,
-  region: string,
-): AwsObjectSummary {
+function normalizeObject(contentElement: XmlNode, bucket: string, region: string): AwsObjectSummary {
   const objectKey = decodeS3XmlValue(readElementText(contentElement, "Key")) ?? "";
   return {
     name: objectKey,
@@ -817,9 +792,7 @@ function decodeS3XmlValue(value: string | null) {
 }
 
 function normalizeHeaderRecord(headers: Headers) {
-  return Object.fromEntries(
-    Array.from(headers.entries()).map(([key, value]) => [key.toLowerCase(), value]),
-  );
+  return Object.fromEntries(Array.from(headers.entries()).map(([key, value]) => [key.toLowerCase(), value]));
 }
 
 function extractAwsMetadata(headers: Record<string, string>) {
@@ -914,7 +887,12 @@ function isBlockedSourceHost(hostname: string): boolean {
     return isPrivateIpv4(normalized);
   }
   if (ipVersion === 6) {
-    return normalized === "::1" || normalized.startsWith("fc") || normalized.startsWith("fd") || normalized.startsWith("fe80:");
+    return (
+      normalized === "::1" ||
+      normalized.startsWith("fc") ||
+      normalized.startsWith("fd") ||
+      normalized.startsWith("fe80:")
+    );
   }
 
   return false;
@@ -923,7 +901,7 @@ function isBlockedSourceHost(hostname: string): boolean {
 function isPrivateIpv4(value: string): boolean {
   const parts = value.split(".").map((part) => Number(part));
   const [a, b] = parts;
-  if (a === 10 || a === 127 || a === 0 || a === 169 && b === 254) {
+  if (a === 10 || a === 127 || a === 0 || (a === 169 && b === 254)) {
     return true;
   }
   if (a === 172 && b !== undefined && b >= 16 && b <= 31) {
@@ -1010,10 +988,7 @@ function normalizeAwsError(error: unknown, phase: "validate" | "execute") {
     return error;
   }
   if (error instanceof AwsS3HttpError) {
-    if (
-      phase === "validate" &&
-      (error.status === 400 || error.status === 401 || error.status === 403)
-    ) {
+    if (phase === "validate" && (error.status === 400 || error.status === 401 || error.status === 403)) {
       return new ProviderRequestError(400, error.message);
     }
     if (error.status === 429) {
@@ -1094,12 +1069,7 @@ function hmacHex(key: Buffer, value: string) {
   return createHmac("sha256", key).update(value).digest("hex");
 }
 
-function getSigningKey(
-  secretAccessKey: string,
-  dateStamp: string,
-  region: string,
-  service: string,
-) {
+function getSigningKey(secretAccessKey: string, dateStamp: string, region: string, service: string) {
   const kDate = hmac(`AWS4${secretAccessKey}`, dateStamp);
   const kRegion = hmac(kDate, region);
   const kService = hmac(kRegion, service);

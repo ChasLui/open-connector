@@ -428,11 +428,7 @@ export async function validateAlpacaCredential(
   };
 }
 
-export function readAlpacaCredential(input: {
-  apiKey: unknown;
-  apiKeyId: unknown;
-  environment: unknown;
-}): Credential {
+export function readAlpacaCredential(input: { apiKey: unknown; apiKeyId: unknown; environment: unknown }): Credential {
   return {
     apiSecretKey: requiredInputString(input.apiKey, "apiKey"),
     apiKeyId: requiredInputString(input.apiKeyId, "apiKeyId"),
@@ -451,11 +447,14 @@ async function requestAlpacaJson(input: {
   const signal = input.context.signal ? AbortSignal.any([input.context.signal, timeoutSignal]) : timeoutSignal;
 
   try {
-    const response = await input.context.fetcher(buildAlpacaUrl(input.family, input.path, input.query, input.context.credential.environment), {
-      method: "GET",
-      headers: buildAlpacaHeaders(input.context.credential),
-      signal,
-    });
+    const response = await input.context.fetcher(
+      buildAlpacaUrl(input.family, input.path, input.query, input.context.credential.environment),
+      {
+        method: "GET",
+        headers: buildAlpacaHeaders(input.context.credential),
+        signal,
+      },
+    );
     const payload = await readAlpacaPayload(response, { strictJson: response.ok });
 
     if (!response.ok) {

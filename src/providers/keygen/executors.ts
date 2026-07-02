@@ -23,10 +23,7 @@ type KeygenResourceKey =
   | "machines"
   | "components"
   | "processes";
-type KeygenActionHandler = (
-  input: Record<string, unknown>,
-  context: KeygenRequestContext,
-) => Promise<unknown>;
+type KeygenActionHandler = (input: Record<string, unknown>, context: KeygenRequestContext) => Promise<unknown>;
 
 interface KeygenRequestContext {
   apiKey: string;
@@ -230,21 +227,13 @@ export const keygenActionHandlers: Record<KeygenActionName, KeygenActionHandler>
   },
   validate_license_by_id(input, context) {
     const id = readRequiredString(input.id, "id");
-    return keygenPostJson(
-      ["licenses", id, "actions", "validate"],
-      buildValidationBody(input),
-      context,
-      { auth: true },
-    );
+    return keygenPostJson(["licenses", id, "actions", "validate"], buildValidationBody(input), context, { auth: true });
   },
   validate_license_key(input, context) {
     const key = readRequiredString(input.key, "key");
-    return keygenPostJson(
-      ["licenses", "actions", "validate-key"],
-      buildValidationBody({ ...input, key }),
-      context,
-      { auth: false },
-    );
+    return keygenPostJson(["licenses", "actions", "validate-key"], buildValidationBody({ ...input, key }), context, {
+      auth: false,
+    });
   },
   list_license_users(input, context) {
     return listKeygenRelationship(input, context, "licenses", "users");
@@ -493,14 +482,9 @@ function postKeygenAction(
   body?: Record<string, unknown>,
 ) {
   const normalizedBody = body && Object.keys(body).length > 0 ? body : undefined;
-  return keygenPostJson(
-    [parentPath, readRequiredString(input.id, "id"), "actions", action],
-    normalizedBody,
-    context,
-    {
-      auth: true,
-    },
-  );
+  return keygenPostJson([parentPath, readRequiredString(input.id, "id"), "actions", action], normalizedBody, context, {
+    auth: true,
+  });
 }
 
 async function deleteKeygenAction(
@@ -509,10 +493,7 @@ async function deleteKeygenAction(
   parentPath: string,
   action: string,
 ) {
-  const data = await keygenDeleteJson(
-    [parentPath, readRequiredString(input.id, "id"), "actions", action],
-    context,
-  );
+  const data = await keygenDeleteJson([parentPath, readRequiredString(input.id, "id"), "actions", action], context);
   return compactObject({
     deleted: true,
     data,
@@ -543,11 +524,7 @@ function updateKeygenRelationship(
     [relationship.parentPath, readRequiredString(input.id, "id"), relationship.relationshipPath],
     {},
     {
-      data: buildResourceLinkageArray(
-        input,
-        relationship.inputFieldName,
-        relationship.resourceType,
-      ),
+      data: buildResourceLinkageArray(input, relationship.inputFieldName, relationship.resourceType),
     },
     context,
     "execute",
@@ -590,19 +567,11 @@ async function keygenPostJson(
   return keygenRequestJson("POST", pathParts, {}, body, context, "execute", options);
 }
 
-async function keygenPutJson(
-  pathParts: string[],
-  body: Record<string, unknown>,
-  context: KeygenRequestContext,
-) {
+async function keygenPutJson(pathParts: string[], body: Record<string, unknown>, context: KeygenRequestContext) {
   return keygenRequestJson("PUT", pathParts, {}, body, context, "execute", { auth: true });
 }
 
-async function keygenPatchJson(
-  pathParts: string[],
-  body: Record<string, unknown>,
-  context: KeygenRequestContext,
-) {
+async function keygenPatchJson(pathParts: string[], body: Record<string, unknown>, context: KeygenRequestContext) {
   return keygenRequestJson("PATCH", pathParts, {}, body, context, "execute", { auth: true });
 }
 
@@ -705,14 +674,8 @@ async function readKeygenPayload(response: Response) {
   }
 }
 
-function createKeygenError(
-  response: Response,
-  payload: unknown,
-  phase: KeygenRequestPhase,
-  usedAuth: boolean,
-) {
-  const message =
-    extractKeygenErrorMessage(payload) ?? response.statusText ?? "keygen request failed";
+function createKeygenError(response: Response, payload: unknown, phase: KeygenRequestPhase, usedAuth: boolean) {
+  const message = extractKeygenErrorMessage(payload) ?? response.statusText ?? "keygen request failed";
 
   if (response.status === 429) {
     return new ProviderRequestError(429, message);
@@ -781,11 +744,7 @@ function buildRelationshipListQuery(input: Record<string, unknown>) {
   });
 }
 
-function buildResourceBody(
-  input: Record<string, unknown>,
-  resource: KeygenResourceConfig,
-  id?: string,
-) {
+function buildResourceBody(input: Record<string, unknown>, resource: KeygenResourceConfig, id?: string) {
   const data = compactObject({
     type: resource.type,
     id,
@@ -797,11 +756,7 @@ function buildResourceBody(
   return { data };
 }
 
-function buildResourceLinkageArray(
-  input: Record<string, unknown>,
-  fieldName: string,
-  resourceType: string,
-) {
+function buildResourceLinkageArray(input: Record<string, unknown>, fieldName: string, resourceType: string) {
   const ids = input[fieldName];
   if (!Array.isArray(ids)) {
     throw new ProviderRequestError(400, `${fieldName} must be an array`);

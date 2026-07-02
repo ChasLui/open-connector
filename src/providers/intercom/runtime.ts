@@ -496,12 +496,7 @@ function normalizeIntercomApiBaseUrl(value: string): string {
     throw new ProviderRequestError(400, "intercom apiBaseUrl must use https");
   }
 
-  if (
-    parsed.username ||
-    parsed.password ||
-    parsed.port ||
-    !allowedIntercomHosts.has(parsed.hostname.toLowerCase())
-  ) {
+  if (parsed.username || parsed.password || parsed.port || !allowedIntercomHosts.has(parsed.hostname.toLowerCase())) {
     throw new ProviderRequestError(400, "intercom apiBaseUrl must be an approved Intercom API host");
   }
 

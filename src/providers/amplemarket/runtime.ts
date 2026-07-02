@@ -18,16 +18,14 @@ export const amplemarketActionHandlers: Record<string, AmplemarketActionHandler>
     return requestAmplemarket({ path: "/account-info" }, context).then((account) => ({ account }));
   },
   get_contact(input, context) {
-    return requestAmplemarket(
-      { path: `/contacts/${encodeURIComponent(String(input.id))}` },
-      context,
-    ).then((contact) => ({ contact }));
+    return requestAmplemarket({ path: `/contacts/${encodeURIComponent(String(input.id))}` }, context).then(
+      (contact) => ({ contact }),
+    );
   },
   get_contact_by_email(input, context) {
-    return requestAmplemarket(
-      { path: `/contacts/email/${encodeURIComponent(String(input.email))}` },
-      context,
-    ).then((contact) => ({ contact }));
+    return requestAmplemarket({ path: `/contacts/email/${encodeURIComponent(String(input.email))}` }, context).then(
+      (contact) => ({ contact }),
+    );
   },
   async list_contacts(input, context) {
     const payload = await requestAmplemarket(
@@ -64,10 +62,9 @@ export const amplemarketActionHandlers: Record<string, AmplemarketActionHandler>
     ).then((payload) => normalizePaginatedResponse(payload, "lead_lists"));
   },
   get_lead_list(input, context) {
-    return requestAmplemarket(
-      { path: `/lead-lists/${encodeURIComponent(String(input.id))}` },
-      context,
-    ).then((leadList) => ({ lead_list: unwrapNamedObject(leadList, "lead_list") }));
+    return requestAmplemarket({ path: `/lead-lists/${encodeURIComponent(String(input.id))}` }, context).then(
+      (leadList) => ({ lead_list: unwrapNamedObject(leadList, "lead_list") }),
+    );
   },
   list_tasks(input, context) {
     return requestAmplemarket(
@@ -283,11 +280,7 @@ function readAmplemarketErrorMessage(payload: unknown) {
 
   if (Array.isArray(record._errors)) {
     const firstError = optionalRecord(record._errors[0]);
-    return (
-      optionalString(firstError?.detail) ??
-      optionalString(firstError?.title) ??
-      optionalString(firstError?.code)
-    );
+    return optionalString(firstError?.detail) ?? optionalString(firstError?.title) ?? optionalString(firstError?.code);
   }
   return undefined;
 }

@@ -47,7 +47,10 @@ const queryStatusSchema = s.looseObject("The Axiom query execution status.", {
 });
 
 const queryOptionsSchema = s.looseObject("Axiom query options passed through to the APL API.");
-const variablesSchema = s.record("Variables inserted into the APL query.", s.looseObject("One Axiom query variable value."));
+const variablesSchema = s.record(
+  "Variables inserted into the APL query.",
+  s.looseObject("One Axiom query variable value."),
+);
 
 export const axiomActions: ActionDefinition[] = [
   defineProviderAction(service, {
@@ -86,14 +89,7 @@ export const axiomActions: ActionDefinition[] = [
         referrer: s.nonEmptyString("Optional referrer slug sent as the create dataset query parameter."),
       },
       {
-        optional: [
-          "description",
-          "edgeDeployment",
-          "kind",
-          "retentionDays",
-          "useRetentionPeriod",
-          "referrer",
-        ],
+        optional: ["description", "edgeDeployment", "kind", "retentionDays", "useRetentionPeriod", "referrer"],
       },
     ),
     outputSchema: s.object("The response returned when creating an Axiom dataset.", {

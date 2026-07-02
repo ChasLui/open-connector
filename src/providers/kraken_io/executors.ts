@@ -291,8 +291,7 @@ async function requestKrakenJson<T>(
 
   const payload = await readKrakenPayload(response);
   const payloadRecord = optionalRecord(payload);
-  const success =
-    payloadRecord && typeof payloadRecord.success === "boolean" ? payloadRecord.success : undefined;
+  const success = payloadRecord && typeof payloadRecord.success === "boolean" ? payloadRecord.success : undefined;
 
   if (!response.ok || success === false) {
     throw createKrakenError(payload, response.status, phase);
@@ -321,9 +320,7 @@ async function readKrakenPayload(response: Response): Promise<unknown> {
 function createKrakenError(payload: unknown, status: number, phase: KrakenRequestPhase): ProviderRequestError {
   const message =
     extractKrakenMessage(payload) ??
-    (status === 401 || status === 403
-      ? "Kraken.io rejected the supplied credentials"
-      : "Kraken.io request failed");
+    (status === 401 || status === 403 ? "Kraken.io rejected the supplied credentials" : "Kraken.io request failed");
 
   if (status === 429) {
     return new ProviderRequestError(429, message, payload);

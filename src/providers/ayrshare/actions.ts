@@ -23,9 +23,13 @@ const socialPlatformSchema = s.stringEnum("The social network platform name acce
 const rawResponseSchema = s.looseObject("The raw response object returned by Ayrshare.");
 const postIdSchema = s.nonEmptyString("The top-level Ayrshare post ID returned by publish_post.");
 const statusSchema = s.string("The status returned by Ayrshare.");
-const platformFilterSchema = s.array("Optional social platforms to include in the Ayrshare request.", socialPlatformSchema, {
-  minItems: 1,
-});
+const platformFilterSchema = s.array(
+  "Optional social platforms to include in the Ayrshare request.",
+  socialPlatformSchema,
+  {
+    minItems: 1,
+  },
+);
 const postResultSchema = s.object("A normalized Ayrshare post result.", {
   status: statusSchema,
   id: s.nullable(s.string("The top-level Ayrshare post ID when returned.")),
@@ -67,8 +71,7 @@ export const ayrshareActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "list_post_history",
-    description:
-      "List Ayrshare post history with optional filters for date range, status, type, and social platforms.",
+    description: "List Ayrshare post history with optional filters for date range, status, type, and social platforms.",
     requiredScopes: [],
     inputSchema: s.object(
       "The input payload for listing Ayrshare post history.",
@@ -115,7 +118,10 @@ export const ayrshareActions: ActionDefinition[] = [
           ]),
           { minItems: 1 },
         ),
-        mediaUrls: s.array("HTTPS image or video URLs to include in the post.", s.string("An HTTPS media URL Ayrshare can retrieve.")),
+        mediaUrls: s.array(
+          "HTTPS image or video URLs to include in the post.",
+          s.string("An HTTPS media URL Ayrshare can retrieve."),
+        ),
         isVideo: s.boolean("Whether the media URLs should be treated as video media."),
         scheduleDate: s.string("The UTC ISO 8601 datetime when Ayrshare should publish the post."),
         validateScheduled: s.boolean("Whether Ayrshare should validate a scheduled post before accepting it."),
@@ -215,7 +221,10 @@ export const ayrshareActions: ActionDefinition[] = [
     outputSchema: s.object("The normalized Ayrshare post length result.", {
       maxCharLimits: s.record("Maximum character limits keyed by platform.", s.integer("A character limit.")),
       validByPlatform: s.record("Whether the post is valid for each platform.", s.boolean("A validity flag.")),
-      weightedLengthByPlatform: s.record("Weighted post lengths keyed by platform.", s.integer("A weighted character length.")),
+      weightedLengthByPlatform: s.record(
+        "Weighted post lengths keyed by platform.",
+        s.integer("A weighted character length."),
+      ),
       raw: rawResponseSchema,
     }),
   }),
@@ -228,7 +237,10 @@ export const ayrshareActions: ActionDefinition[] = [
       {
         post: s.string("The post text to validate."),
         platforms: s.array("The social platforms to validate the post against.", socialPlatformSchema, { minItems: 1 }),
-        mediaUrls: s.array("HTTPS image or video URLs to validate with the post.", s.url("An HTTPS media URL Ayrshare can retrieve.")),
+        mediaUrls: s.array(
+          "HTTPS image or video URLs to validate with the post.",
+          s.url("An HTTPS media URL Ayrshare can retrieve."),
+        ),
         isVideo: s.boolean("Whether the media URLs should be treated as video media."),
       },
       { optional: ["mediaUrls", "isVideo"] },

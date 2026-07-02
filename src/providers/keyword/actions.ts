@@ -5,8 +5,7 @@ import { defineProviderAction } from "../../core/provider-definition.ts";
 
 const service = "keyword";
 
-const nonEmptyString = (description: string) =>
-  s.string(description, { minLength: 1, pattern: "\\S" });
+const nonEmptyString = (description: string) => s.string(description, { minLength: 1, pattern: "\\S" });
 
 const projectNameSchema = nonEmptyString(
   "The Keyword.com project or group name. Use the full `[sub]` convention for subprojects.",
@@ -51,9 +50,7 @@ const regionSchema = s.object("A Google region tracked in a Keyword.com project.
 const userSchema = s.object("The current Keyword.com user profile.", {
   type: s.string("The user resource type returned by Keyword.com."),
   id: s.string("The user identifier returned by Keyword.com."),
-  attributes: s.looseObject(
-    "The user profile and subscription attributes returned by Keyword.com.",
-  ),
+  attributes: s.looseObject("The user profile and subscription attributes returned by Keyword.com."),
   raw: s.looseObject("The raw user resource returned by Keyword.com."),
 });
 

@@ -19,10 +19,7 @@ interface AnchorBrowserContext {
   signal?: AbortSignal;
 }
 
-type AnchorBrowserActionHandler = (
-  input: Record<string, unknown>,
-  context: AnchorBrowserContext,
-) => Promise<unknown>;
+type AnchorBrowserActionHandler = (input: Record<string, unknown>, context: AnchorBrowserContext) => Promise<unknown>;
 
 export const anchorBrowserActionHandlers: Record<string, AnchorBrowserActionHandler> = {
   async get_billing_info(_input, context) {
@@ -170,11 +167,7 @@ async function readAnchorBrowserPayload(response: Response) {
   }
 }
 
-function createAnchorBrowserError(
-  response: Response,
-  payload: unknown,
-  phase: AnchorBrowserRequestPhase,
-) {
+function createAnchorBrowserError(response: Response, payload: unknown, phase: AnchorBrowserRequestPhase) {
   const message =
     extractAnchorBrowserErrorMessage(payload) ?? `Anchor Browser request failed with status ${response.status}`;
 
@@ -215,7 +208,7 @@ function normalizeBillingPayload(value: unknown) {
     tier: requireString(data.tier, "tier"),
     gifts_balance: optionalNumber(data.gifts_balance) ?? null,
     max_concurrent_browsers: optionalNumber(data.max_concurrent_browsers) ?? null,
-    cost_limit: data.cost_limit === null ? null : optionalNumber(data.cost_limit) ?? null,
+    cost_limit: data.cost_limit === null ? null : (optionalNumber(data.cost_limit) ?? null),
   };
 }
 

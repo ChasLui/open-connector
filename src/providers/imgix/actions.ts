@@ -5,28 +5,22 @@ import { defineProviderAction } from "../../core/provider-definition.ts";
 
 const service = "imgix";
 
-const sourceResourceSchema = s.looseRequiredObject(
-  "An Imgix Source resource returned by the Management API.",
-  {
-    id: s.string("The unique Imgix Source identifier."),
-    type: s.string("The JSON:API resource type returned by Imgix."),
-    attributes: s.looseObject("The Source attributes returned by Imgix."),
-  },
-);
+const sourceResourceSchema = s.looseRequiredObject("An Imgix Source resource returned by the Management API.", {
+  id: s.string("The unique Imgix Source identifier."),
+  type: s.string("The JSON:API resource type returned by Imgix."),
+  attributes: s.looseObject("The Source attributes returned by Imgix."),
+});
 
-const paginationMetaSchema = s.looseObject(
-  "Pagination metadata returned by Imgix for list endpoints.",
-  {
-    currentPage: s.integer("The current zero-indexed page number."),
-    pageSize: s.integer("The page size returned by Imgix."),
-    totalPages: s.integer("The total number of available pages."),
-    totalRecords: s.integer("The total number of matching records."),
-    hasNextPage: s.boolean("Whether another page is available."),
-    hasPreviousPage: s.boolean("Whether a previous page is available."),
-    nextPage: s.nullable(s.integer("The next page number when available.")),
-    previousPage: s.nullable(s.integer("The previous page number when available.")),
-  },
-);
+const paginationMetaSchema = s.looseObject("Pagination metadata returned by Imgix for list endpoints.", {
+  currentPage: s.integer("The current zero-indexed page number."),
+  pageSize: s.integer("The page size returned by Imgix."),
+  totalPages: s.integer("The total number of available pages."),
+  totalRecords: s.integer("The total number of matching records."),
+  hasNextPage: s.boolean("Whether another page is available."),
+  hasPreviousPage: s.boolean("Whether a previous page is available."),
+  nextPage: s.nullable(s.integer("The next page number when available.")),
+  previousPage: s.nullable(s.integer("The previous page number when available.")),
+});
 
 const jsonApiObjectSchema = s.looseObject("The JSON:API metadata object returned by Imgix.");
 const looseAttributesSchema = s.looseObject(
@@ -41,10 +35,9 @@ const listSourcesInputSchema = s.object(
     }),
     pageSize: s.positiveInteger("Number of Sources to return per page."),
     pageNumber: s.nonNegativeInteger("Zero-indexed page number to fetch."),
-    fieldsSources: s.string(
-      "Comma-separated Source fields to return through the fields[sources] sparse fieldset.",
-      { minLength: 1 },
-    ),
+    fieldsSources: s.string("Comma-separated Source fields to return through the fields[sources] sparse fieldset.", {
+      minLength: 1,
+    }),
     filterName: s.string("Filter Sources by name.", { minLength: 1 }),
     filterEnabled: s.boolean("Filter Sources by enabled status."),
     filterDeploymentType: s.stringEnum("Filter Sources by deployment type.", [

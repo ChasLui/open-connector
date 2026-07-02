@@ -317,7 +317,9 @@ async function basinFetch(input: {
   query?: Record<string, BasinQueryValue>;
   body?: unknown;
 }): Promise<Response> {
-  const url = new URL(input.path.startsWith("/") ? `${basinApiBaseUrl}${input.path}` : `${basinApiBaseUrl}/${input.path}`);
+  const url = new URL(
+    input.path.startsWith("/") ? `${basinApiBaseUrl}${input.path}` : `${basinApiBaseUrl}/${input.path}`,
+  );
   const method = input.method ?? "GET";
   for (const [key, value] of Object.entries(input.query ?? {})) {
     if (value !== undefined) {
@@ -353,7 +355,9 @@ async function readResponseBody(response: Response): Promise<string> {
   } catch (error) {
     throw new ProviderRequestError(
       502,
-      error instanceof Error ? `Failed to read Basin response body: ${error.message}` : "Failed to read Basin response body",
+      error instanceof Error
+        ? `Failed to read Basin response body: ${error.message}`
+        : "Failed to read Basin response body",
     );
   }
 }

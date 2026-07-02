@@ -24,11 +24,7 @@ const maxResultsSchema = s.integer("The maximum number of papers to return.", {
   minimum: 1,
   maximum: 100,
 });
-const sortBySchema = s.stringEnum("The arXiv sort field.", [
-  "relevance",
-  "lastUpdatedDate",
-  "submittedDate",
-]);
+const sortBySchema = s.stringEnum("The arXiv sort field.", ["relevance", "lastUpdatedDate", "submittedDate"]);
 const sortOrderSchema = s.stringEnum("The arXiv sort direction.", ["ascending", "descending"]);
 
 const paperSchema = s.object("A normalized arXiv paper.", {
@@ -74,17 +70,7 @@ const allFieldsInputSchema = s.object(
     ...searchOptionsSchema,
   },
   {
-    optional: [
-      "query",
-      "author",
-      "title",
-      "abstractQuery",
-      "category",
-      "start",
-      "maxResults",
-      "sortBy",
-      "sortOrder",
-    ],
+    optional: ["query", "author", "title", "abstractQuery", "category", "start", "maxResults", "sortBy", "sortOrder"],
   },
 );
 allFieldsInputSchema.anyOf = [
@@ -150,8 +136,7 @@ export const arxivActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "search_by_all_fields",
-    description:
-      "Search arXiv papers by combining optional all-field, author, title, abstract, and category filters.",
+    description: "Search arXiv papers by combining optional all-field, author, title, abstract, and category filters.",
     inputSchema: allFieldsInputSchema,
     outputSchema: searchOutputSchema,
   }),

@@ -93,15 +93,7 @@ export const aliyunOssActions: ActionDefinition[] = [
         maxKeys: maxKeysSchema,
       },
       {
-        optional: [
-          "endpoint",
-          "prefix",
-          "delimiter",
-          "continuationToken",
-          "startAfter",
-          "fetchOwner",
-          "maxKeys",
-        ],
+        optional: ["endpoint", "prefix", "delimiter", "continuationToken", "startAfter", "fetchOwner", "maxKeys"],
       },
     ),
     outputSchema: s.object("The output payload for this action.", {

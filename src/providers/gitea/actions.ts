@@ -182,7 +182,11 @@ const commentsListSchema = s.actionOutput(
   ["comments"],
 );
 
-function repositoryInput(description: string, extra: Record<string, JsonSchema> = {}, optional: string[] = []): JsonSchema {
+function repositoryInput(
+  description: string,
+  extra: Record<string, JsonSchema> = {},
+  optional: string[] = [],
+): JsonSchema {
   return s.object(
     description,
     {
@@ -291,15 +295,15 @@ export const giteaActions: ActionDefinition[] = [
       "The input payload for this action.",
       {
         state: s.stringEnum("Issue state filter.", ["open", "closed", "all"]),
-        labels: s.array("Label names or IDs used to filter issues.", s.union([
-          s.nonEmptyString("A label name or ID."),
-          s.integer("A label name or ID."),
-        ])),
+        labels: s.array(
+          "Label names or IDs used to filter issues.",
+          s.union([s.nonEmptyString("A label name or ID."), s.integer("A label name or ID.")]),
+        ),
         query: s.nonEmptyString("Search string used to filter issues."),
-        milestones: s.array("Milestone names or IDs used to filter issues.", s.union([
-          s.nonEmptyString("A milestone name or ID."),
-          s.integer("A milestone name or ID."),
-        ])),
+        milestones: s.array(
+          "Milestone names or IDs used to filter issues.",
+          s.union([s.nonEmptyString("A milestone name or ID."), s.integer("A milestone name or ID.")]),
+        ),
         since: isoDateTimeField,
         before: isoDateTimeField,
         createdBy: s.nonEmptyString("Only return issues created by this username."),

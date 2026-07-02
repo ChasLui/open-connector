@@ -23,12 +23,10 @@ type AliyunBucket = {
   StorageClass?: string | null;
 };
 
-type AliyunOwner =
-  | {
-      id?: string;
-      displayName?: string;
-    }
-  | null;
+type AliyunOwner = {
+  id?: string;
+  displayName?: string;
+} | null;
 
 type AliyunObject = {
   name?: string;
@@ -168,7 +166,9 @@ async function validateAliyunOssCredential(input: Record<string, string>): Promi
     return {
       profile: {
         accountId: accessKeyId,
-        displayName: firstBucket?.name ? `Alibaba Cloud OSS - ${firstBucket.name}` : `Alibaba Cloud OSS - ${stripProtocol(endpoint)}`,
+        displayName: firstBucket?.name
+          ? `Alibaba Cloud OSS - ${firstBucket.name}`
+          : `Alibaba Cloud OSS - ${stripProtocol(endpoint)}`,
       },
       grantedScopes: [],
       metadata: compactObject({
@@ -313,7 +313,10 @@ async function downloadSourceFile(
     throw new ProviderRequestError(400, "sourceUrl payload is too large");
   }
   if (!response.ok) {
-    throw new ProviderRequestError(response.status, `failed to download sourceUrl: ${response.status} ${response.statusText}`.trim());
+    throw new ProviderRequestError(
+      response.status,
+      `failed to download sourceUrl: ${response.status} ${response.statusText}`.trim(),
+    );
   }
 
   return {

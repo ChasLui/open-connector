@@ -69,10 +69,7 @@ export const credentialValidators: CredentialValidators = {
   },
 };
 
-async function executeMarkdownToPdf(
-  input: Record<string, unknown>,
-  context: Api2pdfActionContext,
-): Promise<unknown> {
+async function executeMarkdownToPdf(input: Record<string, unknown>, context: Api2pdfActionContext): Promise<unknown> {
   const markdown = requireApi2pdfString(input.markdown, "markdown");
   const fileName = optionalString(input.fileName);
   const inline = optionalBoolean(input.inline);
@@ -157,11 +154,7 @@ async function readApi2pdfPayload(response: Response): Promise<unknown> {
   }
 }
 
-function createApi2pdfError(
-  response: Response,
-  payload: unknown,
-  phase: Api2pdfRequestPhase,
-): ProviderRequestError {
+function createApi2pdfError(response: Response, payload: unknown, phase: Api2pdfRequestPhase): ProviderRequestError {
   const message = extractApi2pdfErrorMessage(payload) ?? response.statusText ?? "API2PDF request failed";
 
   if (response.status === 429) {

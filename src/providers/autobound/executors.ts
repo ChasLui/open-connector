@@ -369,7 +369,9 @@ function readSignalTypeEntries(value: unknown): Array<Record<string, unknown>> {
     return [];
   }
 
-  return value.map((item) => normalizeSignalTypeEntry(item)).filter((entry): entry is Record<string, unknown> => !!entry);
+  return value
+    .map((item) => normalizeSignalTypeEntry(item))
+    .filter((entry): entry is Record<string, unknown> => !!entry);
 }
 
 function normalizeSignalTypeEntry(value: unknown): Record<string, unknown> | null {

@@ -21,10 +21,7 @@ type AmbientWeatherDevice = {
   lastData: Record<string, unknown>;
 };
 
-type AmbientWeatherActionHandler = (
-  input: Record<string, unknown>,
-  context: AmbientWeatherContext,
-) => Promise<unknown>;
+type AmbientWeatherActionHandler = (input: Record<string, unknown>, context: AmbientWeatherContext) => Promise<unknown>;
 
 export const ambientWeatherActionHandlers: Record<string, AmbientWeatherActionHandler> = {
   list_devices(_input, context) {
@@ -87,7 +84,10 @@ async function getLatestAmbientWeatherDeviceData(input: Record<string, unknown>,
   );
   const record = records[0];
   if (!record) {
-    throw new ProviderRequestError(502, `Ambient Weather returned no observation records for device ${device.macAddress}`);
+    throw new ProviderRequestError(
+      502,
+      `Ambient Weather returned no observation records for device ${device.macAddress}`,
+    );
   }
 
   return {
@@ -223,9 +223,7 @@ function createAmbientWeatherError(response: Response, payload: unknown, phase: 
 function createAmbientWeatherTransportError(error: unknown) {
   return new ProviderRequestError(
     error instanceof Error && (error.name === "AbortError" || error.name === "TimeoutError") ? 504 : 502,
-    error instanceof Error
-      ? `Ambient Weather request failed: ${error.message}`
-      : "Ambient Weather request failed",
+    error instanceof Error ? `Ambient Weather request failed: ${error.message}` : "Ambient Weather request failed",
   );
 }
 
@@ -247,9 +245,7 @@ function normalizeAmbientWeatherDeviceArray(payload: unknown): AmbientWeatherDev
     throw new ProviderRequestError(502, "Ambient Weather devices response must be an array");
   }
 
-  return payload.map((item, index) =>
-    normalizeAmbientWeatherDevice(item, `Ambient Weather devices[${index}]`),
-  );
+  return payload.map((item, index) => normalizeAmbientWeatherDevice(item, `Ambient Weather devices[${index}]`));
 }
 
 function normalizeAmbientWeatherRecordArray(payload: unknown) {

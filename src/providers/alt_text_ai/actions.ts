@@ -5,10 +5,9 @@ import { defineProviderAction } from "../../core/provider-definition.ts";
 
 const service = "alt_text_ai";
 
-const languageSchema = s.string(
-  "Language code or comma-separated language codes for generated alt text.",
-  { minLength: 1 },
-);
+const languageSchema = s.string("Language code or comma-separated language codes for generated alt text.", {
+  minLength: 1,
+});
 
 const keywordsSchema = s.array(
   "Keywords or phrases to consider when generating SEO-optimized alt text.",
@@ -32,31 +31,17 @@ const imageSchema = s.object(
   "An AltText.ai image record.",
   {
     asset_id: s.nullable(s.string("The unique ID of the image.")),
-    url: s.nullable(
-      s.string("The public image URL, or null when the image was uploaded as raw data."),
-    ),
+    url: s.nullable(s.string("The public image URL, or null when the image was uploaded as raw data.")),
     alt_text: s.nullable(s.string("The primary generated alt text for the image.")),
     alt_texts: s.unknownObject("Generated alt text keyed by language code."),
     tags: s.array("Words or phrases associated with the image.", s.string("An image tag.")),
     metadata: s.unknownObject("Custom metadata stored with the image."),
     created_at: s.nullable(s.integer("Creation time in seconds since epoch.")),
     errors: s.unknownObject("Field-specific image processing errors."),
-    error_code: s.nullable(
-      s.string("An identifier describing the type of image processing error."),
-    ),
+    error_code: s.nullable(s.string("An identifier describing the type of image processing error.")),
   },
   {
-    optional: [
-      "asset_id",
-      "url",
-      "alt_text",
-      "alt_texts",
-      "tags",
-      "metadata",
-      "created_at",
-      "errors",
-      "error_code",
-    ],
+    optional: ["asset_id", "url", "alt_text", "alt_texts", "tags", "metadata", "created_at", "errors", "error_code"],
   },
 );
 
@@ -78,23 +63,13 @@ const accountSchema = s.object(
   {
     name: s.nullable(s.string("The name of the AltText.ai account.")),
     webhook_url: s.nullable(s.string("The default notification URL for webhooks.")),
-    notification_email: s.nullable(
-      s.string("The email address for important account notifications."),
-    ),
+    notification_email: s.nullable(s.string("The email address for important account notifications.")),
     usage: s.nullable(s.integer("The number of credits used this billing period.")),
-    usage_limit: s.nullable(
-      s.integer("The maximum credits that can be used during this billing period."),
-    ),
+    usage_limit: s.nullable(s.integer("The maximum credits that can be used during this billing period.")),
     whitelabel: s.nullable(s.boolean("Whether whitelabel mode is enabled for the account.")),
-    ending_period: s.nullable(
-      s.boolean("Whether generated alt text should end with a period by default."),
-    ),
-    no_quotes: s.nullable(
-      s.boolean("Whether quote characters are removed from generated alt text by default."),
-    ),
-    remove_symbols: s.nullable(
-      s.array("Symbol characters removed from generated alt text.", s.string("A symbol.")),
-    ),
+    ending_period: s.nullable(s.boolean("Whether generated alt text should end with a period by default.")),
+    no_quotes: s.nullable(s.boolean("Whether quote characters are removed from generated alt text by default.")),
+    remove_symbols: s.nullable(s.array("Symbol characters removed from generated alt text.", s.string("A symbol."))),
     gpt_prompt: s.nullable(s.string("The default prompt applied to initially generated alt text.")),
     max_chars: s.nullable(s.integer("The account-level maximum character limit for alt text.")),
     subscription: s.nullable(
@@ -102,9 +77,7 @@ const accountSchema = s.object(
         "Subscription details associated with the account.",
         {
           plan_name: s.nullable(s.string("The name of the current subscription plan.")),
-          usage_quota: s.nullable(
-            s.integer("The number of credits granted each billing period on this plan."),
-          ),
+          usage_quota: s.nullable(s.integer("The number of credits granted each billing period on this plan.")),
           status: s.nullable(s.string("The current status of the subscription plan.")),
           expires_at: s.nullable(s.string("The renewal or expiration date of the plan.")),
         },
@@ -139,9 +112,7 @@ const scrapedImageSchema = s.object(
     alt: s.nullable(s.string("The existing alt attribute discovered in the page HTML.")),
     width: s.nullable(s.integer("The image width in pixels when available.")),
     height: s.nullable(s.integer("The image height in pixels when available.")),
-    skip_reason: s.nullable(
-      s.string("The reason this image was skipped from processing, or null when queued."),
-    ),
+    skip_reason: s.nullable(s.string("The reason this image was skipped from processing, or null when queued.")),
   },
   { optional: ["src", "alt", "width", "height", "skip_reason"] },
 );
@@ -280,8 +251,7 @@ export const altTextAiActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "scrape_page",
-    description:
-      "Scrape a web page or raw HTML document and queue discovered images for alt text generation.",
+    description: "Scrape a web page or raw HTML document and queue discovered images for alt text generation.",
     requiredScopes: [],
     inputSchema: s.object(
       "Input for scraping images from a URL or raw HTML document.",

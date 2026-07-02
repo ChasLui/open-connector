@@ -126,10 +126,9 @@ const getNftsForOwnerInputSchema = s.object(
     }),
     withMetadata: s.boolean("Whether NFT metadata should be returned."),
     orderBy: s.stringEnum("NFT ordering mode accepted by Alchemy.", ["transferTime"]),
-    tokenUriTimeoutInMs: s.integer(
-      "Timeout in milliseconds for live token URI fetches when metadata is requested.",
-      { minimum: 0 },
-    ),
+    tokenUriTimeoutInMs: s.integer("Timeout in milliseconds for live token URI fetches when metadata is requested.", {
+      minimum: 0,
+    }),
     pageKey: s.string("Pagination key returned by a previous NFTs-by-owner call.", { minLength: 1 }),
     pageSize: s.integer("Maximum number of NFTs to return per page.", {
       minimum: 1,
@@ -137,14 +136,7 @@ const getNftsForOwnerInputSchema = s.object(
     }),
   },
   {
-    optional: [
-      "contractAddresses",
-      "withMetadata",
-      "orderBy",
-      "tokenUriTimeoutInMs",
-      "pageKey",
-      "pageSize",
-    ],
+    optional: ["contractAddresses", "withMetadata", "orderBy", "tokenUriTimeoutInMs", "pageKey", "pageSize"],
   },
 );
 
@@ -165,10 +157,9 @@ const getNftMetadataInputSchema = s.object(
     contractAddress: hexAddressSchema,
     tokenId: s.string("NFT token identifier in decimal or hex form.", { minLength: 1 }),
     tokenType: nftTokenTypeSchema,
-    tokenUriTimeoutInMs: s.integer(
-      "Timeout in milliseconds for live token URI fetches when metadata is requested.",
-      { minimum: 0 },
-    ),
+    tokenUriTimeoutInMs: s.integer("Timeout in milliseconds for live token URI fetches when metadata is requested.", {
+      minimum: 0,
+    }),
   },
   { optional: ["tokenType", "tokenUriTimeoutInMs"] },
 );

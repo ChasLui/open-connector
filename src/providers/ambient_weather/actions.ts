@@ -12,13 +12,10 @@ const limitFieldSchema = s.integer("The maximum number of historical records to 
   minimum: 1,
   maximum: 288,
 });
-const endDateFieldSchema = s.anyOf(
-  "The history end cursor as an ISO 8601 timestamp or Unix millisecond timestamp.",
-  [
-    s.dateTime("An ISO 8601 timestamp used as the history end cursor."),
-    s.integer("A Unix millisecond timestamp used as the history end cursor."),
-  ],
-);
+const endDateFieldSchema = s.anyOf("The history end cursor as an ISO 8601 timestamp or Unix millisecond timestamp.", [
+  s.dateTime("An ISO 8601 timestamp used as the history end cursor."),
+  s.integer("A Unix millisecond timestamp used as the history end cursor."),
+]);
 
 const emptyInputSchema = s.object("This action does not require any input.", {});
 const latestDeviceInputSchema = s.object(

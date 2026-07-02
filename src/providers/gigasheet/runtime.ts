@@ -279,7 +279,11 @@ async function readGigasheetPayload(response: Response): Promise<unknown> {
   }
 }
 
-function createGigasheetError(response: Response, payload: unknown, phase: GigasheetRequestPhase): ProviderRequestError {
+function createGigasheetError(
+  response: Response,
+  payload: unknown,
+  phase: GigasheetRequestPhase,
+): ProviderRequestError {
   const message = extractGigasheetMessage(payload) ?? `Gigasheet request failed with status ${response.status}`;
 
   if (response.status === 429) {
@@ -316,9 +320,7 @@ function extractGigasheetMessage(payload: unknown): string | undefined {
 
   const nestedError = optionalRecord(body.error);
   return (
-    optionalString(nestedError?.message) ??
-    optionalString(nestedError?.detail) ??
-    optionalString(nestedError?.error)
+    optionalString(nestedError?.message) ?? optionalString(nestedError?.detail) ?? optionalString(nestedError?.error)
   );
 }
 
