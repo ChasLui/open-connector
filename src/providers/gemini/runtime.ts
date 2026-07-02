@@ -701,7 +701,7 @@ async function createTransitDownloadableFile(
   prefix: string,
   mimeType: string,
   bytes: Uint8Array,
-): Promise<{ name: string; mimetype: string; s3url: string }> {
+): Promise<{ name: string; mimetype: string; downloadUrl: string }> {
   if (!context.transitFiles) {
     throw new ProviderRequestError(502, "gemini media actions require server-side file transit");
   }
@@ -711,7 +711,7 @@ async function createTransitDownloadableFile(
   return {
     name,
     mimetype: mimeType,
-    s3url: upload.downloadUrl,
+    downloadUrl: upload.downloadUrl,
   };
 }
 

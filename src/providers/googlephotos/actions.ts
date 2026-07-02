@@ -154,8 +154,6 @@ const mediaFileInput = s.object("One media file input to upload.", {
     maxLength: 1000,
     description: "A description for the uploaded media item.",
   }),
-  file: s.unknown("Unsupported: file uploadable input (not supported)."),
-  s3key: s.string("Unsupported: S3 key input (not supported)."),
 });
 const uploadMediaInput = s.object("The input payload for uploading one media item.", {
   url: s.url("The URL of the media file to upload."),
@@ -166,8 +164,6 @@ const uploadMediaInput = s.object("The input payload for uploading one media ite
     maxLength: 1000,
     description: "A description for the uploaded media item.",
   }),
-  s3key: s.string("Unsupported: S3 key input (not supported)."),
-  file_to_upload: s.unknown("Unsupported: file uploadable input (not supported)."),
 });
 const transitDownloadOutput = {
   fileName: s.string("The filename of the downloaded media item."),
@@ -342,7 +338,6 @@ const actions: GooglePhotosActionSource[] = [
         },
       ),
       mediaFiles: s.array("A list of media file inputs to upload (maximum 50).", mediaFileInput, { maxItems: 50 }),
-      files: s.unknown("Unsupported: file uploadable inputs (not supported)."),
       albumId: s.nonEmptyString("The ID of the album to add the media items to."),
       albumPosition,
     }),

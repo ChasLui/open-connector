@@ -84,7 +84,7 @@ const uploadFileOutputSchema = s.actionOutput(
 const downloadableFileSchema = s.object("A downloadable file uploaded to local transit storage.", {
   name: s.string("The downloaded file name."),
   mimetype: s.string("The MIME type of the downloaded file."),
-  s3url: s.url("The transit URL for downloading the file."),
+  downloadUrl: s.url("The local transit URL for downloading the file."),
 });
 
 const taskPageInfoSchema = s.object("One page metadata item returned by Foxit.", {

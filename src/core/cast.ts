@@ -327,7 +327,10 @@ export function positiveInteger(
     return value;
   }
   if (typeof value === "string" && /^\d+$/.test(value)) {
-    return Number(value);
+    const parsed = Number(value);
+    if (parsed > 0) {
+      return parsed;
+    }
   }
 
   throw createError(`${fieldName} must be a positive integer`);

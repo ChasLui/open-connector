@@ -51,7 +51,16 @@ const subtitlesConfigSchema = s.object(
     maximumRowsPerCaption: s.integer("The maximum number of rows per subtitle caption."),
     maximumCharactersPerRow: s.integer("The maximum number of characters per subtitle row."),
   },
-  { optional: ["style", "formats", "maximumDuration", "minimumDuration", "maximumRowsPerCaption", "maximumCharactersPerRow"] },
+  {
+    optional: [
+      "style",
+      "formats",
+      "maximumDuration",
+      "minimumDuration",
+      "maximumRowsPerCaption",
+      "maximumCharactersPerRow",
+    ],
+  },
 );
 
 const diarizationConfigSchema = s.object(
@@ -78,7 +87,17 @@ const translationConfigSchema = s.object(
     informal: s.boolean("Whether to use informal tone in translation."),
     lipsync: s.boolean("Whether to include lipsync metadata for subtitles."),
   },
-  { optional: ["model", "context", "targetLanguages", "contextAdaptation", "matchOriginalUtterances", "informal", "lipsync"] },
+  {
+    optional: [
+      "model",
+      "context",
+      "targetLanguages",
+      "contextAdaptation",
+      "matchOriginalUtterances",
+      "informal",
+      "lipsync",
+    ],
+  },
 );
 
 const summarizationConfigSchema = s.object(
@@ -145,7 +164,7 @@ export const gladiaActions: ActionDefinition[] = [
   defineProviderAction(service, {
     name: "upload_file",
     description:
-      "Upload an audio or video file up to 100 MiB to Gladia from a local transit file, base64 content, public URL, or local file path.",
+      "Upload an audio or video file up to 100 MiB to Gladia from a local transit file, base64 content, or public URL.",
     requiredScopes: [],
     inputSchema: s.object(
       "Input parameters for uploading media to Gladia.",
@@ -153,11 +172,10 @@ export const gladiaActions: ActionDefinition[] = [
         file: s.transitFile("A local transit file to upload."),
         contentBase64: s.nonEmptyString("The audio or video file content encoded as base64."),
         sourceUrl: s.url("A public audio or video file URL to upload."),
-        localFilePath: s.nonEmptyString("A local file path on the connector host to upload."),
-        fileName: s.nonEmptyString("Optional file name override for base64, URL, or local file sources."),
-        mimeType: s.nonEmptyString("Optional MIME type override for base64, URL, or local file sources."),
+        fileName: s.nonEmptyString("Optional file name override for base64 or URL sources."),
+        mimeType: s.nonEmptyString("Optional MIME type override for base64 or URL sources."),
       },
-      { optional: ["file", "contentBase64", "sourceUrl", "localFilePath", "fileName", "mimeType"] },
+      { optional: ["file", "contentBase64", "sourceUrl", "fileName", "mimeType"] },
     ),
     outputSchema: s.actionOutput(
       {
@@ -170,8 +188,7 @@ export const gladiaActions: ActionDefinition[] = [
   }),
   defineProviderAction(service, {
     name: "start_transcription",
-    description:
-      "Start an asynchronous Gladia pre-recorded transcription job from a public audio or video URL.",
+    description: "Start an asynchronous Gladia pre-recorded transcription job from a public audio or video URL.",
     requiredScopes: [],
     inputSchema: s.object(
       "Input parameters for starting a Gladia pre-recorded transcription job.",

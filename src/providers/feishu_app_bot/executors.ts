@@ -835,7 +835,7 @@ async function uploadFeishuMediaTransitFile(input: {
       file: {
         name: fileName,
         mimetype: mimeType,
-        s3url: upload.downloadUrl,
+        downloadUrl: upload.downloadUrl,
       },
       contentType: mimeType,
     };

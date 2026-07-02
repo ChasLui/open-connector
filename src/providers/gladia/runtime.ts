@@ -2,7 +2,6 @@ import type { CredentialValidationResult } from "../../core/types.ts";
 import type { ApiKeyProviderContext } from "../provider-runtime.ts";
 import type { GladiaActionName } from "./actions.ts";
 
-import { readFile, stat } from "node:fs/promises";
 import { basename, extname } from "node:path";
 import {
   compactObject,
@@ -293,12 +292,9 @@ async function resolveUploadSource(
   context: ApiKeyProviderContext,
 ): Promise<UploadSource> {
   const sourceCount =
-    Number(input.file != null) +
-    Number(input.contentBase64 != null) +
-    Number(input.sourceUrl != null) +
-    Number(input.localFilePath != null);
+    Number(input.file != null) + Number(input.contentBase64 != null) + Number(input.sourceUrl != null);
   if (sourceCount !== 1) {
-    throw new ProviderRequestError(400, "exactly one of file, contentBase64, sourceUrl, or localFilePath is required");
+    throw new ProviderRequestError(400, "exactly one of file, contentBase64, or sourceUrl is required");
   }
 
   const mimeTypeOverride = optionalString(input.mimeType);
@@ -338,26 +334,7 @@ async function resolveUploadSource(
     };
   }
 
-  const localFilePath = optionalString(input.localFilePath);
-  if (localFilePath) {
-    const fileStat = await stat(localFilePath).catch((error: unknown) => {
-      throw new ProviderRequestError(
-        400,
-        error instanceof Error ? `localFilePath cannot be read: ${error.message}` : "localFilePath cannot be read",
-      );
-    });
-    if (!fileStat.isFile()) {
-      throw new ProviderRequestError(400, "localFilePath must point to a file");
-    }
-    assertUploadSourceSize(fileStat.size);
-    const name = fileNameOverride ?? basename(localFilePath);
-    const mimeType = mimeTypeOverride ?? mimeTypeFromFileName(name) ?? defaultUploadMimeType;
-    return {
-      file: new File([new Uint8Array(await readFile(localFilePath))], name, { type: mimeType }),
-    };
-  }
-
-  throw new ProviderRequestError(400, "exactly one of file, contentBase64, sourceUrl, or localFilePath is required");
+  throw new ProviderRequestError(400, "exactly one of file, contentBase64, or sourceUrl is required");
 }
 
 async function downloadSourceBytes(

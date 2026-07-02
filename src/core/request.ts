@@ -60,6 +60,59 @@ export function compactJson(value: unknown): unknown {
   );
 }
 
+export interface BoundedResponseBytesOptions {
+  maxBytes: number;
+  fieldName: string;
+  createError: (message: string) => Error;
+}
+
+/**
+ * Read a response body into memory while enforcing a byte limit.
+ */
+export async function readBoundedResponseBytes(
+  response: Response,
+  options: BoundedResponseBytesOptions,
+): Promise<Uint8Array> {
+  const contentLength = parseContentLength(response.headers.get("content-length"));
+  if (contentLength !== undefined) {
+    assertMaxBytes(contentLength, options);
+  }
+
+  if (!response.body) {
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    assertMaxBytes(bytes.byteLength, options);
+    return bytes;
+  }
+
+  const reader = response.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+      totalBytes += value.byteLength;
+      if (totalBytes > options.maxBytes) {
+        await reader.cancel().catch(() => undefined);
+        throw options.createError(`${options.fieldName} exceeds ${options.maxBytes} bytes`);
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+
+  const bytes = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return bytes;
+}
+
 const privateHostnames = new Set(["localhost", "127.0.0.1", "::1", "0.0.0.0"]);
 const privateHostnameSuffixes = [".localhost", ".local"];
 const privateIpv4Cidrs: Array<[number, number]> = [
@@ -138,6 +191,20 @@ function parseIpv4(hostname: string): number | undefined {
   }
 
   return value >>> 0;
+}
+
+function parseContentLength(value: string | null): number | undefined {
+  if (!value || !/^\d+$/.test(value)) {
+    return undefined;
+  }
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) ? parsed : undefined;
+}
+
+function assertMaxBytes(byteLength: number, options: BoundedResponseBytesOptions): void {
+  if (byteLength > options.maxBytes) {
+    throw options.createError(`${options.fieldName} exceeds ${options.maxBytes} bytes`);
+  }
 }
 
 function ipv4ToNumber(value: string): number {

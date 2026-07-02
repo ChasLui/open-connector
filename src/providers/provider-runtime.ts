@@ -98,6 +98,42 @@ export class ProviderRequestError extends Error {
   }
 }
 
+export interface ProviderTimeout {
+  signal: AbortSignal;
+  didTimeout(): boolean;
+  cleanup(): void;
+}
+
+/**
+ * Return an abort signal that fires when either the parent signal aborts or the
+ * provider-local timeout expires.
+ */
+export function createProviderTimeout(parentSignal: AbortSignal | undefined, timeoutMs: number): ProviderTimeout {
+  const controller = new AbortController();
+  let timeoutReached = false;
+  const timeoutId = setTimeout(() => {
+    timeoutReached = true;
+    controller.abort();
+  }, timeoutMs);
+  const abortFromParent = (): void => controller.abort();
+  parentSignal?.addEventListener("abort", abortFromParent, { once: true });
+  return {
+    signal: controller.signal,
+    didTimeout: () => timeoutReached,
+    cleanup() {
+      clearTimeout(timeoutId);
+      parentSignal?.removeEventListener("abort", abortFromParent);
+    },
+  };
+}
+
+/**
+ * Return whether a caught error represents a fetch abort.
+ */
+export function isAbortLikeError(error: unknown): boolean {
+  return error instanceof Error && error.name === "AbortError";
+}
+
 /**
  * Set defined query parameters on a URL.
  */

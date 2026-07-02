@@ -585,7 +585,7 @@ async function uploadAgentyTransitFile(context: AgentyRuntimeContext, response: 
   return {
     name,
     mimetype: mimeType,
-    s3url: upload.downloadUrl,
+    downloadUrl: upload.downloadUrl,
   };
 }
 

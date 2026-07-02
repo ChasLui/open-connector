@@ -464,9 +464,6 @@ async function uploadMedia(input: Record<string, unknown>, context: GooglePhotos
 }
 
 async function batchCreateMediaItems(input: Record<string, unknown>, context: GooglePhotosRuntimeContext) {
-  if (input.files != null) {
-    throw new ProviderRequestError(400, "file_uploadable inputs are not supported");
-  }
   const urls = Array.isArray(input.urls) ? input.urls : [];
   const mediaFiles = normalizeMediaFiles(input);
   if (urls.length === 0 && mediaFiles.length === 0) {
@@ -800,10 +797,6 @@ async function resolveSingleUploadSource(
   fetcher: ProviderFetch,
   signal: AbortSignal | undefined,
 ): Promise<GooglePhotosUploadSource> {
-  if (input.s3key != null || input.file_to_upload != null || input.file != null) {
-    throw new ProviderRequestError(400, "s3key and file_uploadable inputs are not supported");
-  }
-
   const fileName = optionalString(input.fileName);
   const explicitMimeType = optionalString(input.mimeType);
   const url = optionalString(input.url);

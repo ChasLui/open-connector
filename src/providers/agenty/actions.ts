@@ -39,7 +39,7 @@ const urlInputSchema = s.object(
 const downloadableFileSchema = s.requiredObject("A downloadable file uploaded to connector transit storage.", {
   name: s.string("The generated file name."),
   mimetype: s.string("The generated file MIME type."),
-  s3url: s.string("The transit URL for downloading the generated file."),
+  downloadUrl: s.string("The local transit URL for downloading the generated file."),
 });
 
 const agentSchema = looseObject("An Agenty agent object.", {

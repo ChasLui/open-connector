@@ -3,12 +3,20 @@ import type { OAuthProviderContext } from "../provider-runtime.ts";
 import type { SlackActionName } from "./actions.ts";
 
 import { compactObject, optionalBoolean, optionalRecord, optionalString, requiredString } from "../../core/cast.ts";
-import { assertPublicHttpUrl } from "../../core/request.ts";
-import { defineOAuthProviderExecutors, providerUserAgent, ProviderRequestError } from "../provider-runtime.ts";
+import { assertPublicHttpUrl, readBoundedResponseBytes } from "../../core/request.ts";
+import {
+  createProviderTimeout,
+  defineOAuthProviderExecutors,
+  isAbortLikeError,
+  ProviderRequestError,
+  providerUserAgent,
+} from "../provider-runtime.ts";
 
 const service = "slack";
 const slackApiBaseUrl = "https://slack.com/api";
 const defaultConversationTypes = ["public_channel", "private_channel", "im", "mpim"];
+const slackFileUrlMaxBytes = 100 * 1024 * 1024;
+const slackFileUrlFetchTimeoutMs = 30_000;
 
 type SlackActionContext = OAuthProviderContext;
 
@@ -677,11 +685,31 @@ async function resolveSlackFileContent(
 ): Promise<Uint8Array> {
   const fileUrl = requiredString(input.fileUrl, "fileUrl", (message) => new ProviderRequestError(400, message));
   assertFetchableFileUrl(fileUrl);
-  const response = await context.fetcher(fileUrl, { signal: context.signal });
-  if (!response.ok) {
-    throw new ProviderRequestError(400, `failed to fetch fileUrl: ${response.status}`);
+  const timeout = createProviderTimeout(context.signal, slackFileUrlFetchTimeoutMs);
+  try {
+    const response = await context.fetcher(fileUrl, { signal: timeout.signal });
+    if (!response.ok) {
+      throw new ProviderRequestError(400, `failed to fetch fileUrl: ${response.status}`);
+    }
+    return readBoundedResponseBytes(response, {
+      maxBytes: slackFileUrlMaxBytes,
+      fieldName: "fileUrl",
+      createError: (message) => new ProviderRequestError(400, message),
+    });
+  } catch (error) {
+    if (error instanceof ProviderRequestError) {
+      throw error;
+    }
+    if (timeout.didTimeout() && isAbortLikeError(error)) {
+      throw new ProviderRequestError(504, "failed to fetch fileUrl: request timed out");
+    }
+    throw new ProviderRequestError(
+      502,
+      error instanceof Error ? `failed to fetch fileUrl: ${error.message}` : "failed to fetch fileUrl",
+    );
+  } finally {
+    timeout.cleanup();
   }
-  return new Uint8Array(await response.arrayBuffer());
 }
 
 async function uploadSlackFileContent(

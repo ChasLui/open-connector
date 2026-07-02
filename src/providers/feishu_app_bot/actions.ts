@@ -299,7 +299,7 @@ const fileUploadEnvelopeSchema = s.requiredObject("A Feishu file-upload response
 const downloadableFileSchema = s.requiredObject("A downloadable file uploaded to connector transit storage.", {
   name: s.string("The downloaded file name."),
   mimetype: s.string("The MIME type of the downloaded file."),
-  s3url: s.string("The transit URL for downloading the file."),
+  downloadUrl: s.string("The local transit URL for downloading the file."),
 });
 
 export const feishuAppBotActions: ActionDefinition[] = [

@@ -4,8 +4,14 @@ import type { OpenAiActionName } from "./actions.ts";
 
 import { Buffer } from "node:buffer";
 import { compactObject, optionalRecord, optionalString } from "../../core/cast.ts";
-import { assertPublicHttpUrl } from "../../core/request.ts";
-import { ProviderRequestError, defineApiKeyProviderExecutors, providerUserAgent } from "../provider-runtime.ts";
+import { assertPublicHttpUrl, readBoundedResponseBytes } from "../../core/request.ts";
+import {
+  createProviderTimeout,
+  defineApiKeyProviderExecutors,
+  isAbortLikeError,
+  ProviderRequestError,
+  providerUserAgent,
+} from "../provider-runtime.ts";
 
 interface UploadSource {
   bytes: Uint8Array;
@@ -27,6 +33,8 @@ type OpenAiActionHandler = (input: Record<string, unknown>, context: OpenAiActio
 
 const service = "openai";
 const openaiApiBaseUrl = "https://api.openai.com/v1";
+const openaiAudioSourceMaxBytes = 25 * 1024 * 1024;
+const openaiAudioSourceFetchTimeoutMs = 30_000;
 
 export const openaiActionHandlers: Record<OpenAiActionName, OpenAiActionHandler> = {
   list_models(_input, context) {
@@ -251,7 +259,7 @@ async function openaiCreateAudioTranscription(input: Record<string, unknown>, co
     {
       method: "POST",
       path: "/audio/transcriptions",
-      body: await buildOpenAiAudioFormData(input, context.fetcher, {
+      body: await buildOpenAiAudioFormData(input, context, {
         include: "include[]",
         timestamp_granularities: "timestamp_granularities[]",
       }),
@@ -268,7 +276,7 @@ async function openaiCreateAudioTranslation(input: Record<string, unknown>, cont
     {
       method: "POST",
       path: "/audio/translations",
-      body: await buildOpenAiAudioFormData(input, context.fetcher),
+      body: await buildOpenAiAudioFormData(input, context),
     },
     context.fetcher,
   );
@@ -481,10 +489,10 @@ function appendQueryValue(url: URL, key: string, value: unknown): void {
 
 async function buildOpenAiAudioFormData(
   input: Record<string, unknown>,
-  fetcher: typeof fetch,
+  context: Pick<OpenAiActionContext, "fetcher" | "signal">,
   arrayFieldMap: Record<string, string> = {},
 ): Promise<FormData> {
-  const source = await resolveAudioUploadSource(input, fetcher);
+  const source = await resolveAudioUploadSource(input, context);
   const formData = new FormData();
   formData.set("file", new File([Buffer.from(source.bytes)], source.fileName, { type: source.mimeType }));
 
@@ -505,7 +513,10 @@ async function buildOpenAiAudioFormData(
   return formData;
 }
 
-async function resolveAudioUploadSource(input: Record<string, unknown>, fetcher: typeof fetch): Promise<UploadSource> {
+async function resolveAudioUploadSource(
+  input: Record<string, unknown>,
+  context: Pick<OpenAiActionContext, "fetcher" | "signal">,
+): Promise<UploadSource> {
   const nestedFile = optionalRecord(input.file);
   if (!nestedFile) {
     throw new ProviderRequestError(400, "file is required");
@@ -528,29 +539,44 @@ async function resolveAudioUploadSource(input: Record<string, unknown>, fetcher:
   }
 
   if (fileUrl) {
-    const response = await fetchPublicAudioUrl(fileUrl, fetcher);
+    const response = await fetchPublicAudioUrl(fileUrl, context);
     return {
-      bytes: new Uint8Array(await response.arrayBuffer()),
+      bytes: await readBoundedResponseBytes(response, {
+        maxBytes: openaiAudioSourceMaxBytes,
+        fieldName: "file.url",
+        createError: (message) => new ProviderRequestError(400, message),
+      }),
       fileName,
       mimeType: normalizedContentType(response.headers.get("content-type"), mimeType ?? "application/octet-stream"),
     };
   }
 
+  const bytes = decodeBase64Content(contentBase64!, "file.content_base64");
+  assertOpenAiAudioSourceSize(bytes.byteLength, "file.content_base64");
   return {
-    bytes: decodeBase64Content(contentBase64!, "file.content_base64"),
+    bytes,
     fileName,
     mimeType: mimeType ?? "application/octet-stream",
   };
 }
 
-async function fetchPublicAudioUrl(url: string, fetcher: typeof fetch): Promise<Response> {
+async function fetchPublicAudioUrl(
+  url: string,
+  context: Pick<OpenAiActionContext, "fetcher" | "signal">,
+): Promise<Response> {
   assertPublicAudioUrl(url);
+  const timeout = createProviderTimeout(context.signal, openaiAudioSourceFetchTimeoutMs);
   let response: Response;
   try {
-    response = await fetcher(url);
+    response = await context.fetcher(url, { signal: timeout.signal });
   } catch (error) {
+    if (timeout.didTimeout() && isAbortLikeError(error)) {
+      throw new ProviderRequestError(504, "failed to fetch audio source: request timed out");
+    }
     const message = error instanceof Error ? error.message : "unknown network error";
     throw new ProviderRequestError(502, `failed to fetch audio source: ${message}`);
+  } finally {
+    timeout.cleanup();
   }
 
   if (!response.ok) {
@@ -558,6 +584,12 @@ async function fetchPublicAudioUrl(url: string, fetcher: typeof fetch): Promise<
   }
 
   return response;
+}
+
+function assertOpenAiAudioSourceSize(byteLength: number, fieldName: string): void {
+  if (byteLength > openaiAudioSourceMaxBytes) {
+    throw new ProviderRequestError(400, `${fieldName} exceeds ${openaiAudioSourceMaxBytes} bytes`);
+  }
 }
 
 function assertPublicAudioUrl(value: string): void {

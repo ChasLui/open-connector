@@ -45,7 +45,7 @@ const safetySettingSchema = s.requiredObject("A Gemini content safety setting.",
 const downloadableFileSchema = s.requiredObject("A downloadable file with a transit URL.", {
   name: s.string("The file name."),
   mimetype: s.string("The MIME type."),
-  s3url: s.url("The transit URL for downloading the file."),
+  downloadUrl: s.url("The local transit URL for downloading the file."),
 });
 
 const generationInputProperties: Record<string, JsonSchema> = {

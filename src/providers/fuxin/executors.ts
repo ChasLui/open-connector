@@ -308,7 +308,7 @@ async function fuxinDownloadFile(input: Record<string, unknown>, context: FuxinA
     file: {
       name: resolvedFileName,
       mimetype: mimeType,
-      s3url: upload.downloadUrl,
+      downloadUrl: upload.downloadUrl,
     },
     contentLength: bytes.byteLength,
   };

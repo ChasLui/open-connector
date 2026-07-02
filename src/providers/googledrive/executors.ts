@@ -776,10 +776,6 @@ function resolveUploadContent(
   input: Record<string, unknown>,
   options: { required?: boolean; textOnly?: boolean } = {},
 ): UploadContent | undefined {
-  if (input.s3key != null) {
-    throw new ProviderRequestError(400, "s3key is not supported; use contentBase64 or text");
-  }
-
   const text = typeof input.text === "string" ? input.text : undefined;
   if (text != null) {
     return {
