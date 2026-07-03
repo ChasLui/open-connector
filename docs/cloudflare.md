@@ -25,6 +25,14 @@ cp wrangler.example.jsonc wrangler.local.jsonc
 `wrangler.local.jsonc` is ignored by git. Fill it with your Cloudflare resource IDs before remote
 deployment.
 
+## Log In With Wrangler
+
+Skip this step if you are already logged in:
+
+```bash
+npx wrangler login
+```
+
 ## Create Cloudflare Resources
 
 Create the D1 database and R2 bucket:
