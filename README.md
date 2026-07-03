@@ -70,10 +70,11 @@ safe account labels, and execution results they need.
 
 ## Deployment Paths
 
-| Path                         | Best for                                     | What you get                                                                      |
-| ---------------------------- | -------------------------------------------- | --------------------------------------------------------------------------------- |
-| OSS self-host                | Developers and teams that want full control  | Local Docker or Node runtime, SQLite storage, MCP, HTTP, OpenAPI, and Web Console |
-| Cloudflare-compatible deploy | Teams that want a lightweight hosted runtime | Workers runtime, D1 state, R2 transit files, and Static Assets for the console    |
+| Path                         | Best for                                            | What you get                                                                      |
+| ---------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------- |
+| OSS self-host                | Developers and teams that want full control         | Local Docker or Node runtime, SQLite storage, MCP, HTTP, OpenAPI, and Web Console |
+| Cloudflare-compatible deploy | Teams that want a lightweight hosted runtime        | Workers runtime, D1 state, R2 transit files, and Static Assets for the console    |
+| OpenConnector SaaS           | Teams blocked by OAuth approval or launch deadlines | Hosted auth and runtime path with migration back to self-hosted deployments       |
 
 ## Cloudflare Quick Start Video
 
@@ -148,6 +149,18 @@ Workers, D1, R2, and Static Assets.
 
 See [docs/cloudflare.md](docs/cloudflare.md) for resource creation, migrations, secrets, local Worker
 preview, and remote deployment.
+
+## SaaS Version And Wanta
+
+OpenConnector is the open-source gateway for teams that want to self-host and control the runtime.
+
+For businesses that need to launch immediately, the OpenConnector SaaS version provides hosted auth
+and runtime infrastructure first, with a migration path back to private or self-hosted deployment
+when the team is ready.
+
+For small teams or individuals who want a ready-to-use desktop Agent, [Wanta](https://wanta.ai/)
+connects apps through a desktop product experience and adds team features such as shared app access,
+permission control, multiple connected accounts, and workspace-specific connections.
 
 ## Documentation
 
