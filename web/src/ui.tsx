@@ -33,9 +33,41 @@ const navItems = [
   { path: "/resources", labelKey: "nav.docs", icon: BookOpen },
 ] as const;
 
+const oauthCompletionChannelName = "oomol-connect-oauth";
+const oauthCompletedType = "oauth.completed";
+
 export interface AuthSession {
   adminAuthConfigured: boolean;
   authenticated: boolean;
+}
+
+export interface OAuthCompletionMessage {
+  type: typeof oauthCompletedType;
+  service: string;
+}
+
+export function subscribeToOAuthCompletions(onComplete: (message: OAuthCompletionMessage) => void): () => void {
+  const handleMessage = (event: MessageEvent<unknown>): void => {
+    if (isOAuthCompletionMessage(event.data)) {
+      onComplete(event.data);
+    }
+  };
+
+  if (typeof BroadcastChannel === "undefined") {
+    return () => {};
+  }
+
+  const channel = new BroadcastChannel(oauthCompletionChannelName);
+  channel.addEventListener("message", handleMessage);
+  return () => channel.close();
+}
+
+function isOAuthCompletionMessage(value: unknown): value is OAuthCompletionMessage {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const message = value as { type?: unknown; service?: unknown };
+  return message.type === oauthCompletedType && typeof message.service === "string";
 }
 
 export interface LogoutState {
@@ -107,6 +139,14 @@ export function App(): ReactNode {
   const [runtimeChecked, setRuntimeChecked] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState(0);
+
+  useEffect(
+    () =>
+      subscribeToOAuthCompletions(() => {
+        setRefreshToken((value) => value + 1);
+      }),
+    [],
+  );
 
   useEffect(() => {
     let cancelled = false;
