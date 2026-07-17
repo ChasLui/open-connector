@@ -804,6 +804,25 @@ export class ConnectServer {
       hasCode: Boolean(code),
     };
     this.options.logger?.info(logContext, "oauth callback received");
+    const providerError = context.req.query("error");
+    if (providerError) {
+      const providerErrorDescription = context.req.query("error_description");
+      this.options.logger?.warn(
+        {
+          ...logContext,
+          errorCode: "oauth_provider_error",
+          providerError,
+          providerErrorDescription,
+        },
+        "oauth callback failed",
+      );
+      return jsonError(
+        context,
+        400,
+        "oauth_provider_error",
+        `OAuth provider returned error "${providerError}"${providerErrorDescription ? `: ${providerErrorDescription}` : "."}`,
+      );
+    }
     if (!state || !code) {
       this.options.logger?.warn(
         {

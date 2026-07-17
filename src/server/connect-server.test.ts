@@ -820,6 +820,22 @@ describe("ConnectServer", () => {
     }
   });
 
+  it("surfaces provider errors returned on the OAuth callback", async () => {
+    const app = createTestServer([apiKeyProvider], { auth: { adminToken: "local-token" } }).createApp();
+
+    const response = await app.request(
+      "/oauth/callback?error=invalid_scope&error_description=The+requested+scope+is+invalid.&state=example-state",
+    );
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({
+      error: {
+        code: "oauth_provider_error",
+        message: 'OAuth provider returned error "invalid_scope": The requested scope is invalid.',
+      },
+    });
+  });
+
   it("accepts the shared OAuth callback route without a service path segment", async () => {
     const app = createTestServer([apiKeyProvider], { auth: { adminToken: "local-token" } }).createApp();
 
